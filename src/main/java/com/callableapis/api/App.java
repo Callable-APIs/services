@@ -3,12 +3,47 @@
  */
 package com.callableapis.api;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.servlet.ServletContainer;
+
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
+    int port;
+
+    public App(int port) {
+        this.port = port;
+    }
+
+    public void runServer() {
+        Server server = new Server(this.port);
+
+        ServletContextHandler servletContextHandler = new ServletContextHandler(
+                server,
+                "/",
+                ServletContextHandler.SESSIONS
+        );
+
+        ServletHolder jerseyHolder = new ServletHolder(
+                "Jersey REST Service",
+                new ServletContainer()
+        );
+        jerseyHolder.setInitParameter("jersey.config.server.provider.packages", "com.callableapis.api");
+        servletContextHandler.addServlet(jerseyHolder, "/*");
+
+
+        try {
+            server.start();
+            server.join();
+        } catch (InterruptedException e) {
+            ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        App app = new App(8080);
+        app.runServer();
     }
 }
