@@ -3,10 +3,10 @@
  */
 package com.callableapis.api;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.glassfish.jersey.servlet.ServletContainer;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+
+import java.net.URI;
 
 public class App {
     int port;
@@ -16,25 +16,14 @@ public class App {
     }
 
     public void runServer() {
-        Server server = new Server(this.port);
 
-        ServletContextHandler servletContextHandler = new ServletContextHandler(
-                server,
-                "/",
-                ServletContextHandler.SESSIONS
-        );
-
-        ServletHolder jerseyHolder = new ServletHolder(
-                "Jersey REST Service",
-                new ServletContainer()
-        );
-        jerseyHolder.setInitParameter("jersey.config.server.provider.packages", "com.callableapis.api");
-        servletContextHandler.addServlet(jerseyHolder, "/*");
-
+        URI uri = URI.create("http://localhost:8080/");
+        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, new APIApplication());
+        Runtime.getRuntime().addShutdownHook(new Thread(server::shutdownNow));
 
         try {
             server.start();
-            server.join();
+            Thread.currentThread().join();
         } catch (InterruptedException e) {
             ;
         } catch (Exception e) {
@@ -43,7 +32,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        App app = new App(8080);
+        App app = new App(5000);
         app.runServer();
     }
 }
