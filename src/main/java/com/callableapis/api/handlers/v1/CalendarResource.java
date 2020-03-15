@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 
-@Path("/v1/date")
-public class Date {
+@Path("v1/calendar")
+public class CalendarResource {
     private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
     public static class DateStruct {
@@ -52,9 +52,10 @@ public class Date {
         }
     }
 
+    @Path("date")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public DateStruct asJSON() {
+    public DateStruct getDateAsStruct() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(GMT);
 
