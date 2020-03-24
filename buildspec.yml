@@ -8,8 +8,8 @@ phases:
   build:
     commands:
      - echo Build started on `date`
-     - ./gradlew build
+     - ./gradlew assemble
 artifacts:
-  type: zip
+  discard-paths: yes
   files:
-    - 'build/libs/*.jar'
+    - 'build/distributions/callableapis-webapp.zip'
