@@ -1,0 +1,5 @@
+version: 0.0
+hooks:
+  ApplicationStart:
+    - location: bin/callableapis-webapp
+      timeout: 3600
