@@ -36,6 +36,26 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
+distributions {
+    
+    ec2 {
+        contents {
+            from "appspec.yml"
+            with main.contents
+        }
+    }
+
+    ec2DistTar.enabled = false
+
+    ec2DistZip {
+        eachFile { file ->
+            String path = file.relativePath
+            file.setPath(path.substring(path.indexOf("/")+1,path.length()))
+        }
+    }
+}
+
+
 application {
     // Define the main class for the application.
     mainClassName = 'com.callableapis.api.App'
