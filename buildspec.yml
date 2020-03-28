@@ -2,9 +2,8 @@ version: 0.1
 
 phases:
   install:
-   commands:
-     - echo Entering install phase...
-     - echo Nothing to do now
+    runtime-versions:
+      java: corretto8
   build:
     commands:
      - ./gradlew clean installEc2Dist
