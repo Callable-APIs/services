@@ -2,5 +2,5 @@ version: 0.0
 os: linux
 hooks:
   ApplicationStart:
-    - location: bin/callableapis-webapp
+    - location: codedeploy-app-start.sh
       timeout: 3600

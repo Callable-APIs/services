@@ -41,6 +41,7 @@ distributions {
     ec2 {
         contents {
             from "appspec.yml"
+            from "codedeploy-app-start.sh"
             with main.contents
         }
     }
