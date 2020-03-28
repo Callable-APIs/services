@@ -12,4 +12,4 @@ phases:
 artifacts:
   discard-paths: yes
   files:
-    - 'build/distributions/callableapis-webapp.zip'
+    - 'build/distributions/callableapis-webapp-ec2.zip'
