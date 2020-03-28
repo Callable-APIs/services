@@ -11,4 +11,4 @@ phases:
 artifacts:
   discard-paths: yes
   files:
-    - 'build/install/callableapis-webapp-ec2/**'
+    - 'build/install/callableapis-webapp-ec2/**/*'
