@@ -9,6 +9,5 @@ phases:
     commands:
      - ./gradlew clean installEc2Dist
 artifacts:
-  discard-paths: yes
   files:
     - 'build/install/callableapis-webapp-ec2/**/*'
