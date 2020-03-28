@@ -7,9 +7,8 @@ phases:
      - echo Nothing to do now
   build:
     commands:
-     - echo Build started on `date`
-     - ./gradlew assemble
+     - ./gradlew clean installEc2Dist
 artifacts:
   discard-paths: yes
   files:
-    - 'build/distributions/callableapis-webapp-ec2.zip'
+    - 'build/install/callableapis-webapp-ec2/**'
