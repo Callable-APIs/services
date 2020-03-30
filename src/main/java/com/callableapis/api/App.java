@@ -9,15 +9,13 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import java.net.URI;
 
 public class App {
-    int port;
-
-    public App(int port) {
-        this.port = port;
-    }
+    private static final String BIND_URL_PROPERTY_NAME = "com.callableapis.bindurl";
+    private static final String BIND_URL_DEFAULT_VALUE = "http://localhost:8080/";
 
     public void runServer() {
+        String bindUrl = System.getProperty(BIND_URL_PROPERTY_NAME, BIND_URL_DEFAULT_VALUE);
 
-        URI uri = URI.create("http://0.0.0.0:8080/");
+        URI uri = URI.create(bindUrl);
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, new APIApplication());
         Runtime.getRuntime().addShutdownHook(new Thread(server::shutdownNow));
 
@@ -32,7 +30,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        App app = new App(5000);
+        App app = new App();
         app.runServer();
     }
 }
