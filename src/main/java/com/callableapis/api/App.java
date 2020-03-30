@@ -17,7 +17,7 @@ public class App {
 
     public void runServer() {
 
-        URI uri = URI.create("http://localhost:8080/");
+        URI uri = URI.create("http://0.0.0.0:8080/");
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(uri, new APIApplication());
         Runtime.getRuntime().addShutdownHook(new Thread(server::shutdownNow));
 
