@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./bin/callableapis-webapp > /dev/null 2> /dev/null < /dev/null &
+( ./bin/callableapis-webapp 2>&1 ) > /tmp/callableapis-webapp.log < /dev/null &
