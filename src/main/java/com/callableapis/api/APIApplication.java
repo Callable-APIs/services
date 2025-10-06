@@ -8,7 +8,10 @@ import com.callableapis.api.health.HealthResource;
 import com.callableapis.api.security.BearerAuthFilter;
 import com.callableapis.api.di.AppBinder;
 import com.callableapis.api.web.NotFoundRedirectMapper;
+import com.callableapis.api.web.NotFoundRedirectFilter;
+import com.callableapis.api.web.FallbackResource;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
 import jakarta.ws.rs.ApplicationPath;
 
@@ -29,5 +32,10 @@ public class APIApplication extends ResourceConfig {
 
         // Exception mappers
         register(NotFoundRedirectMapper.class);
+        register(NotFoundRedirectFilter.class);
+        register(FallbackResource.class);
+
+        // MVC (JSP) support
+        register(JspMvcFeature.class);
     }
 }
