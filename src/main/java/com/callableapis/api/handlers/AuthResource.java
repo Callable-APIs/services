@@ -61,7 +61,7 @@ public class AuthResource {
         String body = "client_id=" + urlEncode(AppConfig.getGithubClientId()) +
                 "&client_secret=" + urlEncode(AppConfig.getGithubClientSecret()) +
                 "&code=" + urlEncode(code) +
-                "&redirect_uri=" + urlEncode(AppConfig.getPublicBaseUrl() + "/auth/callback");
+                "&redirect_uri=" + urlEncode(AppConfig.getGithubCallbackUrl());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(AppConfig.getGithubTokenUri())
                 .header("Accept", "application/json")

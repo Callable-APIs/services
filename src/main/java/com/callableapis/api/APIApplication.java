@@ -1,6 +1,7 @@
 package com.callableapis.api;
 
 import com.callableapis.api.handlers.AuthResource;
+import com.callableapis.api.handlers.RootResource;
 import com.callableapis.api.handlers.v1.CalendarResource;
 import com.callableapis.api.handlers.UserResource;
 import com.callableapis.api.health.HealthResource;
@@ -16,6 +17,7 @@ public class APIApplication extends ResourceConfig {
         register(CalendarResource.class);
         register(AuthResource.class);
         register(UserResource.class);
+        register(RootResource.class);
         register(HealthResource.class);
         // Filters
         register(BearerAuthFilter.class);

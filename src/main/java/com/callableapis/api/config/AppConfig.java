@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public final class AppConfig {
     private AppConfig() {}
+    private static final String PUBLIC_BASE_URL = "https://api.callableapis.com";
 
     public static String getGithubClientId() {
         return requireEnv("GITHUB_CLIENT_ID");
@@ -14,10 +15,7 @@ public final class AppConfig {
         return requireEnv("GITHUB_CLIENT_SECRET");
     }
 
-    public static String getPublicBaseUrl() {
-        // e.g. https://your.domain
-        return requireEnv("PUBLIC_BASE_URL");
-    }
+    public static String getPublicBaseUrl() { return PUBLIC_BASE_URL; }
 
     public static String getApiKeySalt() {
         String v = System.getenv("API_KEY_SALT");
@@ -40,10 +38,14 @@ public final class AppConfig {
     public static URI getGithubAuthorizeUri(String state) {
         String authorize = "https://github.com/login/oauth/authorize" +
                 "?client_id=" + urlEncode(getGithubClientId()) +
-                "&redirect_uri=" + urlEncode(getPublicBaseUrl() + "/auth/callback") +
+                "&redirect_uri=" + urlEncode(getGithubCallbackUrl()) +
                 "&scope=" + urlEncode("read:user user:email") +
                 "&state=" + urlEncode(state);
         return URI.create(authorize);
+    }
+
+    public static String getGithubCallbackUrl() {
+        return getPublicBaseUrl() + "/auth/callback";
     }
 
     public static URI getGithubTokenUri() {
