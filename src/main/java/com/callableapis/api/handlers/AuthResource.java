@@ -1,13 +1,14 @@
 package com.callableapis.api.handlers;
 
 import com.callableapis.api.config.AppConfig;
-import com.callableapis.api.security.ApiKeyService;
+import com.callableapis.api.security.ApiKeyStore;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.net.URI;
@@ -21,6 +22,8 @@ import java.util.UUID;
 
 @Path("auth")
 public class AuthResource {
+    @Inject
+    private ApiKeyStore apiKeyStore;
 
     @GET
     @Path("/login")
@@ -49,7 +52,7 @@ public class AuthResource {
             return Response.status(Response.Status.BAD_GATEWAY).entity("Failed to fetch user").build();
         }
         String identity = "github:" + login;
-        String apiKey = ApiKeyService.getInstance().getOrCreateApiKeyForIdentity(identity);
+        String apiKey = apiKeyStore.getOrCreateApiKeyForIdentity(identity);
         return Response.ok(Map.of(
                 "identity", identity,
                 "apiKey", apiKey

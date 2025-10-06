@@ -2,7 +2,6 @@
 
 Environment variables required:
 
-- `PUBLIC_BASE_URL`: Public base URL, e.g. `https://your.domain`
 - `GITHUB_CLIENT_ID`: GitHub OAuth app Client ID
 - `GITHUB_CLIENT_SECRET`: GitHub OAuth app Client Secret
 - `API_KEY_SALT`: Random secret string used to salt API key hashes
@@ -10,8 +9,9 @@ Environment variables required:
 
 Endpoints:
 
+- `GET /` → public instructions page (with GitHub connect link)
 - `GET /auth/login` → redirects to GitHub
-- `GET /auth/callback?code=...` → returns `{ identity, apiKey }`
+- `GET /auth/callback?code=...` → returns `{ identity, apiKey }` (callback hardcoded to `https://api.callableapis.com/auth/callback`)
 - `GET /user/me` → requires `Authorization: Bearer <apiKey>`, returns `{ identity, apiKey }`
 - `POST /user/key/rotate` → requires bearer; rotates and returns new key
 - `GET /v1/calendar/date` → requires bearer; returns date

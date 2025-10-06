@@ -6,6 +6,8 @@ import com.callableapis.api.handlers.v1.CalendarResource;
 import com.callableapis.api.handlers.UserResource;
 import com.callableapis.api.health.HealthResource;
 import com.callableapis.api.security.BearerAuthFilter;
+import com.callableapis.api.di.AppBinder;
+import com.callableapis.api.web.NotFoundRedirectMapper;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import jakarta.ws.rs.ApplicationPath;
@@ -21,5 +23,11 @@ public class APIApplication extends ResourceConfig {
         register(HealthResource.class);
         // Filters
         register(BearerAuthFilter.class);
+
+        // Dependency injection bindings
+        register(new AppBinder());
+
+        // Exception mappers
+        register(NotFoundRedirectMapper.class);
     }
 }

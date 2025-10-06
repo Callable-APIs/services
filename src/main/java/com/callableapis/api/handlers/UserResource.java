@@ -1,6 +1,6 @@
 package com.callableapis.api.handlers;
 
-import com.callableapis.api.security.ApiKeyService;
+import com.callableapis.api.security.ApiKeyStore;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -9,12 +9,15 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.inject.Inject;
 
 import java.util.Map;
 import java.util.Optional;
 
 @Path("user")
 public class UserResource {
+    @Inject
+    private ApiKeyStore apiKeyStore;
 
     @GET
     @Path("/me")
@@ -24,7 +27,7 @@ public class UserResource {
         if (identity == null) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Unauthorized").build();
         }
-        String apiKey = ApiKeyService.getInstance().getOrCreateApiKeyForIdentity(identity);
+        String apiKey = apiKeyStore.getOrCreateApiKeyForIdentity(identity);
         return Response.ok(Map.of(
                 "identity", identity,
                 "apiKey", apiKey
@@ -39,7 +42,7 @@ public class UserResource {
         if (identity == null) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Unauthorized").build();
         }
-        String apiKey = ApiKeyService.getInstance().rotateApiKeyForIdentity(identity);
+        String apiKey = apiKeyStore.rotateApiKeyForIdentity(identity);
         return Response.ok(Map.of(
                 "identity", identity,
                 "apiKey", apiKey

@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class ApiKeyService {
+public final class ApiKeyService implements ApiKeyStore, RateLimitService {
     private static final ApiKeyService INSTANCE = new ApiKeyService();
 
     private final ConcurrentHashMap<String, String> identityToApiKey = new ConcurrentHashMap<>();
@@ -18,6 +18,7 @@ public final class ApiKeyService {
 
     public static ApiKeyService getInstance() { return INSTANCE; }
 
+    @Override
     public String getOrCreateApiKeyForIdentity(String oidcIdentity) {
         Objects.requireNonNull(oidcIdentity, "oidcIdentity");
         return identityToApiKey.computeIfAbsent(oidcIdentity, id -> {
@@ -27,6 +28,7 @@ public final class ApiKeyService {
         });
     }
 
+    @Override
     public String rotateApiKeyForIdentity(String oidcIdentity) {
         Objects.requireNonNull(oidcIdentity, "oidcIdentity");
         String oldKey = identityToApiKey.remove(oidcIdentity);
@@ -40,12 +42,15 @@ public final class ApiKeyService {
         return newKey;
     }
 
+    @Override
     public Optional<String> findIdentityByApiKey(String apiKey) {
         return Optional.ofNullable(apiKeyToIdentity.get(apiKey));
     }
 
-    public RateLimiter getRateLimiterForApiKey(String apiKey) {
+    @Override
+    public boolean tryAcquire(String apiKey) {
         double permitsPerSecond = Math.max(1, AppConfig.getRateLimitQps());
-        return apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
+        RateLimiter limiter = apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
+        return limiter.tryAcquire();
     }
 }

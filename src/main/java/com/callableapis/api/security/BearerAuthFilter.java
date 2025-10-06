@@ -1,7 +1,7 @@
 package com.callableapis.api.security;
 
-import com.callableapis.api.config.AppConfig;
 import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -15,11 +15,18 @@ import java.util.Optional;
 @Priority(Priorities.AUTHENTICATION)
 public class BearerAuthFilter implements ContainerRequestFilter {
 
+    @Inject
+    private ApiKeyStore apiKeyStore;
+
+    @Inject
+    private RateLimitService rateLimitService;
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        // Skip authentication for OIDC login/callback and basic health endpoints
+        // Only protect API endpoints; leave others public for docs/redirects
         String path = requestContext.getUriInfo().getPath();
-        if (path.startsWith("auth/") || path.startsWith("health")) {
+        boolean isProtectedApi = path.startsWith("v1/") || path.startsWith("user/");
+        if (!isProtectedApi) {
             return;
         }
 
@@ -35,15 +42,14 @@ public class BearerAuthFilter implements ContainerRequestFilter {
             return;
         }
 
-        ApiKeyService apiKeyService = ApiKeyService.getInstance();
-        Optional<String> identityOpt = apiKeyService.findIdentityByApiKey(token);
+        Optional<String> identityOpt = apiKeyStore.findIdentityByApiKey(token);
         if (identityOpt.isEmpty()) {
             abort(requestContext, Response.Status.FORBIDDEN, "Invalid API key");
             return;
         }
 
         // Rate limit before proceeding
-        if (!apiKeyService.getRateLimiterForApiKey(token).tryAcquire()) {
+        if (!rateLimitService.tryAcquire(token)) {
             abort(requestContext, Response.Status.TOO_MANY_REQUESTS, "Rate limit exceeded");
             return;
         }
