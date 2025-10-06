@@ -12,7 +12,6 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.inject.Inject;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Path("user")
 public class UserResource {

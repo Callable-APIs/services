@@ -16,7 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 
@@ -104,13 +103,21 @@ public class AuthResource {
         // Minimal JSON parsing to avoid extra deps: "key":"value"
         String quotedKey = "\"" + key + "\"";
         int idx = json.indexOf(quotedKey);
-        if (idx < 0) return null;
+        if (idx < 0) {
+            return null;
+        }
         int colon = json.indexOf(':', idx);
-        if (colon < 0) return null;
+        if (colon < 0) {
+            return null;
+        }
         int startQuote = json.indexOf('"', colon + 1);
-        if (startQuote < 0) return null;
+        if (startQuote < 0) {
+            return null;
+        }
         int endQuote = json.indexOf('"', startQuote + 1);
-        if (endQuote < 0) return null;
+        if (endQuote < 0) {
+            return null;
+        }
         return json.substring(startQuote + 1, endQuote);
     }
 }
