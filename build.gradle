@@ -27,15 +27,21 @@ dependencies {
     implementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.1.0'
     implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
     implementation 'jakarta.activation:jakarta.activation-api:2.1.2'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     
     // JSON processing
     implementation 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.15.2'
     
     // Utilities
     implementation 'com.google.guava:guava:32.1.3-jre'
+
+    // JSON-B for simple parsing (optional, kept minimal)
+    implementation 'org.eclipse:yasson:3.0.3'
     
     // Test dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testImplementation 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.10.0'
     testImplementation 'org.glassfish.jersey.test-framework:jersey-test-framework-core:3.1.3'
     testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:3.1.3'
 }
