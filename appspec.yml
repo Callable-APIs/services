@@ -1,6 +1,10 @@
 version: 0.0
 os: linux
+files:
+  - source: callableapis-webapp-1.0.0.war
+    destination: /var/lib/tomcat/webapps/ROOT.war
 hooks:
   ApplicationStart:
-    - location: codedeploy-app-start.sh
-      timeout: 3600
+    - location: scripts/restart-tomcat.sh
+      timeout: 300
+      runas: root

@@ -3,11 +3,22 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto8
+      java: corretto21
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
   build:
     commands:
-     - ./gradlew clean installEc2Dist
+      - echo Build started on `date`
+      - echo Building the WAR file...
+      - ./gradlew clean war
+      - echo Build completed on `date`
+  post_build:
+    commands:
+      - echo Build phase completed
 artifacts:
-  base-directory: 'build/install/callableapis-webapp-ec2'
+  base-directory: "build/libs"
   files:
-    - '**/*'
+    - "callableapis-webapp-1.0.0.war"
+    - "**/*"
