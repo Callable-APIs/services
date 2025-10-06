@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: callableapis-webapp-1.0.0.war
+  - source: ROOT.war
     destination: /var/lib/tomcat/webapps/ROOT.war
 hooks:
   ApplicationStart:

@@ -41,8 +41,8 @@ dependencies {
 }
 
 war {
-    archiveBaseName = 'callableapis-webapp'
-    archiveVersion = '1.0.0'
+    archiveBaseName = 'ROOT'
+    archiveVersion = ''
 }
 
 test {

@@ -35,7 +35,7 @@ WORKDIR $CATALINA_HOME
 RUN rm -rf $CATALINA_HOME/webapps/*
 
 # Copy the WAR file from builder stage
-COPY --from=builder /app/build/libs/callableapis-webapp-1.0.0.war $CATALINA_HOME/webapps/ROOT.war
+COPY --from=builder /app/build/libs/ROOT.war $CATALINA_HOME/webapps/ROOT.war
 
 # Create logs directory
 RUN mkdir -p $CATALINA_HOME/logs

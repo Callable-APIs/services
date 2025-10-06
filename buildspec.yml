@@ -20,5 +20,5 @@ phases:
 artifacts:
   base-directory: "build/libs"
   files:
-    - "callableapis-webapp-1.0.0.war"
+    - "ROOT.war"
     - "**/*"

@@ -4,9 +4,6 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
 
-# Gradle Wrapper
-gradle/wrapper/gradle-wrapper.jar
-
 # IDE
 .idea/
 *.iml

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callable APIs - Service Documentation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .api-section {
+            margin-bottom: 30px;
+        }
+
+        .api-section h2 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .endpoint:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .method {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .path {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 1.1em;
+            color: #495057;
+        }
+
+        .description {
+            margin-top: 8px;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .example {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .try-button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px 5px;
+            transition: background 0.3s ease;
+        }
+
+        .try-button:hover {
+            background: #5a6fd8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Callable APIs</h1>
+            <p>RESTful Web Service Documentation</p>
+        </div>
+
+        <div class="content">
+            <div class="status">
+                <strong>✅ Service Status:</strong> Online and ready to serve requests
+            </div>
+
+            <div class="api-section">
+                <h2>Available Endpoints</h2>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/api/v1/calendar/date</span>
+                    <div class="description">
+                        Returns the current date in JSON format with year, month, and day components.
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example Request:</div>
+                    <div>curl -X GET http://your-domain/api/v1/calendar/date</div>
+                </div>
+
+                <div class="example">
+                    <div class="example-title">Example Response:</div>
+                    <div>{
+                        "year": 2025,
+                        "month": 9,
+                        "day": 6
+                        }</div>
+                </div>
+            </div>
+
+            <div class="api-section">
+                <h2>Try It Out</h2>
+                <p>Click the button below to test the API endpoint:</p>
+                <button class="try-button" onclick="testAPI()">Test Calendar API</button>
+                <div id="result" style="margin-top: 15px;"></div>
+            </div>
+
+            <div class="api-section">
+                <h2>Service Information</h2>
+                <ul>
+                    <li><strong>Java Version:</strong> 21 (Corretto 21)</li>
+                    <li><strong>Application Server:</strong> Tomcat 11</li>
+                    <li><strong>Framework:</strong> Jersey 3.x with Jakarta EE</li>
+                    <li><strong>Deployment:</strong> AWS Elastic Beanstalk</li>
+                    <li><strong>Base URL:</strong> <span id="baseUrl"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Built with ❤️ using modern Java technologies</p>
+            <p>Last updated: <span id="lastUpdated"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Set the base URL dynamically
+        document.getElementById('baseUrl').textContent = window.location.origin;
+
+        // Set the last updated date
+        document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString();
+
+        // Function to test the API
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div style="color: #007bff;">Testing API...</div>';
+
+            try {
+                const response = await fetch('/api/v1/calendar/date');
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; border-left: 4px solid #28a745;">
+                            <strong>✅ Success!</strong><br>
+                            <pre style="margin: 10px 0; font-family: monospace;">${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; border-left: 4px solid #dc3545;">
+                        <strong>❌ Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>
