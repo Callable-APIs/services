@@ -23,8 +23,28 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
+    <!-- Handle auth endpoints with Jersey -->
+    <servlet-mapping>
+        <servlet-name>JerseyServlet</servlet-name>
+        <url-pattern>/auth/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Handle user endpoints with Jersey -->
+    <servlet-mapping>
+        <servlet-name>JerseyServlet</servlet-name>
+        <url-pattern>/user/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Handle health endpoint with Jersey -->
+    <servlet-mapping>
+        <servlet-name>JerseyServlet</servlet-name>
+        <url-pattern>/health</url-pattern>
+    </servlet-mapping>
+
+    <!-- Handle root path with Jersey -->
+    <servlet-mapping>
+        <servlet-name>JerseyServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 
 </web-app>

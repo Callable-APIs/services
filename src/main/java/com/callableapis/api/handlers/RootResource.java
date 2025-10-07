@@ -8,11 +8,21 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Context;
 import jakarta.servlet.ServletContext;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("")
 public class RootResource {
     @Context
     private ServletContext servletContext;
+    
+    @Context
+    private ContainerRequestContext requestContext;
+    
+    @Context
+    private HttpServletRequest httpRequest;
 
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -40,6 +50,22 @@ https://api.callableapis.com/v1/calendar/date
                     """;
             return Response.ok(html).build();
         }
-        return new Viewable("/WEB-INF/jsp/index.jsp");
+        
+        // Prepare data for JSP
+        Map<String, Object> model = new HashMap<>();
+        
+        // Check if user is authenticated via Bearer token
+        String identity = (String) requestContext.getProperty("api.identity");
+        boolean isAuthenticated = identity != null && !identity.isEmpty();
+        
+        model.put("isAuthenticated", isAuthenticated);
+        model.put("identity", identity);
+        
+        // Check for Authorization header for display purposes
+        String authHeader = httpRequest.getHeader("Authorization");
+        boolean hasBearerToken = authHeader != null && authHeader.startsWith("Bearer ");
+        model.put("hasBearerToken", hasBearerToken);
+        
+        return new Viewable("/WEB-INF/jsp/index.jsp", model);
     }
 }
