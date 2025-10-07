@@ -2,6 +2,9 @@ package com.callableapis.api.handlers;
 
 import com.callableapis.api.config.AppConfig;
 import com.callableapis.api.security.ApiKeyStore;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -73,10 +76,9 @@ public class AuthResource {
         if (response.statusCode() / 100 != 2) {
             return null;
         }
-        // naive parse; could use JSON-B but keep minimal
         String json = response.body();
-        String token = extractJsonString(json, "access_token");
-        return token;
+        TokenResponse tokenResponse = parseJson(json, TokenResponse.class);
+        return tokenResponse != null ? tokenResponse.accessToken : null;
     }
 
     private String fetchGithubLogin(String accessToken) throws IOException, InterruptedException {
@@ -92,32 +94,28 @@ public class AuthResource {
             return null;
         }
         String json = response.body();
-        return extractJsonString(json, "login");
+        GithubUser user = parseJson(json, GithubUser.class);
+        return user != null ? user.login : null;
     }
 
     private static String urlEncode(String v) {
         return java.net.URLEncoder.encode(v, StandardCharsets.UTF_8);
     }
 
-    private static String extractJsonString(String json, String key) {
-        // Minimal JSON parsing to avoid extra deps: "key":"value"
-        String quotedKey = "\"" + key + "\"";
-        int idx = json.indexOf(quotedKey);
-        if (idx < 0) {
+    private static <T> T parseJson(String json, Class<T> type) {
+        try (Jsonb jsonb = JsonbBuilder.create()) {
+            return jsonb.fromJson(json, type);
+        } catch (Exception ex) {
             return null;
         }
-        int colon = json.indexOf(':', idx);
-        if (colon < 0) {
-            return null;
-        }
-        int startQuote = json.indexOf('"', colon + 1);
-        if (startQuote < 0) {
-            return null;
-        }
-        int endQuote = json.indexOf('"', startQuote + 1);
-        if (endQuote < 0) {
-            return null;
-        }
-        return json.substring(startQuote + 1, endQuote);
+    }
+
+    public static class TokenResponse {
+        @JsonbProperty("access_token")
+        public String accessToken;
+    }
+
+    public static class GithubUser {
+        public String login;
     }
 }
