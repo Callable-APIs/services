@@ -24,7 +24,8 @@ public class BearerAuthFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         // Only protect API endpoints; leave others public for docs/redirects
-        String path = requestContext.getUriInfo().getPath();
+        String rawPath = requestContext.getUriInfo().getPath();
+        String path = rawPath.startsWith("/") ? rawPath.substring(1) : rawPath;
         boolean isProtectedApi = path.startsWith("v1/") || path.startsWith("user/");
         if (!isProtectedApi) {
             return;
