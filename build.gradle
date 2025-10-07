@@ -57,10 +57,14 @@ configurations {
 }
 
 dependencies {
-    jspc 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.26'
+    // Use Jasper CLI (JspC) from full Tomcat dist, plus Ant
+    jspc 'org.apache.tomcat:tomcat-jasper:10.1.26'
     jspc 'org.apache.tomcat.embed:tomcat-embed-core:10.1.26'
     jspc 'org.apache.tomcat.embed:tomcat-embed-el:10.1.26'
     jspc 'org.eclipse.jdt:ecj:3.37.0'
+    jspc 'org.apache.ant:ant:1.10.14'
+    jspc 'org.apache.ant:ant-launcher:1.10.14'
+    jspc 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 }
 
 task precompileJsp(type: JavaExec) {
@@ -90,10 +94,7 @@ war {
     dependsOn precompileJsp
 }
 
-war {
-    archiveBaseName = 'ROOT'
-    archiveVersion = ''
-}
+
 
 test {
     useJUnitPlatform()
