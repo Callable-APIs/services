@@ -59,6 +59,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Compile classes
+        run: ./gradlew --no-daemon classes testClasses
+
       - name: Run SpotBugs
         run: ./gradlew --no-daemon spotbugsMain spotbugsTest
 
