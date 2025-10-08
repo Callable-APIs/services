@@ -41,6 +41,12 @@
         <url-pattern>/health</url-pattern>
     </servlet-mapping>
 
+    <!-- Handle debug endpoints with Jersey -->
+    <servlet-mapping>
+        <servlet-name>JerseyServlet</servlet-name>
+        <url-pattern>/debug/*</url-pattern>
+    </servlet-mapping>
+
     <!-- Welcome file configuration -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

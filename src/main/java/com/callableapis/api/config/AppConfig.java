@@ -2,34 +2,42 @@ package com.callableapis.api.config;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public final class AppConfig {
     private AppConfig() {}
+    private static final Logger logger = Logger.getLogger(AppConfig.class.getName());
     private static final String PUBLIC_BASE_URL = "https://api.callableapis.com";
     private static final ParameterStoreService parameterStore = ParameterStoreService.getInstance();
 
     public static String getGithubClientId() {
-        return parameterStore.getParameterWithEnvFallback(
+        String value = parameterStore.getParameterWithEnvFallback(
             "/callableapis/github/client-id", 
             "GITHUB_CLIENT_ID", 
             null
         );
+        logger.info("GitHub Client ID: " + (value != null ? "***" + value.substring(Math.max(0, value.length() - 4)) : "null"));
+        return value;
     }
 
     public static String getGithubClientSecret() {
-        return parameterStore.getParameterWithEnvFallback(
+        String value = parameterStore.getParameterWithEnvFallback(
             "/callableapis/github/client-secret", 
             "GITHUB_CLIENT_SECRET", 
             null
         );
+        logger.info("GitHub Client Secret: " + (value != null ? "***" + value.substring(Math.max(0, value.length() - 4)) : "null"));
+        return value;
     }
 
     public static String getGithubOAuthScope() {
-        return parameterStore.getParameterWithEnvFallback(
+        String value = parameterStore.getParameterWithEnvFallback(
             "/callableapis/github/oauth-scope", 
             "GITHUB_OAUTH_SCOPE", 
             "read:user user:email"
         );
+        logger.info("GitHub OAuth Scope: " + value);
+        return value;
     }
 
     public static String getGithubCallbackUrl() {

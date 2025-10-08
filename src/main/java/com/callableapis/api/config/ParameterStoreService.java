@@ -48,13 +48,18 @@ public final class ParameterStoreService {
      * @return The parameter value or fallback value
      */
     public String getParameter(String parameterName, String fallbackValue) {
+        logger.info("Attempting to get parameter: " + parameterName);
+        
         // Check cache first
         CachedParameter cached = cache.get(parameterName);
         if (cached != null && !cached.isExpired()) {
+            logger.info("Using cached parameter: " + parameterName + " = " + cached.value);
             return cached.value;
         }
         
         try {
+            logger.info("Fetching parameter from Parameter Store: " + parameterName);
+            
             // Fetch from Parameter Store
             GetParameterRequest request = GetParameterRequest.builder()
                     .name(parameterName)
@@ -67,19 +72,21 @@ public final class ParameterStoreService {
             // Cache the result
             cache.put(parameterName, new CachedParameter(value, System.currentTimeMillis()));
             
-            logger.info("Retrieved parameter from Parameter Store: " + parameterName);
+            logger.info("Successfully retrieved parameter from Parameter Store: " + parameterName + " = " + value);
             return value;
             
         } catch (ParameterNotFoundException e) {
-            logger.warning("Parameter not found in Parameter Store: " + parameterName + ", using fallback");
+            logger.warning("Parameter not found in Parameter Store: " + parameterName + ", using fallback: " + fallbackValue);
             return fallbackValue;
         } catch (SsmException e) {
-            logger.warning("Failed to retrieve parameter from Parameter Store: " + parameterName + 
-                          ", error: " + e.getMessage() + ", using fallback");
+            logger.warning("SSM error retrieving parameter: " + parameterName + 
+                          ", error: " + e.getMessage() + ", error code: " + e.awsErrorDetails().errorCode() + 
+                          ", using fallback: " + fallbackValue);
             return fallbackValue;
         } catch (Exception e) {
             logger.severe("Unexpected error retrieving parameter: " + parameterName + 
-                         ", error: " + e.getMessage() + ", using fallback");
+                         ", error: " + e.getMessage() + ", using fallback: " + fallbackValue);
+            e.printStackTrace();
             return fallbackValue;
         }
     }
