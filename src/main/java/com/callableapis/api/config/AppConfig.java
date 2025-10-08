@@ -8,7 +8,13 @@ public final class AppConfig {
     private AppConfig() {}
     private static final Logger logger = Logger.getLogger(AppConfig.class.getName());
     private static final String PUBLIC_BASE_URL = "https://api.callableapis.com";
-    private static final ParameterStoreService parameterStore = ParameterStoreService.getInstance();
+    private static final ParameterStoreService parameterStore;
+    
+    static {
+        logger.info("Initializing AppConfig...");
+        parameterStore = ParameterStoreService.getInstance();
+        logger.info("AppConfig initialized successfully");
+    }
 
     public static String getGithubClientId() {
         String value = parameterStore.getParameterWithEnvFallback(

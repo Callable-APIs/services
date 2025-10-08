@@ -30,10 +30,17 @@ public class AuthResource {
     @GET
     @Path("/login")
     public Response login() {
-        String state = UUID.randomUUID().toString();
-        // In a real app, store the state in session/cookie; for simplicity we skip it
-        URI redirect = AppConfig.getGithubAuthorizeUri(state);
-        return Response.seeOther(redirect).build();
+        try {
+            String state = UUID.randomUUID().toString();
+            // In a real app, store the state in session/cookie; for simplicity we skip it
+            URI redirect = AppConfig.getGithubAuthorizeUri(state);
+            return Response.seeOther(redirect).build();
+        } catch (Exception e) {
+            // If OAuth configuration fails, return error instead of redirecting
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("OAuth configuration error: " + e.getMessage())
+                    .build();
+        }
     }
 
     @GET

@@ -25,15 +25,18 @@ public final class ParameterStoreService {
     private final long CACHE_TTL_MINUTES = 5; // Cache for 5 minutes
     
     private ParameterStoreService() {
+        logger.info("Initializing Parameter Store Service...");
+        SsmClient client = null;
         try {
-            this.ssmClient = SsmClient.builder()
+            client = SsmClient.builder()
                     .region(Region.US_EAST_1) // Adjust region as needed
                     .credentialsProvider(DefaultCredentialsProvider.create())
                     .build();
+            logger.info("Parameter Store Service initialized successfully");
         } catch (Exception e) {
-            logger.warning("Failed to initialize SSM client: " + e.getMessage());
-            throw new RuntimeException("Failed to initialize Parameter Store service", e);
+            logger.warning("Failed to initialize SSM client (will use environment variables only): " + e.getMessage());
         }
+        this.ssmClient = client; // Set to null if initialization failed
     }
     
     public static ParameterStoreService getInstance() {
@@ -55,6 +58,12 @@ public final class ParameterStoreService {
         if (cached != null && !cached.isExpired()) {
             logger.info("Using cached parameter: " + parameterName + " = " + cached.value);
             return cached.value;
+        }
+        
+        // If SSM client is not available, skip Parameter Store and use fallback
+        if (ssmClient == null) {
+            logger.info("SSM client not available, using fallback value for: " + parameterName);
+            return fallbackValue;
         }
         
         try {
