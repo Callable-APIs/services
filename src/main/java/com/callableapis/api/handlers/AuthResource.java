@@ -30,13 +30,36 @@ public class AuthResource {
     @GET
     @Path("/login")
     public Response login() {
+        System.out.println("=== AuthResource.login() called ===");
         try {
             String state = UUID.randomUUID().toString();
-            // In a real app, store the state in session/cookie; for simplicity we skip it
+            System.out.println("Generated state: " + state);
+            
+            // Test configuration values
+            String clientId = AppConfig.getGithubClientId();
+            String clientSecret = AppConfig.getGithubClientSecret();
+            String oauthScope = AppConfig.getGithubOAuthScope();
+            String callbackUrl = AppConfig.getGithubCallbackUrl();
+            
+            System.out.println("Configuration values:");
+            System.out.println("- Client ID: " + (clientId != null ? "***" + clientId.substring(Math.max(0, clientId.length() - 4)) : "NULL"));
+            System.out.println("- Client Secret: " + (clientSecret != null ? "***" + clientSecret.substring(Math.max(0, clientSecret.length() - 4)) : "NULL"));
+            System.out.println("- OAuth Scope: " + oauthScope);
+            System.out.println("- Callback URL: " + callbackUrl);
+            
+            if (clientId == null || clientId.isBlank()) {
+                System.out.println("ERROR: GitHub Client ID is null or blank!");
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity("GitHub Client ID is not configured")
+                        .build();
+            }
+            
             URI redirect = AppConfig.getGithubAuthorizeUri(state);
+            System.out.println("Generated OAuth URL: " + redirect.toString());
             return Response.seeOther(redirect).build();
         } catch (Exception e) {
-            // If OAuth configuration fails, return error instead of redirecting
+            System.out.println("ERROR in AuthResource.login(): " + e.getMessage());
+            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("OAuth configuration error: " + e.getMessage())
                     .build();

@@ -11,9 +11,31 @@ public final class AppConfig {
     private static final ParameterStoreService parameterStore;
     
     static {
-        logger.info("Initializing AppConfig...");
-        parameterStore = ParameterStoreService.getInstance();
-        logger.info("AppConfig initialized successfully");
+        logger.info("=== AppConfig Static Initialization Started ===");
+        try {
+            parameterStore = ParameterStoreService.getInstance();
+            logger.info("ParameterStoreService instance obtained successfully");
+            
+            // Test configuration loading immediately
+            logger.info("Testing configuration loading...");
+            String clientId = getGithubClientId();
+            String clientSecret = getGithubClientSecret();
+            String oauthScope = getGithubOAuthScope();
+            String callbackUrl = getGithubCallbackUrl();
+            
+            logger.info("Configuration test results:");
+            logger.info("- GitHub Client ID: " + (clientId != null ? "***" + clientId.substring(Math.max(0, clientId.length() - 4)) : "NULL"));
+            logger.info("- GitHub Client Secret: " + (clientSecret != null ? "***" + clientSecret.substring(Math.max(0, clientSecret.length() - 4)) : "NULL"));
+            logger.info("- GitHub OAuth Scope: " + oauthScope);
+            logger.info("- GitHub Callback URL: " + callbackUrl);
+            
+            logger.info("=== AppConfig Static Initialization Completed Successfully ===");
+        } catch (Exception e) {
+            logger.severe("=== AppConfig Static Initialization FAILED ===");
+            logger.severe("Error: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("AppConfig initialization failed", e);
+        }
     }
 
     public static String getGithubClientId() {
