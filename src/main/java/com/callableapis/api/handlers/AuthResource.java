@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
-@Path("auth")
+@Path("/auth")
 public class AuthResource {
     @Inject
     private ApiKeyStore apiKeyStore;

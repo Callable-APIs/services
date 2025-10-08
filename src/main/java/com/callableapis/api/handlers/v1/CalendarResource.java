@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 
-@Path("v1/calendar")
+@Path("/v1/calendar")
 public class CalendarResource {
     private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 

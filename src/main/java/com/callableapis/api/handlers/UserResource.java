@@ -13,7 +13,7 @@ import jakarta.inject.Inject;
 
 import java.util.Map;
 
-@Path("user")
+@Path("/user")
 public class UserResource {
     @Inject
     private ApiKeyStore apiKeyStore;

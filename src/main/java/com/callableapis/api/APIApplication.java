@@ -3,6 +3,7 @@ package com.callableapis.api;
 import com.callableapis.api.handlers.AuthResource;
 import com.callableapis.api.handlers.DebugResource;
 import com.callableapis.api.handlers.RootResource;
+import com.callableapis.api.handlers.TestResource;
 import com.callableapis.api.handlers.v1.CalendarResource;
 import com.callableapis.api.handlers.UserResource;
 import com.callableapis.api.health.HealthResource;
@@ -16,10 +17,11 @@ import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
 import jakarta.ws.rs.ApplicationPath;
 
-@ApplicationPath("/")
+@ApplicationPath("/api")
 public class APIApplication extends ResourceConfig {
     public APIApplication() {
         // Resources
+        register(TestResource.class);
         register(CalendarResource.class);
         register(AuthResource.class);
         register(UserResource.class);

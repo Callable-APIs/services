@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.Map;
 
-@Path("health")
+@Path("/health")
 public class HealthResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("debug")
+@Path("/debug")
 public class DebugResource {
 
     @GET
