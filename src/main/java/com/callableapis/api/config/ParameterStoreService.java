@@ -1,0 +1,133 @@
+package com.callableapis.api.config;
+
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.ssm.SsmClient;
+import software.amazon.awssdk.services.ssm.model.GetParameterRequest;
+import software.amazon.awssdk.services.ssm.model.GetParameterResponse;
+import software.amazon.awssdk.services.ssm.model.ParameterNotFoundException;
+import software.amazon.awssdk.services.ssm.model.SsmException;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
+
+/**
+ * Service for reading configuration values from AWS Systems Manager Parameter Store.
+ * Includes caching to avoid repeated API calls and fallback to environment variables.
+ */
+public final class ParameterStoreService {
+    private static final Logger logger = Logger.getLogger(ParameterStoreService.class.getName());
+    private static final ParameterStoreService INSTANCE = new ParameterStoreService();
+    
+    private final SsmClient ssmClient;
+    private final ConcurrentHashMap<String, CachedParameter> cache = new ConcurrentHashMap<>();
+    private final long CACHE_TTL_MINUTES = 5; // Cache for 5 minutes
+    
+    private ParameterStoreService() {
+        try {
+            this.ssmClient = SsmClient.builder()
+                    .region(Region.US_EAST_1) // Adjust region as needed
+                    .credentialsProvider(DefaultCredentialsProvider.create())
+                    .build();
+        } catch (Exception e) {
+            logger.warning("Failed to initialize SSM client: " + e.getMessage());
+            throw new RuntimeException("Failed to initialize Parameter Store service", e);
+        }
+    }
+    
+    public static ParameterStoreService getInstance() {
+        return INSTANCE;
+    }
+    
+    /**
+     * Get a parameter value from Parameter Store with caching and fallback.
+     * 
+     * @param parameterName The parameter name (e.g., "/callableapis/github/client-id")
+     * @param fallbackValue Fallback value if parameter is not found or service is unavailable
+     * @return The parameter value or fallback value
+     */
+    public String getParameter(String parameterName, String fallbackValue) {
+        // Check cache first
+        CachedParameter cached = cache.get(parameterName);
+        if (cached != null && !cached.isExpired()) {
+            return cached.value;
+        }
+        
+        try {
+            // Fetch from Parameter Store
+            GetParameterRequest request = GetParameterRequest.builder()
+                    .name(parameterName)
+                    .withDecryption(true) // Decrypt SecureString parameters
+                    .build();
+            
+            GetParameterResponse response = ssmClient.getParameter(request);
+            String value = response.parameter().value();
+            
+            // Cache the result
+            cache.put(parameterName, new CachedParameter(value, System.currentTimeMillis()));
+            
+            logger.info("Retrieved parameter from Parameter Store: " + parameterName);
+            return value;
+            
+        } catch (ParameterNotFoundException e) {
+            logger.warning("Parameter not found in Parameter Store: " + parameterName + ", using fallback");
+            return fallbackValue;
+        } catch (SsmException e) {
+            logger.warning("Failed to retrieve parameter from Parameter Store: " + parameterName + 
+                          ", error: " + e.getMessage() + ", using fallback");
+            return fallbackValue;
+        } catch (Exception e) {
+            logger.severe("Unexpected error retrieving parameter: " + parameterName + 
+                         ", error: " + e.getMessage() + ", using fallback");
+            return fallbackValue;
+        }
+    }
+    
+    /**
+     * Get a parameter value from Parameter Store, with fallback to environment variable.
+     * 
+     * @param parameterName The parameter name
+     * @param envVarName The environment variable name as fallback
+     * @param defaultValue Default value if both parameter store and env var are unavailable
+     * @return The parameter value, env var value, or default value
+     */
+    public String getParameterWithEnvFallback(String parameterName, String envVarName, String defaultValue) {
+        String paramValue = getParameter(parameterName, null);
+        if (paramValue != null) {
+            return paramValue;
+        }
+        
+        String envValue = System.getenv(envVarName);
+        if (envValue != null && !envValue.isBlank()) {
+            logger.info("Using environment variable fallback: " + envVarName);
+            return envValue;
+        }
+        
+        return defaultValue;
+    }
+    
+    /**
+     * Clear the cache (useful for testing or when parameters are updated)
+     */
+    public void clearCache() {
+        cache.clear();
+    }
+    
+    /**
+     * Cached parameter with expiration time
+     */
+    private static class CachedParameter {
+        final String value;
+        final long timestamp;
+        
+        CachedParameter(String value, long timestamp) {
+            this.value = value;
+            this.timestamp = timestamp;
+        }
+        
+        boolean isExpired() {
+            return System.currentTimeMillis() - timestamp > TimeUnit.MINUTES.toMillis(5);
+        }
+    }
+}
