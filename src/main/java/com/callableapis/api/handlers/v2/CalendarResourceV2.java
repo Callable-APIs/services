@@ -249,6 +249,20 @@ public class CalendarResourceV2 {
 		public double nightLengthHours;
 	}
 
+	public static class MoonlightRequest {
+		public Double lat;
+		public Double lon;
+		public BaseDateTime at; // optional, defaults to now
+	}
+
+	public static class MoonlightResponse {
+		public double elevationDeg;
+		public double azimuthDeg;
+		public double intensity; // 0..1, << 1
+		public boolean aboveHorizon;
+		public double illumination;
+	}
+
 	@POST
 	@Path("solar")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -266,6 +280,25 @@ public class CalendarResourceV2 {
 		out.daylight = si.isDaylight;
 		out.dayLengthHours = si.dayLengthHours;
 		out.nightLengthHours = si.nightLengthHours;
+		return out;
+	}
+
+	@POST
+	@Path("moonlight")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public MoonlightResponse moonlight(MoonlightRequest req) {
+		if (req == null || req.lat == null || req.lon == null) {
+			throw new IllegalArgumentException("lat and lon are required");
+		}
+		ZonedDateTime at = toZoned(req.at);
+		AstronomyService.MoonlightInfoResult mi = astronomyService.computeMoonlightInfo(at, req.lat, req.lon);
+		MoonlightResponse out = new MoonlightResponse();
+		out.elevationDeg = mi.elevationDeg;
+		out.azimuthDeg = mi.azimuthDeg;
+		out.intensity = mi.intensity;
+		out.aboveHorizon = mi.aboveHorizon;
+		out.illumination = mi.illumination;
 		return out;
 	}
 

@@ -29,6 +29,14 @@ public class AstronomyService {
 		public double nightLengthHours; // 24 - dayLength
 	}
 
+	public static class MoonlightInfoResult {
+		public double elevationDeg; // lunar elevation angle
+		public double azimuthDeg;   // lunar azimuth (0=N)
+		public double intensity;    // 0..1 proxy << 1, scaled by illumination and elevation
+		public boolean aboveHorizon;
+		public double illumination; // 0..1 from phase
+	}
+
 	// Synodic month length in days
 	private static final double SYNODIC_MONTH = 29.530588853;
 
@@ -121,6 +129,68 @@ public class AstronomyService {
 		r.isDaylight = elevationDeg > 0.0;
 		r.dayLengthHours = dayLenHours;
 		r.nightLengthHours = 24.0 - dayLenHours;
+		return r;
+	}
+
+	public MoonlightInfoResult computeMoonlightInfo(ZonedDateTime dateTimeUtc, double latitudeDeg, double longitudeDeg) {
+		// Use sun equations as a base, then shift by lunar phase and inclination to approximate moon position
+		MoonPhaseResult mp = computeMoonPhase(dateTimeUtc);
+		int dayOfYear = dateTimeUtc.getDayOfYear();
+		double minutes = dateTimeUtc.get(ChronoField.HOUR_OF_DAY) * 60.0 + dateTimeUtc.get(ChronoField.MINUTE_OF_HOUR) + dateTimeUtc.get(ChronoField.SECOND_OF_MINUTE) / 60.0;
+		double gamma = 2.0 * Math.PI / 365.0 * (dayOfYear - 1 + (minutes - 720.0) / 1440.0);
+
+		// Base solar declination
+		double declSun = 0.006918
+				- 0.399912 * Math.cos(gamma)
+				+ 0.070257 * Math.sin(gamma)
+				- 0.006758 * Math.cos(2 * gamma)
+				+ 0.000907 * Math.sin(2 * gamma)
+				- 0.002697 * Math.cos(3 * gamma)
+				+ 0.00148  * Math.sin(3 * gamma);
+
+		// Approximate lunar declination: solar declination plus up to ±5° depending on phase
+		double declMoon = declSun + Math.toRadians(5.145) * Math.sin(Math.toRadians(mp.phaseAngleDeg));
+
+		// Equation of time (minutes) for sun
+		double eot = 229.18 * (0.000075
+				+ 0.001868 * Math.cos(gamma)
+				- 0.032077 * Math.sin(gamma)
+				- 0.014615 * Math.cos(2 * gamma)
+				- 0.040849 * Math.sin(2 * gamma));
+
+		// True solar time (minutes)
+		double tst = minutes + eot + 4.0 * longitudeDeg;
+		double hourAngleSunDeg = (tst / 4.0) - 180.0;
+		hourAngleSunDeg = normalizeDegrees(hourAngleSunDeg);
+
+		// Approximate lunar hour angle: shift sun by phase*180° (new ~ sun, full ~ opposite)
+		double hourAngleMoonDeg = normalizeDegrees(hourAngleSunDeg + (mp.phase * 360.0 / 2.0)); // 0.5 phase -> +180°
+
+		double latRad = Math.toRadians(latitudeDeg);
+		double declRad = declMoon;
+		double hraRad = Math.toRadians(hourAngleMoonDeg);
+
+		double cosZenith = Math.sin(latRad) * Math.sin(declRad) + Math.cos(latRad) * Math.cos(declRad) * Math.cos(hraRad);
+		cosZenith = clamp(cosZenith, -1.0, 1.0);
+		double zenithRad = Math.acos(cosZenith);
+		double elevationDeg = 90.0 - Math.toDegrees(zenithRad);
+		// Azimuth
+		double sinAz = -Math.sin(hraRad) * Math.cos(declRad) / Math.sin(zenithRad);
+		double cosAz = (Math.sin(declRad) - Math.sin(latRad) * Math.cos(zenithRad)) / (Math.cos(latRad) * Math.sin(zenithRad));
+		double azimuthRad = Math.atan2(sinAz, cosAz);
+		double azimuthDeg = (Math.toDegrees(azimuthRad) + 360.0) % 360.0;
+
+		// Intensity proxy: illumination * cos(zenith) clipped, scaled to ensure < 1.0
+		double raw = Math.max(0.0, cosZenith) * mp.illumination;
+		// Scale down lunar intensity to a small fraction (moon is far dimmer than sun)
+		double intensity = Math.min(0.2, raw * 0.2); // cap at 0.2
+
+		MoonlightInfoResult r = new MoonlightInfoResult();
+		r.elevationDeg = elevationDeg;
+		r.azimuthDeg = azimuthDeg;
+		r.intensity = intensity;
+		r.aboveHorizon = elevationDeg > 0.0;
+		r.illumination = mp.illumination;
 		return r;
 	}
 

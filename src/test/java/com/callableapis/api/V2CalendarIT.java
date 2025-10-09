@@ -76,5 +76,19 @@ public class V2CalendarIT extends JerseyTest {
 		assertTrue(json.contains("\"intensity\""));
 		assertTrue(json.contains("\"daylight\""));
 	}
+
+	@Test
+	public void testMoonlightBasics() {
+		String payload = "{ \n" +
+				"  \"lat\": 37.7749, \"lon\": -122.4194, \n" +
+				"  \"at\": { \"year\": 2025, \"month\": 1, \"day\": 15, \"hour\": 22, \"minute\": 0, \"second\": 0 }\n" +
+				"}";
+		Response r = target("v2/calendar/moonlight").request().header("Authorization", bearer()).post(Entity.entity(payload, MediaType.APPLICATION_JSON));
+		assertEquals(200, r.getStatus());
+		String json = r.readEntity(String.class);
+		assertTrue(json.contains("\"intensity\""));
+		// Moonlight should never reach 1.0 in our model
+		assertFalse(json.contains("\"intensity\":1.0"));
+	}
 }
 
