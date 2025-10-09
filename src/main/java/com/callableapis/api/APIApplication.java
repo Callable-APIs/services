@@ -5,6 +5,7 @@ import com.callableapis.api.handlers.DebugResource;
 import com.callableapis.api.handlers.RootResource;
 import com.callableapis.api.handlers.TestResource;
 import com.callableapis.api.handlers.v1.CalendarResource;
+import com.callableapis.api.handlers.v2.CalendarResourceV2;
 import com.callableapis.api.handlers.UserResource;
 import com.callableapis.api.health.HealthResource;
 import com.callableapis.api.security.BearerAuthFilter;
@@ -15,14 +16,13 @@ import com.callableapis.api.web.FallbackResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
-import jakarta.ws.rs.ApplicationPath;
 
-@ApplicationPath("/api")
 public class APIApplication extends ResourceConfig {
     public APIApplication() {
         // Resources
         register(TestResource.class);
         register(CalendarResource.class);
+        register(CalendarResourceV2.class);
         register(AuthResource.class);
         register(UserResource.class);
         register(RootResource.class);

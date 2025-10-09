@@ -4,13 +4,13 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import java.util.Calendar;
-import java.util.TimeZone;
+import com.callableapis.api.time.DateTimeService;
+import java.time.ZonedDateTime;
 
 
 @Path("/v1/calendar")
 public class CalendarResource {
-    private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+    private final DateTimeService dateTimeService = new DateTimeService();
 
     public static class DateStruct {
         int year;
@@ -55,13 +55,12 @@ public class CalendarResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public DateStruct getDateAsStruct() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(GMT);
-
+        ZonedDateTime now = dateTimeService.nowUtc();
+        int zeroBasedMonth = now.getMonthValue() - 1; // preserve v1 0-based month
         return new DateStruct(
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
+            now.getYear(),
+            zeroBasedMonth,
+            now.getDayOfMonth()
         );
     }
 }
