@@ -176,6 +176,14 @@ public class CalendarResourceV2 {
 		public double illumination;
 		public double ageDays;
 		public String phaseName;
+		public double phaseAngleDeg;
+		public boolean waxing;
+		public boolean waning;
+		public boolean crescent;
+		public boolean gibbous;
+		public boolean quarter;
+		public boolean full;
+		public boolean isNew;
 	}
 
 	@GET
@@ -188,6 +196,41 @@ public class CalendarResourceV2 {
 		out.illumination = r.illumination;
 		out.ageDays = r.ageDays;
 		out.phaseName = r.phaseName;
+		out.phaseAngleDeg = r.phaseAngleDeg;
+		out.waxing = r.waxing;
+		out.waning = r.waning;
+		out.crescent = r.crescent;
+		out.gibbous = r.gibbous;
+		out.quarter = r.quarter;
+		out.full = r.full;
+		out.isNew = r.isNew;
+		return out;
+	}
+
+	public static class MoonRequest {
+		public BaseDateTime at;
+	}
+
+	@POST
+	@Path("moon-phase")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public MoonResponse moonPhaseAt(MoonRequest req) {
+		ZonedDateTime at = toZoned(req != null ? req.at : null);
+		AstronomyService.MoonPhaseResult r = astronomyService.computeMoonPhase(at);
+		MoonResponse out = new MoonResponse();
+		out.phase = r.phase;
+		out.illumination = r.illumination;
+		out.ageDays = r.ageDays;
+		out.phaseName = r.phaseName;
+		out.phaseAngleDeg = r.phaseAngleDeg;
+		out.waxing = r.waxing;
+		out.waning = r.waning;
+		out.crescent = r.crescent;
+		out.gibbous = r.gibbous;
+		out.quarter = r.quarter;
+		out.full = r.full;
+		out.isNew = r.isNew;
 		return out;
 	}
 

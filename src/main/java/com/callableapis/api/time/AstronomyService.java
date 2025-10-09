@@ -10,6 +10,14 @@ public class AstronomyService {
 		public double illumination; // 0..1 fraction illuminated
 		public double ageDays; // days since new moon
 		public String phaseName;
+		public double phaseAngleDeg; // 0..360, 0=new, 180=full
+		public boolean waxing;
+		public boolean waning;
+		public boolean crescent;
+		public boolean gibbous;
+		public boolean quarter;
+		public boolean full;
+		public boolean isNew;
 	}
 
 	public static class SolarInfoResult {
@@ -39,6 +47,14 @@ public class AstronomyService {
 		r.illumination = illumination;
 		r.ageDays = ageDays;
 		r.phaseName = phaseName(phase);
+		r.phaseAngleDeg = (phase * 360.0) % 360.0;
+		r.waxing = phase > 0.0 && phase < 0.5;
+		r.waning = phase > 0.5 && phase < 1.0;
+		r.crescent = (phase > 0.0 && phase < 0.25) || (phase > 0.75 && phase < 1.0);
+		r.gibbous = (phase > 0.25 && phase < 0.5) || (phase > 0.5 && phase < 0.75);
+		r.quarter = (phase >= 0.22 && phase <= 0.28) || (phase >= 0.72 && phase <= 0.78);
+		r.full = (phase >= 0.47 && phase <= 0.53);
+		r.isNew = (phase <= 0.03 || phase >= 0.97);
 		return r;
 	}
 
