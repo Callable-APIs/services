@@ -1,6 +1,7 @@
 package com.callableapis.api.handlers.v2;
 
 import com.callableapis.api.time.DateTimeService;
+import com.callableapis.api.time.AstronomyService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -14,6 +15,7 @@ import java.time.ZonedDateTime;
 public class CalendarResourceV2 {
 
 	private final DateTimeService dateTimeService = new DateTimeService();
+	private final AstronomyService astronomyService = new AstronomyService();
 
 	public static class DateTimeStruct {
 		int year;
@@ -167,6 +169,61 @@ public class CalendarResourceV2 {
 		ZonedDateTime to = request != null && request.to != null ? toZoned(request.to) : dateTimeService.nowUtc();
 		DateTimeService.DiffResult r = dateTimeService.diff(from, to);
 		return new DiffResponse(r);
+	}
+
+	public static class MoonResponse {
+		public double phase;
+		public double illumination;
+		public double ageDays;
+		public String phaseName;
+	}
+
+	@GET
+	@Path("moon-phase")
+	@Produces(MediaType.APPLICATION_JSON)
+	public MoonResponse moonPhase() {
+		AstronomyService.MoonPhaseResult r = astronomyService.computeMoonPhase(dateTimeService.nowUtc());
+		MoonResponse out = new MoonResponse();
+		out.phase = r.phase;
+		out.illumination = r.illumination;
+		out.ageDays = r.ageDays;
+		out.phaseName = r.phaseName;
+		return out;
+	}
+
+	public static class SolarRequest {
+		public Double lat;
+		public Double lon;
+		public BaseDateTime at; // optional, defaults to now
+	}
+
+	public static class SolarResponse {
+		public double elevationDeg;
+		public double azimuthDeg;
+		public double intensity;
+		public boolean daylight;
+		public double dayLengthHours;
+		public double nightLengthHours;
+	}
+
+	@POST
+	@Path("solar")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public SolarResponse solar(SolarRequest req) {
+		if (req == null || req.lat == null || req.lon == null) {
+			throw new IllegalArgumentException("lat and lon are required");
+		}
+		ZonedDateTime at = toZoned(req.at);
+		AstronomyService.SolarInfoResult si = astronomyService.computeSolarInfo(at, req.lat, req.lon);
+		SolarResponse out = new SolarResponse();
+		out.elevationDeg = si.elevationDeg;
+		out.azimuthDeg = si.azimuthDeg;
+		out.intensity = si.intensity;
+		out.daylight = si.isDaylight;
+		out.dayLengthHours = si.dayLengthHours;
+		out.nightLengthHours = si.nightLengthHours;
+		return out;
 	}
 
 	private ZonedDateTime toZoned(BaseDateTime base) {
