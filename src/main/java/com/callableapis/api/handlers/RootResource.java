@@ -40,10 +40,10 @@ public class RootResource {
                     <body>
                       <h1>Callable APIs</h1>
                       <p>Connect your GitHub account to obtain your API token.</p>
-                      <p><a href="/auth/login">Connect with GitHub</a></p>
+                      <p><a href="/api/auth/login">Connect with GitHub</a></p>
                       <h2>Example</h2>
                       <pre><code>curl -H "Authorization: Bearer YOUR_API_KEY" \
-https://api.callableapis.com/v1/calendar/date
+https://api.callableapis.com/api/v1/calendar/date
 </code></pre>
                     </body>
                     </html>

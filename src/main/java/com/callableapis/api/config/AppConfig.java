@@ -72,7 +72,7 @@ public final class AppConfig {
         String redirectUri = parameterStore.getParameterWithEnvFallback(
             "/callableapis/github/redirect-uri", 
             "GITHUB_REDIRECT_URI", 
-            getPublicBaseUrl() + "/auth/callback"
+            getPublicBaseUrl() + "/api/auth/callback"
         );
         return redirectUri;
     }
