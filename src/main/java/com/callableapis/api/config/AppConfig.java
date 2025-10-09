@@ -41,7 +41,7 @@ public final class AppConfig {
         String value = parameterStore.getParameterWithEnvFallback(
             "/callableapis/github/client-id", 
             "GITHUB_CLIENT_ID", 
-            null
+            "dev-client-id-placeholder"
         );
         logger.info("GitHub Client ID: " + (value != null ? "***" + value.substring(Math.max(0, value.length() - 4)) : "null"));
         return value;
@@ -51,7 +51,7 @@ public final class AppConfig {
         String value = parameterStore.getParameterWithEnvFallback(
             "/callableapis/github/client-secret", 
             "GITHUB_CLIENT_SECRET", 
-            null
+            "dev-client-secret-placeholder"
         );
         logger.info("GitHub Client Secret: " + (value != null ? "***" + value.substring(Math.max(0, value.length() - 4)) : "null"));
         return value;
