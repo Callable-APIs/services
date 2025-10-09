@@ -113,8 +113,12 @@ public class AstronomyService {
 
 		// Day length (hours) using sunrise hour angle formula
 		double cosH0 = -Math.tan(latRad) * Math.tan(declRad);
-		if (cosH0 > 1.0) cosH0 = 1.0;
-		if (cosH0 < -1.0) cosH0 = -1.0;
+		if (cosH0 > 1.0) {
+			cosH0 = 1.0;
+		}
+		if (cosH0 < -1.0) {
+			cosH0 = -1.0;
+		}
 		double h0 = Math.acos(cosH0); // radians
 		double dayLenHours = 2.0 * Math.toDegrees(h0) / 15.0; // 15 deg per hour
 		// Handle polar day/night extremes
@@ -195,13 +199,27 @@ public class AstronomyService {
 	}
 
 	private static String phaseName(double phase) {
-		if (phase < 0.03 || phase > 0.97) return "New Moon";
-		if (phase < 0.22) return "Waxing Crescent";
-		if (phase < 0.28) return "First Quarter";
-		if (phase < 0.47) return "Waxing Gibbous";
-		if (phase < 0.53) return "Full Moon";
-		if (phase < 0.72) return "Waning Gibbous";
-		if (phase < 0.78) return "Last Quarter";
+		if (phase < 0.03 || phase > 0.97) {
+			return "New Moon";
+		}
+		if (phase < 0.22) {
+			return "Waxing Crescent";
+		}
+		if (phase < 0.28) {
+			return "First Quarter";
+		}
+		if (phase < 0.47) {
+			return "Waxing Gibbous";
+		}
+		if (phase < 0.53) {
+			return "Full Moon";
+		}
+		if (phase < 0.72) {
+			return "Waning Gibbous";
+		}
+		if (phase < 0.78) {
+			return "Last Quarter";
+		}
 		return "Waning Crescent";
 	}
 
@@ -224,8 +242,12 @@ public class AstronomyService {
 
 	private static double normalizeDegrees(double deg) {
 		double d = deg % 360.0;
-		if (d < -180.0) d += 360.0;
-		if (d > 180.0) d -= 360.0;
+		if (d < -180.0) {
+			d += 360.0;
+		}
+		if (d > 180.0) {
+			d -= 360.0;
+		}
 		return d;
 	}
 

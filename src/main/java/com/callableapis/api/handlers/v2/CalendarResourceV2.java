@@ -56,7 +56,6 @@ public class CalendarResourceV2 {
 	}
 
 	public static class BaseDateTime {
-		// All fields optional; when missing, defaults will be applied
 		Integer year;
 		Integer month; // 1-12
 		Integer day;
@@ -78,12 +77,26 @@ public class CalendarResourceV2 {
 		public void setSecond(Integer second) { this.second = second; }
 	}
 
+	private static BaseDateTime copyBase(BaseDateTime in) {
+		if (in == null) {
+			return null;
+		}
+		BaseDateTime out = new BaseDateTime();
+		out.year = in.year;
+		out.month = in.month;
+		out.day = in.day;
+		out.hour = in.hour;
+		out.minute = in.minute;
+		out.second = in.second;
+		return out;
+	}
+
 	public static class ShiftRequest {
 		BaseDateTime base;
 		DateTimeService.Delta delta;
 
-		public BaseDateTime getBase() { return base; }
-		public void setBase(BaseDateTime base) { this.base = base; }
+		public BaseDateTime getBase() { return copyBase(base); }
+		public void setBase(BaseDateTime base) { this.base = copyBase(base); }
 		public DateTimeService.Delta getDelta() { return delta; }
 		public void setDelta(DateTimeService.Delta delta) { this.delta = delta; }
 	}
@@ -92,10 +105,10 @@ public class CalendarResourceV2 {
 		BaseDateTime from;
 		BaseDateTime to; // optional; if null, diff to now
 
-		public BaseDateTime getFrom() { return from; }
-		public void setFrom(BaseDateTime from) { this.from = from; }
-		public BaseDateTime getTo() { return to; }
-		public void setTo(BaseDateTime to) { this.to = to; }
+		public BaseDateTime getFrom() { return copyBase(from); }
+		public void setFrom(BaseDateTime from) { this.from = copyBase(from); }
+		public BaseDateTime getTo() { return copyBase(to); }
+		public void setTo(BaseDateTime to) { this.to = copyBase(to); }
 	}
 
 	public static class DiffResponse {
@@ -184,6 +197,31 @@ public class CalendarResourceV2 {
 		public boolean quarter;
 		public boolean full;
 		public boolean isNew;
+
+		public double getPhase() { return phase; }
+		public void setPhase(double phase) { this.phase = phase; }
+		public double getIllumination() { return illumination; }
+		public void setIllumination(double illumination) { this.illumination = illumination; }
+		public double getAgeDays() { return ageDays; }
+		public void setAgeDays(double ageDays) { this.ageDays = ageDays; }
+		public String getPhaseName() { return phaseName; }
+		public void setPhaseName(String phaseName) { this.phaseName = phaseName; }
+		public double getPhaseAngleDeg() { return phaseAngleDeg; }
+		public void setPhaseAngleDeg(double phaseAngleDeg) { this.phaseAngleDeg = phaseAngleDeg; }
+		public boolean isWaxing() { return waxing; }
+		public void setWaxing(boolean waxing) { this.waxing = waxing; }
+		public boolean isWaning() { return waning; }
+		public void setWaning(boolean waning) { this.waning = waning; }
+		public boolean isCrescent() { return crescent; }
+		public void setCrescent(boolean crescent) { this.crescent = crescent; }
+		public boolean isGibbous() { return gibbous; }
+		public void setGibbous(boolean gibbous) { this.gibbous = gibbous; }
+		public boolean isQuarter() { return quarter; }
+		public void setQuarter(boolean quarter) { this.quarter = quarter; }
+		public boolean isFull() { return full; }
+		public void setFull(boolean full) { this.full = full; }
+		public boolean isNew() { return isNew; }
+		public void setNew(boolean aNew) { isNew = aNew; }
 	}
 
 	@GET
@@ -209,6 +247,8 @@ public class CalendarResourceV2 {
 
 	public static class MoonRequest {
 		public BaseDateTime at;
+		public BaseDateTime getAt() { return copyBase(at); }
+		public void setAt(BaseDateTime at) { this.at = copyBase(at); }
 	}
 
 	@POST
@@ -238,6 +278,12 @@ public class CalendarResourceV2 {
 		public Double lat;
 		public Double lon;
 		public BaseDateTime at; // optional, defaults to now
+		public Double getLat() { return lat; }
+		public void setLat(Double lat) { this.lat = lat; }
+		public Double getLon() { return lon; }
+		public void setLon(Double lon) { this.lon = lon; }
+		public BaseDateTime getAt() { return copyBase(at); }
+		public void setAt(BaseDateTime at) { this.at = copyBase(at); }
 	}
 
 	public static class SolarResponse {
@@ -247,12 +293,30 @@ public class CalendarResourceV2 {
 		public boolean daylight;
 		public double dayLengthHours;
 		public double nightLengthHours;
+		public double getElevationDeg() { return elevationDeg; }
+		public void setElevationDeg(double elevationDeg) { this.elevationDeg = elevationDeg; }
+		public double getAzimuthDeg() { return azimuthDeg; }
+		public void setAzimuthDeg(double azimuthDeg) { this.azimuthDeg = azimuthDeg; }
+		public double getIntensity() { return intensity; }
+		public void setIntensity(double intensity) { this.intensity = intensity; }
+		public boolean isDaylight() { return daylight; }
+		public void setDaylight(boolean daylight) { this.daylight = daylight; }
+		public double getDayLengthHours() { return dayLengthHours; }
+		public void setDayLengthHours(double dayLengthHours) { this.dayLengthHours = dayLengthHours; }
+		public double getNightLengthHours() { return nightLengthHours; }
+		public void setNightLengthHours(double nightLengthHours) { this.nightLengthHours = nightLengthHours; }
 	}
 
 	public static class MoonlightRequest {
 		public Double lat;
 		public Double lon;
 		public BaseDateTime at; // optional, defaults to now
+		public Double getLat() { return lat; }
+		public void setLat(Double lat) { this.lat = lat; }
+		public Double getLon() { return lon; }
+		public void setLon(Double lon) { this.lon = lon; }
+		public BaseDateTime getAt() { return copyBase(at); }
+		public void setAt(BaseDateTime at) { this.at = copyBase(at); }
 	}
 
 	public static class MoonlightResponse {
@@ -261,6 +325,16 @@ public class CalendarResourceV2 {
 		public double intensity; // 0..1, << 1
 		public boolean aboveHorizon;
 		public double illumination;
+		public double getElevationDeg() { return elevationDeg; }
+		public void setElevationDeg(double elevationDeg) { this.elevationDeg = elevationDeg; }
+		public double getAzimuthDeg() { return azimuthDeg; }
+		public void setAzimuthDeg(double azimuthDeg) { this.azimuthDeg = azimuthDeg; }
+		public double getIntensity() { return intensity; }
+		public void setIntensity(double intensity) { this.intensity = intensity; }
+		public boolean isAboveHorizon() { return aboveHorizon; }
+		public void setAboveHorizon(boolean aboveHorizon) { this.aboveHorizon = aboveHorizon; }
+		public double getIllumination() { return illumination; }
+		public void setIllumination(double illumination) { this.illumination = illumination; }
 	}
 
 	@POST

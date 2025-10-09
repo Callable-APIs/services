@@ -11,6 +11,7 @@ import software.amazon.awssdk.services.ssm.model.SsmException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Service for reading configuration values from AWS Systems Manager Parameter Store.
@@ -22,7 +23,7 @@ public final class ParameterStoreService {
     
     private final SsmClient ssmClient;
     private final ConcurrentHashMap<String, CachedParameter> cache = new ConcurrentHashMap<>();
-    private final long CACHE_TTL_MINUTES = 5; // Cache for 5 minutes
+    private static final long CACHE_TTL_MINUTES = 5; // Cache for 5 minutes
     
     private ParameterStoreService() {
         logger.info("Initializing Parameter Store Service...");
@@ -39,6 +40,7 @@ public final class ParameterStoreService {
         this.ssmClient = client; // Set to null if initialization failed
     }
     
+    @SuppressFBWarnings(value = "MS_EXPOSE_REP", justification = "Intentional singleton service returned by accessor")
     public static ParameterStoreService getInstance() {
         return INSTANCE;
     }
@@ -143,7 +145,7 @@ public final class ParameterStoreService {
         }
         
         boolean isExpired() {
-            return System.currentTimeMillis() - timestamp > TimeUnit.MINUTES.toMillis(5);
+            return System.currentTimeMillis() - timestamp > TimeUnit.MINUTES.toMillis(CACHE_TTL_MINUTES);
         }
     }
 }
