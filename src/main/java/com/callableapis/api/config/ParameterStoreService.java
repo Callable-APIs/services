@@ -24,6 +24,7 @@ public final class ParameterStoreService {
     private final SsmClient ssmClient;
     private final ConcurrentHashMap<String, CachedParameter> cache = new ConcurrentHashMap<>();
     private static final long CACHE_TTL_MINUTES = 5; // Cache for 5 minutes
+    private static final long CRITICAL_CACHE_TTL_MINUTES = 1; // Critical parameters cache for 1 minute
     
     private ParameterStoreService() {
         logger.info("Initializing Parameter Store Service...");
@@ -33,11 +34,25 @@ public final class ParameterStoreService {
                     .region(Region.US_EAST_1) // Adjust region as needed
                     .credentialsProvider(DefaultCredentialsProvider.create())
                     .build();
-            logger.info("Parameter Store Service initialized successfully");
+            
+            // Test credentials by making a simple call
+            logger.info("Testing Parameter Store credentials...");
+            try {
+                GetParameterRequest testRequest = GetParameterRequest.builder()
+                        .name("/callableapis/github/oauth-scope")
+                        .withDecryption(true)
+                        .build();
+                client.getParameter(testRequest);
+                logger.info("Parameter Store Service initialized successfully with working credentials");
+            } catch (Exception testException) {
+                logger.warning("Parameter Store client created but credentials test failed: " + testException.getMessage());
+                logger.warning("Will use fallback values only");
+                client = null; // Mark as unavailable if credentials don't work
+            }
         } catch (Exception e) {
             logger.warning("Failed to initialize SSM client (will use environment variables only): " + e.getMessage());
         }
-        this.ssmClient = client; // Set to null if initialization failed
+        this.ssmClient = client; // Set to null if initialization failed or credentials don't work
     }
     
     @SuppressFBWarnings(value = "MS_EXPOSE_REP", justification = "Intentional singleton service returned by accessor")
@@ -57,14 +72,15 @@ public final class ParameterStoreService {
         
         // Check cache first
         CachedParameter cached = cache.get(parameterName);
-        if (cached != null && !cached.isExpired()) {
+        if (cached != null && !cached.isExpired(isCriticalParameter(parameterName))) {
             logger.info("Using cached parameter: " + parameterName + " = " + cached.value);
             return cached.value;
         }
         
         // If SSM client is not available, skip Parameter Store and use fallback
         if (ssmClient == null) {
-            logger.info("SSM client not available, using fallback value for: " + parameterName);
+            logger.warning("SSM client not available - Parameter Store disabled. Using fallback value for: " + parameterName);
+            logger.warning("This typically means AWS credentials are not configured. In production, ensure IAM role has Parameter Store access.");
             return fallbackValue;
         }
         
@@ -145,7 +161,51 @@ public final class ParameterStoreService {
         }
         
         boolean isExpired() {
-            return System.currentTimeMillis() - timestamp > TimeUnit.MINUTES.toMillis(CACHE_TTL_MINUTES);
+            return isExpired(false);
         }
+        
+        boolean isExpired(boolean isCritical) {
+            long ttlMinutes = isCritical ? CRITICAL_CACHE_TTL_MINUTES : CACHE_TTL_MINUTES;
+            return System.currentTimeMillis() - timestamp > TimeUnit.MINUTES.toMillis(ttlMinutes);
+        }
+    }
+    
+    /**
+     * Clear the cache for a specific parameter or all parameters.
+     * 
+     * @param parameterName The parameter name to clear, or null to clear all
+     */
+    public void clearCache(String parameterName) {
+        if (parameterName == null) {
+            logger.info("Clearing all parameter cache");
+            cache.clear();
+        } else {
+            logger.info("Clearing cache for parameter: " + parameterName);
+            cache.remove(parameterName);
+        }
+    }
+    
+    /**
+     * Check if Parameter Store is available (SSM client initialized successfully).
+     * 
+     * @return true if Parameter Store is available, false if using fallback values only
+     */
+    public boolean isParameterStoreAvailable() {
+        return ssmClient != null;
+    }
+    
+    /**
+     * Check if a parameter is considered critical (should use shorter cache TTL).
+     * 
+     * @param parameterName The parameter name
+     * @return true if the parameter is critical
+     */
+    private boolean isCriticalParameter(String parameterName) {
+        return parameterName != null && (
+            parameterName.contains("redirect-uri") || 
+            parameterName.contains("callback") ||
+            parameterName.contains("client-id") ||
+            parameterName.contains("client-secret")
+        );
     }
 }

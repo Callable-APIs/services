@@ -2,12 +2,15 @@ package com.callableapis.api.handlers;
 
 import com.callableapis.api.config.AppConfig;
 import com.callableapis.api.config.ParameterStoreService;
+import com.callableapis.api.time.AstronomyService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -50,6 +53,11 @@ public class DebugResource {
 			config.put("github_callback_url", callbackUrl);
 			config.put("api_key_salt", apiKeySalt != null ? "***" + apiKeySalt.substring(Math.max(0, apiKeySalt.length() - 4)) : "null");
 			config.put("rate_limit_qps", rateLimitQps);
+			
+			// Check if Parameter Store is available
+			boolean paramStoreAvailable = paramStore.isParameterStoreAvailable();
+			config.put("parameter_store_available", paramStoreAvailable);
+			config.put("parameter_store_status", paramStoreAvailable ? "Using Parameter Store" : "Using fallback values only (no AWS credentials)");
 
 			logger.info("Testing direct Parameter Store access...");
 			String paramStoreTest = paramStore.getParameter("/callableapis/github/oauth-scope", "FAILED");
@@ -121,6 +129,90 @@ public class DebugResource {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "ERROR testing AWS SDK: " + e.getMessage(), e);
+			result.put("error", e.getMessage());
+			result.put("error_type", e.getClass().getSimpleName());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
+		}
+	}
+	
+	@GET
+	@Path("/intensity-test")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response testIntensity() {
+		System.out.println("=== DebugResource.testIntensity() called ===");
+		Map<String, Object> result = new HashMap<>();
+		
+		try {
+			// Test solar intensity at noon on equator (should be close to 1.0)
+			ZonedDateTime noonEquator = ZonedDateTime.of(2024, 6, 21, 12, 0, 0, 0, ZoneOffset.UTC);
+			AstronomyService astronomyService = new AstronomyService();
+			AstronomyService.SolarInfoResult solar = astronomyService.computeSolarInfo(noonEquator, 0.0, 0.0);
+			
+			// Test moonlight intensity at full moon - try different times to find when moon is visible
+			ZonedDateTime fullMoon = ZonedDateTime.of(2024, 6, 21, 18, 0, 0, 0, ZoneOffset.UTC); // 6 PM
+			AstronomyService.MoonlightInfoResult moonlight = astronomyService.computeMoonlightInfo(fullMoon, 0.0, 0.0);
+			
+			// Also test at a different time when moon might be higher
+			ZonedDateTime fullMoon2 = ZonedDateTime.of(2024, 6, 21, 6, 0, 0, 0, ZoneOffset.UTC); // 6 AM
+			AstronomyService.MoonlightInfoResult moonlight2 = astronomyService.computeMoonlightInfo(fullMoon2, 0.0, 0.0);
+			
+			result.put("solar_intensity_noon_equator", solar.intensity);
+			result.put("solar_elevation_noon_equator", solar.elevationDeg);
+			result.put("moonlight_intensity_6pm", moonlight.intensity);
+			result.put("moonlight_elevation_6pm", moonlight.elevationDeg);
+			result.put("moonlight_intensity_6am", moonlight2.intensity);
+			result.put("moonlight_elevation_6am", moonlight2.elevationDeg);
+			result.put("moon_illumination", moonlight.illumination);
+			
+			// Calculate ratios for both times
+			double ratio1 = solar.intensity > 0 ? moonlight.intensity / solar.intensity : 0;
+			double ratio2 = solar.intensity > 0 ? moonlight2.intensity / solar.intensity : 0;
+			result.put("moonlight_to_solar_ratio_6pm", ratio1);
+			result.put("moonlight_to_solar_ratio_6am", ratio2);
+			
+			System.out.println("Intensity test completed successfully");
+			return Response.ok(result).build();
+			
+		} catch (Exception e) {
+			System.out.println("ERROR testing intensity: " + e.getMessage());
+			e.printStackTrace();
+			result.put("error", e.getMessage());
+			result.put("error_type", e.getClass().getSimpleName());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
+		}
+	}
+	
+	@GET
+	@Path("/clear-cache")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response clearCache() {
+		System.out.println("=== DebugResource.clearCache() called ===");
+		Map<String, Object> result = new HashMap<>();
+		
+		try {
+			ParameterStoreService paramStore = ParameterStoreService.getInstance();
+			
+			// Clear cache for OAuth-related parameters
+			paramStore.clearCache("/callableapis/github/redirect-uri");
+			paramStore.clearCache("/callableapis/github/client-id");
+			paramStore.clearCache("/callableapis/github/client-secret");
+			paramStore.clearCache("/callableapis/github/oauth-scope");
+			
+			result.put("status", "success");
+			result.put("message", "Cache cleared for OAuth parameters");
+			result.put("cleared_parameters", new String[]{
+				"/callableapis/github/redirect-uri",
+				"/callableapis/github/client-id", 
+				"/callableapis/github/client-secret",
+				"/callableapis/github/oauth-scope"
+			});
+			
+			System.out.println("Cache cleared successfully");
+			return Response.ok(result).build();
+			
+		} catch (Exception e) {
+			System.out.println("ERROR clearing cache: " + e.getMessage());
+			e.printStackTrace();
 			result.put("error", e.getMessage());
 			result.put("error_type", e.getClass().getSimpleName());
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();

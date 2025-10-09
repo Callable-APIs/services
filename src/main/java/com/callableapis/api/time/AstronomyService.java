@@ -108,7 +108,8 @@ public class AstronomyService {
 		double azimuthRad = Math.atan2(sinAz, cosAz);
 		double azimuthDeg = (Math.toDegrees(azimuthRad) + 360.0) % 360.0; // 0=N, 90=E
 
-		// Intensity proxy: cos(zenith) clipped to [0,1]
+		// Solar intensity: cos(zenith) clipped to [0,1] represents relative intensity
+		// 1.0 = sun directly overhead, 0.0 = sun below horizon
 		double intensity = Math.max(0.0, cosZenith);
 
 		// Day length (hours) using sunrise hour angle formula
@@ -184,10 +185,13 @@ public class AstronomyService {
 		double azimuthRad = Math.atan2(sinAz, cosAz);
 		double azimuthDeg = (Math.toDegrees(azimuthRad) + 360.0) % 360.0;
 
-		// Intensity proxy: illumination * cos(zenith) clipped, scaled to ensure < 1.0
+		// Moonlight intensity: on same physical scale as sunlight (0.0-1.0)
+		// Based on physical measurements: moonlight is ~1/1,300,000th of sunlight
+		// Full moon illumination (~1.0) at zenith should give ~0.0000008 intensity
+		// This represents what a light meter would read under moonlight vs sunlight
 		double raw = Math.max(0.0, cosZenith) * mp.illumination;
-		// Scale down lunar intensity to a small fraction (moon is far dimmer than sun)
-		double intensity = Math.min(0.2, raw * 0.2); // cap at 0.2
+		// Physical ratio: moonlight is approximately 1/1,300,000th of sunlight
+		double intensity = raw / 1300000.0;
 
 		MoonlightInfoResult r = new MoonlightInfoResult();
 		r.elevationDeg = elevationDeg;
