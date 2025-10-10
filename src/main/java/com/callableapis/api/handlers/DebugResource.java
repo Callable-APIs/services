@@ -139,7 +139,7 @@ public class DebugResource {
 	@Path("/intensity-test")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response testIntensity() {
-		System.out.println("=== DebugResource.testIntensity() called ===");
+		logger.info("=== DebugResource.testIntensity() called ===");
 		Map<String, Object> result = new HashMap<>();
 		
 		try {
@@ -170,12 +170,11 @@ public class DebugResource {
 			result.put("moonlight_to_solar_ratio_6pm", ratio1);
 			result.put("moonlight_to_solar_ratio_6am", ratio2);
 			
-			System.out.println("Intensity test completed successfully");
+			logger.info("Intensity test completed successfully");
 			return Response.ok(result).build();
 			
 		} catch (Exception e) {
-			System.out.println("ERROR testing intensity: " + e.getMessage());
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "ERROR testing intensity: " + e.getMessage(), e);
 			result.put("error", e.getMessage());
 			result.put("error_type", e.getClass().getSimpleName());
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
@@ -186,7 +185,7 @@ public class DebugResource {
 	@Path("/clear-cache")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response clearCache() {
-		System.out.println("=== DebugResource.clearCache() called ===");
+		logger.info("=== DebugResource.clearCache() called ===");
 		Map<String, Object> result = new HashMap<>();
 		
 		try {
@@ -207,12 +206,11 @@ public class DebugResource {
 				"/callableapis/github/oauth-scope"
 			});
 			
-			System.out.println("Cache cleared successfully");
+			logger.info("Cache cleared successfully");
 			return Response.ok(result).build();
 			
 		} catch (Exception e) {
-			System.out.println("ERROR clearing cache: " + e.getMessage());
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "ERROR clearing cache: " + e.getMessage(), e);
 			result.put("error", e.getMessage());
 			result.put("error_type", e.getClass().getSimpleName());
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(result).build();
