@@ -12,6 +12,7 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import com.callableapis.api.config.AppConfig;
 
 @Path("")
 public class RootResource {
@@ -65,6 +66,12 @@ https://api.callableapis.com/api/v1/calendar/date
         String authHeader = httpRequest.getHeader("Authorization");
         boolean hasBearerToken = authHeader != null && authHeader.startsWith("Bearer ");
         model.put("hasBearerToken", hasBearerToken);
+        
+        // Add OAuth URLs from Parameter Store
+        String oauthLoginUrl = "/api/auth/login";
+        String oauthCallbackUrl = AppConfig.getGithubCallbackUrl();
+        model.put("oauthLoginUrl", oauthLoginUrl);
+        model.put("oauthCallbackUrl", oauthCallbackUrl);
         
         return new Viewable("/WEB-INF/jsp/index.jsp", model);
     }

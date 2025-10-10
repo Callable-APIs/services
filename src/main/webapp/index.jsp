@@ -145,7 +145,7 @@
         <!-- API Landing Page for Unauthenticated Users -->
         <h2>🔑 Get Started with OIDC Authentication</h2>
         <p>Connect your GitHub account to obtain your API token and start using our services.</p>
-        <p><a class="button" href="/auth/login">🔗 Connect with GitHub</a></p>
+        <p><a class="button" href="${oauthLoginUrl}">🔗 Connect with GitHub</a></p>
 
         <h3>📋 How it works</h3>
         <ol>
@@ -183,7 +183,7 @@
               <span class="method method-get">GET</span>/api/auth/login
             </div>
             <div class="endpoint">
-              <span class="method method-get">GET</span>/api/auth/callback
+              <span class="method method-get">GET</span>${oauthCallbackUrl}
             </div>
           </div>
 
