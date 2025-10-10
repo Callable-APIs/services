@@ -126,6 +126,25 @@
         background: #fef3c7;
         color: #92400e;
       }
+
+      .version-info {
+        background: #f8f9fa;
+        border-top: 1px solid #e1e4e8;
+        padding: 1rem 2rem;
+        text-align: center;
+        font-size: 0.875rem;
+        color: #6a737d;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      }
+
+      .version-info a {
+        color: #0366d6;
+        text-decoration: none;
+      }
+
+      .version-info a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
 
@@ -213,6 +232,19 @@ https://api.callableapis.com/api/user/key/rotate</code></pre>
             <li><strong>Rate Limiting:</strong> 10 QPS per API key to prevent abuse</li>
             <li><strong>Key Rotation:</strong> Rotate your API keys anytime for enhanced security</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- Version Information -->
+      <div class="version-info">
+        <div>Deployed:
+          <% if (!"unknown".equals(request.getAttribute("gitCommitHash"))) { %>
+            <a href="https://github.com/your-org/your-repo/commit/${gitCommitHash}" target="_blank"
+              rel="noopener">${shortCommitHash}</a>
+            <% } else { %>
+              <span>${shortCommitHash}</span>
+              <% } %>
+                • Built: ${buildTime}
         </div>
       </div>
     </div>

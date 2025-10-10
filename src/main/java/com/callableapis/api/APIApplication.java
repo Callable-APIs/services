@@ -2,7 +2,6 @@ package com.callableapis.api;
 
 import com.callableapis.api.handlers.AuthResource;
 import com.callableapis.api.handlers.DebugResource;
-import com.callableapis.api.handlers.RootResource;
 import com.callableapis.api.handlers.TestResource;
 import com.callableapis.api.handlers.v1.CalendarResource;
 import com.callableapis.api.handlers.v2.CalendarResourceV2;
@@ -25,7 +24,6 @@ public class APIApplication extends ResourceConfig {
         register(CalendarResourceV2.class);
         register(AuthResource.class);
         register(UserResource.class);
-        register(RootResource.class);
         register(HealthResource.class);
         register(DebugResource.class);
         // Filters

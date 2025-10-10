@@ -23,9 +23,20 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Root servlet for handling root path with version info -->
+    <servlet>
+        <servlet-name>RootServlet</servlet-name>
+        <servlet-class>com.callableapis.api.web.RootServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RootServlet</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+
     <!-- Welcome file configuration -->
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index</welcome-file>
     </welcome-file-list>
 
 </web-app>
