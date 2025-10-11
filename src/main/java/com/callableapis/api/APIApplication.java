@@ -12,9 +12,9 @@ import com.callableapis.api.di.AppBinder;
 import com.callableapis.api.web.NotFoundRedirectMapper;
 import com.callableapis.api.web.NotFoundRedirectFilter;
 import com.callableapis.api.web.FallbackResource;
+import com.callableapis.api.web.RootResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
-
 
 public class APIApplication extends ResourceConfig {
     public APIApplication() {
@@ -31,6 +31,9 @@ public class APIApplication extends ResourceConfig {
 
         // Dependency injection bindings
         register(new AppBinder());
+
+        // Web resources
+        register(RootResource.class);
 
         // Exception mappers
         register(NotFoundRedirectMapper.class);

@@ -1,0 +1,24 @@
+# Dockerfile for validation and testing
+# This image includes all tools needed for running comprehensive validation checks
+
+FROM gradle:8.5-jdk21
+
+# Set working directory
+WORKDIR /workspace
+
+# Install additional tools needed for validation
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
+
+# Ensure gradlew is executable
+RUN chmod +x gradlew 2>/dev/null || true
+
+# Set environment variables for better Gradle performance
+ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.caching=true"
+
+# Default command
+CMD ["bash"]
