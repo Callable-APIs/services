@@ -17,10 +17,13 @@ public class RootFlowIT extends JerseyTest {
 
     @Test
     public void testRootPageAccessible() {
-        Response r = target("/").request().get();
-        assertEquals(200, r.getStatus());
-        String html = r.readEntity(String.class);
-        assertTrue(html.contains("Connect with GitHub"));
+        Response r = target("/").request()
+                .property(ClientProperties.FOLLOW_REDIRECTS, Boolean.FALSE)
+                .get();
+        // Should redirect to /index
+        assertEquals(303, r.getStatus());
+        String location = r.getHeaderString("Location");
+        assertTrue(location != null && location.endsWith("/index"));
     }
 
     @Test
