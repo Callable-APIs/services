@@ -7,9 +7,7 @@ import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.inject.Inject;
 
@@ -19,7 +17,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,25 +66,41 @@ public class AuthResource {
 
 	@GET
 	@Path("/callback")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response callback(@QueryParam("code") String code, @QueryParam("state") String state) throws IOException, InterruptedException {
+		logger.info("=== AuthResource.callback() called ===");
+		logger.info("Code: " + (code != null ? "***" + code.substring(Math.max(0, code.length() - 4)) : "null"));
+		logger.info("State: " + state);
+		
 		if (code == null || code.isBlank()) {
+			logger.warning("Missing code parameter");
 			return Response.status(Response.Status.BAD_REQUEST).entity("Missing code").build();
 		}
+		
 		String token = exchangeCodeForToken(code);
 		if (token == null || token.isBlank()) {
+			logger.warning("Token exchange failed");
 			return Response.status(Response.Status.BAD_GATEWAY).entity("Token exchange failed").build();
 		}
+		
 		String login = fetchGithubLogin(token);
 		if (login == null || login.isBlank()) {
+			logger.warning("Failed to fetch user login");
 			return Response.status(Response.Status.BAD_GATEWAY).entity("Failed to fetch user").build();
 		}
+		
 		String identity = "github:" + login;
 		String apiKey = apiKeyStore.getOrCreateApiKeyForIdentity(identity);
-		return Response.ok(Map.of(
-				"identity", identity,
-				"apiKey", apiKey
-		)).build();
+		
+		logger.info("Authentication successful for identity: " + identity);
+		logger.info("Generated/retrieved API key: " + (apiKey != null ? "***" + apiKey.substring(Math.max(0, apiKey.length() - 4)) : "null"));
+		
+		// Redirect to authenticated page instead of returning JSON
+		String redirectUrl = "/authenticated?identity=" + 
+			java.net.URLEncoder.encode(identity, java.nio.charset.StandardCharsets.UTF_8) + 
+			"&apiKey=" + java.net.URLEncoder.encode(apiKey, java.nio.charset.StandardCharsets.UTF_8);
+		
+		logger.info("Redirecting to: " + redirectUrl);
+		return Response.seeOther(java.net.URI.create(redirectUrl)).build();
 	}
 
 	private String exchangeCodeForToken(String code) throws IOException, InterruptedException {

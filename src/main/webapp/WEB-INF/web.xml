@@ -34,6 +34,17 @@
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
 
+    <!-- Authenticated page servlet -->
+    <servlet>
+        <servlet-name>AuthenticatedServlet</servlet-name>
+        <servlet-class>com.callableapis.api.web.AuthenticatedServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AuthenticatedServlet</servlet-name>
+        <url-pattern>/authenticated</url-pattern>
+    </servlet-mapping>
+
     <!-- Welcome file configuration -->
     <welcome-file-list>
         <welcome-file>index</welcome-file>
