@@ -9,6 +9,10 @@ services:
       - "8080:8080"
     environment:
       - JAVA_OPTS=-Xmx512m -Xms256m
+      - GITHUB_CLIENT_ID=your_github_client_id_here
+      - GITHUB_CLIENT_SECRET=your_github_client_secret_here
+      - GITHUB_REDIRECT_URI=http://localhost:8080/api/auth/callback
+      - GITHUB_OAUTH_SCOPE=read:user user:email
     volumes:
       - ./logs:/usr/local/tomcat/logs
     restart: unless-stopped
