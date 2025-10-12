@@ -13,6 +13,7 @@ import com.callableapis.api.web.NotFoundRedirectMapper;
 import com.callableapis.api.web.NotFoundRedirectFilter;
 import com.callableapis.api.web.FallbackResource;
 import com.callableapis.api.web.RootResource;
+import com.callableapis.api.web.AuthenticatedResource;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
@@ -34,7 +35,8 @@ public class APIApplication extends ResourceConfig {
 
         // Web resources
         register(RootResource.class);
-
+        register(AuthenticatedResource.class);
+        
         // Exception mappers
         register(NotFoundRedirectMapper.class);
         register(NotFoundRedirectFilter.class);
