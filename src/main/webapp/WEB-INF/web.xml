@@ -34,6 +34,7 @@
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
 
+
     <!-- Welcome file configuration -->
     <welcome-file-list>
         <welcome-file>index</welcome-file>
