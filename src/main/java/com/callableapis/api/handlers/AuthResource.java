@@ -100,7 +100,7 @@ public class AuthResource {
 				+ (apiKey != null ? "***" + apiKey.substring(Math.max(0, apiKey.length() - 4)) : "null"));
 
 		// Redirect to authenticated page instead of returning JSON
-		String redirectUrl = "/authenticated?identity=" +
+		String redirectUrl = "/api/authenticated?identity=" +
 				java.net.URLEncoder.encode(identity, java.nio.charset.StandardCharsets.UTF_8) +
 				"&apiKey=" + java.net.URLEncoder.encode(apiKey, java.nio.charset.StandardCharsets.UTF_8);
 
