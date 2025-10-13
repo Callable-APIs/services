@@ -13,6 +13,8 @@ public final class ApiKeyService implements ApiKeyStore, RateLimitService {
     private final ConcurrentHashMap<String, String> identityToApiKey = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, String> apiKeyToIdentity = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, RateLimiter> apiKeyToLimiter = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Long> apiKeyToCallCount = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Long> apiKeyToLastCallTime = new ConcurrentHashMap<>();
 
     private ApiKeyService() {}
 
@@ -51,6 +53,35 @@ public final class ApiKeyService implements ApiKeyStore, RateLimitService {
     public boolean tryAcquire(String apiKey) {
         double permitsPerSecond = Math.max(1, AppConfig.getRateLimitQps());
         RateLimiter limiter = apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
-        return limiter.tryAcquire();
+        boolean acquired = limiter.tryAcquire();
+        if (acquired) {
+            recordApiCall(apiKey);
+        }
+        return acquired;
+    }
+
+    public void recordApiCall(String apiKey) {
+        apiKeyToCallCount.merge(apiKey, 1L, Long::sum);
+        apiKeyToLastCallTime.put(apiKey, System.currentTimeMillis());
+    }
+
+    public long getCallCount(String apiKey) {
+        return apiKeyToCallCount.getOrDefault(apiKey, 0L);
+    }
+
+    public long getLastCallTime(String apiKey) {
+        return apiKeyToLastCallTime.getOrDefault(apiKey, 0L);
+    }
+
+    public double getRateLimitQps() {
+        return Math.max(1, AppConfig.getRateLimitQps());
+    }
+
+    public boolean isRateLimited(String apiKey) {
+        double permitsPerSecond = getRateLimitQps();
+        RateLimiter limiter = apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
+        // For now, just return false since we don't have a good way to check without consuming
+        // In a real implementation, we might track recent calls separately
+        return false;
     }
 }
