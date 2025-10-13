@@ -27,6 +27,10 @@ public class BearerAuthFilter implements ContainerRequestFilter {
         String rawPath = requestContext.getUriInfo().getPath();
         String path = rawPath.startsWith("/") ? rawPath.substring(1) : rawPath;
         boolean isProtectedApi = path.startsWith("v1/") || path.startsWith("v2/") || path.startsWith("user/");
+        // Allow time API to be public (no authentication required)
+        if (path.startsWith("time/")) {
+            return;
+        }
         if (!isProtectedApi) {
             return;
         }

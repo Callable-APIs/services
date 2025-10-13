@@ -3,6 +3,7 @@ package com.callableapis.api;
 import com.callableapis.api.handlers.AuthResource;
 import com.callableapis.api.handlers.DebugResource;
 import com.callableapis.api.handlers.TestResource;
+import com.callableapis.api.handlers.TimeResource;
 import com.callableapis.api.handlers.v1.CalendarResource;
 import com.callableapis.api.handlers.v2.CalendarResourceV2;
 import com.callableapis.api.handlers.UserResource;
@@ -21,6 +22,7 @@ public class APIApplication extends ResourceConfig {
     public APIApplication() {
         // Resources
         register(TestResource.class);
+        register(TimeResource.class);
         register(CalendarResource.class);
         register(CalendarResourceV2.class);
         register(AuthResource.class);
@@ -36,7 +38,7 @@ public class APIApplication extends ResourceConfig {
         // Web resources
         register(RootResource.class);
         register(AuthenticatedResource.class);
-        
+
         // Exception mappers
         register(NotFoundRedirectMapper.class);
         register(NotFoundRedirectFilter.class);

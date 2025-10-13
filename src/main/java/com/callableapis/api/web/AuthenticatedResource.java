@@ -183,6 +183,20 @@ public class AuthenticatedResource {
                 ".refresh-button:hover { background: #138496; }" +
                 ".auto-refresh { display: flex; align-items: center; gap: 1rem; margin: 1rem 0; }" +
                 ".auto-refresh input[type='checkbox'] { margin-right: 0.5rem; }" +
+                ".response-structure { background: #f8f9fa; border: 1px solid #e1e4e8; border-radius: 8px; padding: 1.5rem; margin: 1rem 0; }"
+                +
+                ".response-structure h6 { margin-top: 0; color: #2da44e; font-size: 1rem; }" +
+                ".response-structure ul { margin: 0.5rem 0; padding-left: 1.5rem; }" +
+                ".response-structure li { margin: 0.5rem 0; line-height: 1.5; }" +
+                ".explanation { background: #e8f5e8; border: 1px solid #c3e6c3; border-radius: 6px; padding: 1rem; margin: 1rem 0; font-style: italic; }"
+                +
+                ".educational-resources { background: #f0f8ff; border: 1px solid #b3d9ff; border-radius: 8px; padding: 1.5rem; margin: 1rem 0; }"
+                +
+                ".educational-resources h6 { margin-top: 0; color: #0366d6; font-size: 1rem; }" +
+                ".educational-resources ul { margin: 0.5rem 0; padding-left: 1.5rem; }" +
+                ".educational-resources li { margin: 0.5rem 0; }" +
+                ".educational-resources a { color: #0366d6; text-decoration: none; }" +
+                ".educational-resources a:hover { text-decoration: underline; }" +
                 "@media (max-width: 768px) { .tab-navigation { flex-direction: column; } .tab-button { border-bottom: 1px solid #e1e4e8; border-right: none; } .sub-tab-navigation { flex-wrap: wrap; } .api-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }";
     }
 
@@ -298,76 +312,304 @@ public class AuthenticatedResource {
     private String generateCalendarApiDocs(String apiKey) {
         return "<div class=\"endpoint-doc\">" +
                 "<h4><span class=\"method method-get\">GET</span> /api/v1/calendar/date</h4>" +
-                "<div class=\"description\">Get current date information with timezone support</div>" +
+                "<div class=\"description\">Get current date information in UTC (Coordinated Universal Time)</div>" +
+                "<div class=\"info-box\">" +
+                "<strong>🌍 Timezone Information:</strong> All dates and times returned by our APIs are in UTC (Coordinated Universal Time). "
+                +
+                "This is the standard time used worldwide for technical applications and ensures consistency across different locations."
+                +
+                "</div>" +
                 "<div class=\"parameters\">" +
                 "<h5>Query Parameters</h5>" +
-                "<div class=\"parameter\"><span class=\"parameter-name\">timezone</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Timezone identifier (e.g., 'America/New_York')</div>"
+                "<div class=\"parameter\"><span class=\"parameter-name\">timezone</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Timezone identifier (e.g., 'America/New_York'). Note: This parameter is currently not implemented - all responses are in UTC.</div>"
                 +
-                "<div class=\"parameter\"><span class=\"parameter-name\">format</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Response format ('json' or 'xml')</div>"
+                "<div class=\"parameter\"><span class=\"parameter-name\">format</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Response format ('json' or 'xml'). Currently only JSON is supported.</div>"
                 +
                 "</div>" +
                 "<div class=\"response\">" +
-                "<h5>Response Example</h5>" +
-                "<div class=\"response-example\">{\n  \"date\": \"2025-10-13\",\n  \"time\": \"19:32:10\",\n  \"timezone\": \"UTC\",\n  \"timestamp\": 1728847930000\n}</div>"
+                "<h5>Complete Response Documentation</h5>" +
+                "<div class=\"response-structure\">" +
+                "<h6>Response Fields:</h6>" +
+                "<ul>" +
+                "<li><strong>year</strong> (integer): The current year (e.g., 2025)</li>" +
+                "<li><strong>month</strong> (integer): The current month (0-11, where 0=January, 11=December) - Note: This is 0-based indexing</li>"
                 +
+                "<li><strong>day</strong> (integer): The current day of the month (1-31)</li>" +
+                "</ul>" +
+                "<h6>Example Response:</h6>" +
+                "<div class=\"response-example\">{\n  \"year\": 2025,\n  \"month\": 9,\n  \"day\": 13\n}</div>" +
+                "<div class=\"explanation\">" +
+                "<strong>What this means:</strong> This response shows October 13, 2025 (month 9 = October in 0-based indexing) in UTC time."
+                +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"educational-resources\">" +
+                "<h6>📚 Learn More:</h6>" +
+                "<ul>" +
+                "<li><a href=\"https://en.wikipedia.org/wiki/Coordinated_Universal_Time\" target=\"_blank\">What is UTC? - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://www.timeanddate.com/worldclock/converter.html\" target=\"_blank\">UTC Time Converter - TimeAndDate.com</a></li>"
+                +
+                "<li><a href=\"https://www.epochconverter.com/\" target=\"_blank\">Unix Timestamp Converter - EpochConverter.com</a></li>"
+                +
+                "</ul>" +
                 "</div>" +
                 "<button class=\"test-button\" onclick=\"testApi('/api/v1/calendar/date')\">Test This API</button>" +
                 "</div>" +
                 "<div class=\"endpoint-doc\">" +
-                "<h4><span class=\"method method-get\">GET</span> /api/v2/calendar/solar</h4>" +
-                "<div class=\"description\">Get solar information including sunrise, sunset, and solar noon</div>" +
-                "<div class=\"parameters\">" +
-                "<h5>Query Parameters</h5>" +
-                "<div class=\"parameter\"><span class=\"parameter-name\">latitude</span> <span class=\"parameter-type\">(number)</span> <span class=\"parameter-required\">required</span> - Latitude coordinate</div>"
+                "<h4><span class=\"method method-get\">GET</span> /api/v2/calendar/date</h4>" +
+                "<div class=\"description\">Get current date and time information in UTC with more detailed formatting</div>"
                 +
-                "<div class=\"parameter\"><span class=\"parameter-name\">longitude</span> <span class=\"parameter-type\">(number)</span> <span class=\"parameter-required\">required</span> - Longitude coordinate</div>"
-                +
-                "<div class=\"parameter\"><span class=\"parameter-name\">date</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Date in YYYY-MM-DD format (defaults to today)</div>"
+                "<div class=\"info-box\">" +
+                "<strong>🕐 Enhanced Date/Time API:</strong> This is the improved version of the date API that includes time information and uses 1-based month indexing (1=January, 12=December)."
                 +
                 "</div>" +
                 "<div class=\"response\">" +
-                "<h5>Response Example</h5>" +
-                "<div class=\"response-example\">{\n  \"sunrise\": \"06:45:23\",\n  \"sunset\": \"18:30:45\",\n  \"solar_noon\": \"12:38:04\",\n  \"day_length\": \"11:45:22\"\n}</div>"
+                "<h5>Complete Response Documentation</h5>" +
+                "<div class=\"response-structure\">" +
+                "<h6>Response Fields:</h6>" +
+                "<ul>" +
+                "<li><strong>year</strong> (integer): The current year (e.g., 2025)</li>" +
+                "<li><strong>month</strong> (integer): The current month (1-12, where 1=January, 12=December) - 1-based indexing</li>"
+                +
+                "<li><strong>day</strong> (integer): The current day of the month (1-31)</li>" +
+                "<li><strong>hour</strong> (integer): The current hour in 24-hour format (0-23)</li>" +
+                "<li><strong>minute</strong> (integer): The current minute (0-59)</li>" +
+                "<li><strong>second</strong> (integer): The current second (0-59)</li>" +
+                "<li><strong>iso</strong> (string): ISO 8601 formatted date/time string in UTC</li>" +
+                "</ul>" +
+                "<h6>Example Response:</h6>" +
+                "<div class=\"response-example\">{\n  \"year\": 2025,\n  \"month\": 10,\n  \"day\": 13,\n  \"hour\": 19,\n  \"minute\": 32,\n  \"second\": 10,\n  \"iso\": \"2025-10-13T19:32:10Z\"\n}</div>"
+                +
+                "<div class=\"explanation\">" +
+                "<strong>What this means:</strong> This response shows October 13, 2025 at 7:32:10 PM UTC. The 'Z' at the end of the ISO string indicates UTC timezone."
                 +
                 "</div>" +
-                "<button class=\"test-button\" onclick=\"testApi('/api/v2/calendar/solar?latitude=40.7128&longitude=-74.0060')\">Test This API</button>"
+                "</div>" +
+                "</div>" +
+                "<div class=\"educational-resources\">" +
+                "<h6>📚 Learn More:</h6>" +
+                "<ul>" +
+                "<li><a href=\"https://en.wikipedia.org/wiki/ISO_8601\" target=\"_blank\">ISO 8601 Date/Time Standard - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://www.iso.org/iso-8601-date-and-time-format.html\" target=\"_blank\">ISO 8601 Official Documentation</a></li>"
+                +
+                "<li><a href=\"https://www.timeanddate.com/worldclock/converter.html\" target=\"_blank\">UTC Time Converter - TimeAndDate.com</a></li>"
+                +
+                "</ul>" +
+                "</div>" +
+                "<button class=\"test-button\" onclick=\"testApi('/api/v2/calendar/date')\">Test This API</button>" +
+                "</div>" +
+                "<div class=\"endpoint-doc\">" +
+                "<h4><span class=\"method method-post\">POST</span> /api/v2/calendar/solar</h4>" +
+                "<div class=\"description\">Get solar information including sun position, daylight hours, and solar events for a specific location</div>"
+                +
+                "<div class=\"info-box\">" +
+                "<strong>☀️ Solar Calculations:</strong> This API calculates the sun's position and solar events for any location on Earth. All times are returned in UTC."
+                +
+                "</div>" +
+                "<div class=\"parameters\">" +
+                "<h5>Request Body (JSON)</h5>" +
+                "<div class=\"parameter\"><span class=\"parameter-name\">lat</span> <span class=\"parameter-type\">(number)</span> <span class=\"parameter-required\">required</span> - Latitude coordinate (-90 to 90 degrees). Positive values are North, negative are South.</div>"
+                +
+                "<div class=\"parameter\"><span class=\"parameter-name\">lon</span> <span class=\"parameter-type\">(number)</span> <span class=\"parameter-required\">required</span> - Longitude coordinate (-180 to 180 degrees). Positive values are East, negative are West.</div>"
+                +
+                "<div class=\"parameter\"><span class=\"parameter-name\">at</span> <span class=\"parameter-type\">(object)</span> <span class=\"parameter-optional\">optional</span> - Specific date/time to calculate for. If not provided, uses current UTC time.</div>"
+                +
+                "<div class=\"parameter\"><span class=\"parameter-name\">at.year</span> <span class=\"parameter-type\">(integer)</span> <span class=\"parameter-optional\">optional</span> - Year (e.g., 2025)</div>"
+                +
+                "<div class=\"parameter\"><span class=\"parameter-name\">at.month</span> <span class=\"parameter-type\">(integer)</span> <span class=\"parameter-optional\">optional</span> - Month (1-12)</div>"
+                +
+                "<div class=\"parameter\"><span class=\"parameter-name\">at.day</span> <span class=\"parameter-type\">(integer)</span> <span class=\"parameter-optional\">optional</span> - Day of month (1-31)</div>"
+                +
+                "</div>" +
+                "<div class=\"response\">" +
+                "<h5>Complete Response Documentation</h5>" +
+                "<div class=\"response-structure\">" +
+                "<h6>Response Fields:</h6>" +
+                "<ul>" +
+                "<li><strong>elevationDeg</strong> (number): Sun's elevation angle in degrees (0° = horizon, 90° = directly overhead)</li>"
+                +
+                "<li><strong>azimuthDeg</strong> (number): Sun's azimuth angle in degrees (0° = North, 90° = East, 180° = South, 270° = West)</li>"
+                +
+                "<li><strong>intensity</strong> (number): Solar intensity (0.0 to 1.0, where 1.0 is maximum intensity)</li>"
+                +
+                "<li><strong>daylight</strong> (boolean): Whether it's currently daylight at this location</li>" +
+                "<li><strong>dayLengthHours</strong> (number): Length of daylight in hours for this date</li>" +
+                "<li><strong>nightLengthHours</strong> (number): Length of night in hours for this date</li>" +
+                "</ul>" +
+                "<h6>Example Request:</h6>" +
+                "<div class=\"response-example\">{\n  \"lat\": 40.7128,\n  \"lon\": -74.0060\n}</div>" +
+                "<h6>Example Response:</h6>" +
+                "<div class=\"response-example\">{\n  \"elevationDeg\": 45.2,\n  \"azimuthDeg\": 180.5,\n  \"intensity\": 0.707,\n  \"daylight\": true,\n  \"dayLengthHours\": 11.5,\n  \"nightLengthHours\": 12.5\n}</div>"
+                +
+                "<div class=\"explanation\">" +
+                "<strong>What this means:</strong> For New York City (40.7128°N, 74.0060°W), the sun is 45.2° above the horizon, "
+                +
+                "positioned to the south (180.5°), with 70.7% maximum intensity. It's currently daylight with 11.5 hours of daylight today."
+                +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"educational-resources\">" +
+                "<h6>📚 Learn More:</h6>" +
+                "<ul>" +
+                "<li><a href=\"https://en.wikipedia.org/wiki/Solar_azimuth_angle\" target=\"_blank\">Solar Azimuth Angle - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://en.wikipedia.org/wiki/Solar_elevation_angle\" target=\"_blank\">Solar Elevation Angle - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://www.timeanddate.com/astronomy/\" target=\"_blank\">Astronomy and Solar Events - TimeAndDate.com</a></li>"
+                +
+                "<li><a href=\"https://www.latlong.net/\" target=\"_blank\">Find Latitude and Longitude - LatLong.net</a></li>"
+                +
+                "</ul>" +
+                "</div>" +
+                "<button class=\"test-button\" onclick=\"testApi('/api/v2/calendar/solar', 'POST', JSON.stringify({lat: 40.7128, lon: -74.0060}))\">Test This API</button>"
                 +
                 "</div>" +
                 "<div class=\"endpoint-doc\">" +
-                "<h4><span class=\"method method-get\">GET</span> /api/v2/calendar/moon</h4>" +
-                "<div class=\"description\">Get lunar information including moon phase and illumination</div>" +
-                "<div class=\"parameters\">" +
-                "<h5>Query Parameters</h5>" +
-                "<div class=\"parameter\"><span class=\"parameter-name\">date</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Date in YYYY-MM-DD format (defaults to today)</div>"
+                "<h4><span class=\"method method-get\">GET</span> /api/v2/calendar/moon-phase</h4>" +
+                "<div class=\"description\">Get current moon phase information including illumination, phase name, and lunar characteristics</div>"
+                +
+                "<div class=\"info-box\">" +
+                "<strong>🌙 Moon Phase Information:</strong> This API provides detailed information about the current moon phase, including how much of the moon is illuminated and its position in the lunar cycle."
                 +
                 "</div>" +
                 "<div class=\"response\">" +
-                "<h5>Response Example</h5>" +
-                "<div class=\"response-example\">{\n  \"phase\": \"Waxing Crescent\",\n  \"illumination\": 23.4,\n  \"age\": 4.2,\n  \"next_full_moon\": \"2025-10-20\"\n}</div>"
+                "<h5>Complete Response Documentation</h5>" +
+                "<div class=\"response-structure\">" +
+                "<h6>Response Fields:</h6>" +
+                "<ul>" +
+                "<li><strong>phase</strong> (number): Moon phase as a decimal (0.0 = New Moon, 0.5 = Full Moon, 1.0 = Next New Moon)</li>"
                 +
+                "<li><strong>illumination</strong> (number): Fraction of moon illuminated (0.0 to 1.0, where 1.0 = fully illuminated)</li>"
+                +
+                "<li><strong>ageDays</strong> (number): Days since the last new moon</li>" +
+                "<li><strong>phaseName</strong> (string): Human-readable phase name (e.g., 'Waxing Crescent', 'Full Moon')</li>"
+                +
+                "<li><strong>phaseAngleDeg</strong> (number): Phase angle in degrees (0° = New Moon, 180° = Full Moon)</li>"
+                +
+                "<li><strong>waxing</strong> (boolean): Whether the moon is waxing (growing brighter)</li>" +
+                "<li><strong>waning</strong> (boolean): Whether the moon is waning (growing dimmer)</li>" +
+                "<li><strong>crescent</strong> (boolean): Whether the moon is in crescent phase</li>" +
+                "<li><strong>gibbous</strong> (boolean): Whether the moon is in gibbous phase</li>" +
+                "<li><strong>quarter</strong> (boolean): Whether the moon is in quarter phase</li>" +
+                "<li><strong>full</strong> (boolean): Whether the moon is full</li>" +
+                "<li><strong>isNew</strong> (boolean): Whether the moon is new (not visible)</li>" +
+                "</ul>" +
+                "<h6>Example Response:</h6>" +
+                "<div class=\"response-example\">{\n  \"phase\": 0.25,\n  \"illumination\": 0.234,\n  \"ageDays\": 7.4,\n  \"phaseName\": \"Waxing Crescent\",\n  \"phaseAngleDeg\": 90.0,\n  \"waxing\": true,\n  \"waning\": false,\n  \"crescent\": true,\n  \"gibbous\": false,\n  \"quarter\": false,\n  \"full\": false,\n  \"isNew\": false\n}</div>"
+                +
+                "<div class=\"explanation\">" +
+                "<strong>What this means:</strong> The moon is 25% through its cycle, 23.4% illuminated, 7.4 days old, "
+                +
+                "in the Waxing Crescent phase, and growing brighter (waxing)." +
                 "</div>" +
-                "<button class=\"test-button\" onclick=\"testApi('/api/v2/calendar/moon')\">Test This API</button>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"educational-resources\">" +
+                "<h6>📚 Learn More:</h6>" +
+                "<ul>" +
+                "<li><a href=\"https://moon.nasa.gov/moon-in-motion/moon-phases/\" target=\"_blank\">Moon Phases - NASA</a></li>"
+                +
+                "<li><a href=\"https://www.timeanddate.com/moon/phases/\" target=\"_blank\">Moon Phase Calendar - TimeAndDate.com</a></li>"
+                +
+                "<li><a href=\"https://en.wikipedia.org/wiki/Lunar_phase\" target=\"_blank\">Lunar Phase - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://www.almanac.com/astronomy/moon/calendar\" target=\"_blank\">Moon Calendar - Old Farmer's Almanac</a></li>"
+                +
+                "</ul>" +
+                "</div>" +
+                "<button class=\"test-button\" onclick=\"testApi('/api/v2/calendar/moon-phase')\">Test This API</button>"
+                +
                 "</div>";
     }
 
     private String generateUserApiDocs(String apiKey) {
         return "<div class=\"endpoint-doc\">" +
                 "<h4><span class=\"method method-get\">GET</span> /api/user/me</h4>" +
-                "<div class=\"description\">Get current user profile information</div>" +
-                "<div class=\"response\">" +
-                "<h5>Response Example</h5>" +
-                "<div class=\"response-example\">{\n  \"identity\": \"github:username\",\n  \"api_key\": \"***\",\n  \"created_at\": \"2025-10-13T19:32:10Z\",\n  \"last_used\": \"2025-10-13T19:32:10Z\"\n}</div>"
+                "<div class=\"description\">Get current user profile information and account details</div>" +
+                "<div class=\"info-box\">" +
+                "<strong>👤 User Profile:</strong> This endpoint returns information about your authenticated account, including your identity, API key status, and account activity. All timestamps are in UTC."
                 +
+                "</div>" +
+                "<div class=\"response\">" +
+                "<h5>Complete Response Documentation</h5>" +
+                "<div class=\"response-structure\">" +
+                "<h6>Response Fields:</h6>" +
+                "<ul>" +
+                "<li><strong>identity</strong> (string): Your unique identity identifier (e.g., 'github:username')</li>"
+                +
+                "<li><strong>api_key</strong> (string): Your current API key (partially masked for security)</li>" +
+                "<li><strong>created_at</strong> (string): When your account was created (ISO 8601 format in UTC)</li>"
+                +
+                "<li><strong>last_used</strong> (string): When your API key was last used (ISO 8601 format in UTC)</li>"
+                +
+                "</ul>" +
+                "<h6>Example Response:</h6>" +
+                "<div class=\"response-example\">{\n  \"identity\": \"github:johndoe\",\n  \"api_key\": \"cb_***abc123\",\n  \"created_at\": \"2025-10-13T19:32:10Z\",\n  \"last_used\": \"2025-10-13T19:32:10Z\"\n}</div>"
+                +
+                "<div class=\"explanation\">" +
+                "<strong>What this means:</strong> This shows your GitHub account 'johndoe' is authenticated, with an API key starting with 'cb_', "
+                +
+                "account created on October 13, 2025 at 7:32:10 PM UTC, and last used at the same time." +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"educational-resources\">" +
+                "<h6>📚 Learn More:</h6>" +
+                "<ul>" +
+                "<li><a href=\"https://en.wikipedia.org/wiki/API_key\" target=\"_blank\">What is an API Key? - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://auth0.com/blog/a-look-at-the-latest-draft-for-jwt-bcp/\" target=\"_blank\">Understanding API Authentication - Auth0</a></li>"
+                +
+                "<li><a href=\"https://www.timeanddate.com/worldclock/converter.html\" target=\"_blank\">UTC Time Converter - TimeAndDate.com</a></li>"
+                +
+                "</ul>" +
                 "</div>" +
                 "<button class=\"test-button\" onclick=\"testApi('/api/user/me')\">Test This API</button>" +
                 "</div>" +
                 "<div class=\"endpoint-doc\">" +
                 "<h4><span class=\"method method-post\">POST</span> /api/user/key/rotate</h4>" +
-                "<div class=\"description\">Rotate the current API key to generate a new one</div>" +
-                "<div class=\"response\">" +
-                "<h5>Response Example</h5>" +
-                "<div class=\"response-example\">{\n  \"message\": \"API key rotated successfully\",\n  \"new_api_key\": \"***\",\n  \"old_api_key\": \"***\"\n}</div>"
+                "<div class=\"description\">Rotate the current API key to generate a new one for enhanced security</div>"
                 +
+                "<div class=\"info-box\">" +
+                "<strong>🔐 Security Best Practice:</strong> Regularly rotating your API key helps maintain security. When you rotate your key, the old one becomes invalid and a new one is generated. All timestamps are in UTC."
+                +
+                "</div>" +
+                "<div class=\"response\">" +
+                "<h5>Complete Response Documentation</h5>" +
+                "<div class=\"response-structure\">" +
+                "<h6>Response Fields:</h6>" +
+                "<ul>" +
+                "<li><strong>message</strong> (string): Confirmation message about the key rotation</li>" +
+                "<li><strong>new_api_key</strong> (string): Your new API key (partially masked for security)</li>" +
+                "<li><strong>old_api_key</strong> (string): Your previous API key (partially masked for security)</li>"
+                +
+                "<li><strong>rotated_at</strong> (string): When the key was rotated (ISO 8601 format in UTC)</li>" +
+                "</ul>" +
+                "<h6>Example Response:</h6>" +
+                "<div class=\"response-example\">{\n  \"message\": \"API key rotated successfully\",\n  \"new_api_key\": \"cb_***xyz789\",\n  \"old_api_key\": \"cb_***abc123\",\n  \"rotated_at\": \"2025-10-13T19:32:10Z\"\n}</div>"
+                +
+                "<div class=\"explanation\">" +
+                "<strong>What this means:</strong> Your API key has been successfully rotated. The old key (ending in 'abc123') is now invalid, "
+                +
+                "and you have a new key (ending in 'xyz789') that you should use for all future API calls. The rotation happened on October 13, 2025 at 7:32:10 PM UTC."
+                +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"educational-resources\">" +
+                "<h6>📚 Learn More:</h6>" +
+                "<ul>" +
+                "<li><a href=\"https://owasp.org/www-community/vulnerabilities/Insufficient_Session-ID_Length\" target=\"_blank\">API Key Security Best Practices - OWASP</a></li>"
+                +
+                "<li><a href=\"https://auth0.com/blog/a-look-at-the-latest-draft-for-jwt-bcp/\" target=\"_blank\">Understanding API Authentication - Auth0</a></li>"
+                +
+                "<li><a href=\"https://www.timeanddate.com/worldclock/converter.html\" target=\"_blank\">UTC Time Converter - TimeAndDate.com</a></li>"
+                +
+                "</ul>" +
                 "</div>" +
                 "<button class=\"test-button\" onclick=\"testApi('/api/user/key/rotate', 'POST')\">Test This API</button>"
                 +
@@ -377,16 +619,53 @@ public class AuthenticatedResource {
     private String generateTimeApiDocs(String apiKey) {
         return "<div class=\"endpoint-doc\">" +
                 "<h4><span class=\"method method-get\">GET</span> /api/time/now</h4>" +
-                "<div class=\"description\">Get current time information in various formats</div>" +
+                "<div class=\"description\">Get current time information in various formats, all in UTC</div>" +
+                "<div class=\"info-box\">" +
+                "<strong>⏰ Time Formats:</strong> This API provides the current time in multiple standard formats, all in UTC (Coordinated Universal Time). "
+                +
+                "This is useful for applications that need to work with different time representations." +
+                "</div>" +
                 "<div class=\"parameters\">" +
                 "<h5>Query Parameters</h5>" +
-                "<div class=\"parameter\"><span class=\"parameter-name\">format</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Time format ('iso', 'unix', 'rfc2822')</div>"
+                "<div class=\"parameter\"><span class=\"parameter-name\">format</span> <span class=\"parameter-type\">(string)</span> <span class=\"parameter-optional\">optional</span> - Time format ('iso', 'unix', 'rfc2822'). Note: This parameter is currently not implemented - all formats are returned.</div>"
                 +
                 "</div>" +
                 "<div class=\"response\">" +
-                "<h5>Response Example</h5>" +
+                "<h5>Complete Response Documentation</h5>" +
+                "<div class=\"response-structure\">" +
+                "<h6>Response Fields:</h6>" +
+                "<ul>" +
+                "<li><strong>iso</strong> (string): ISO 8601 formatted date/time string in UTC (e.g., '2025-10-13T19:32:10Z')</li>"
+                +
+                "<li><strong>unix</strong> (number): Unix timestamp (seconds since January 1, 1970 UTC)</li>" +
+                "<li><strong>rfc2822</strong> (string): RFC 2822 formatted date/time string in UTC (e.g., 'Mon, 13 Oct 2025 19:32:10 GMT')</li>"
+                +
+                "</ul>" +
+                "<h6>Example Response:</h6>" +
                 "<div class=\"response-example\">{\n  \"iso\": \"2025-10-13T19:32:10Z\",\n  \"unix\": 1728847930,\n  \"rfc2822\": \"Mon, 13 Oct 2025 19:32:10 GMT\"\n}</div>"
                 +
+                "<div class=\"explanation\">" +
+                "<strong>What this means:</strong> The current time is October 13, 2025 at 7:32:10 PM UTC. " +
+                "The 'Z' in the ISO format indicates UTC timezone, the Unix timestamp is 1,728,847,930 seconds since the Unix epoch, "
+                +
+                "and the RFC 2822 format is commonly used in email headers and web protocols." +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "<div class=\"educational-resources\">" +
+                "<h6>📚 Learn More:</h6>" +
+                "<ul>" +
+                "<li><a href=\"https://en.wikipedia.org/wiki/Unix_time\" target=\"_blank\">What is Unix Time? - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://en.wikipedia.org/wiki/ISO_8601\" target=\"_blank\">ISO 8601 Date/Time Standard - Wikipedia</a></li>"
+                +
+                "<li><a href=\"https://tools.ietf.org/html/rfc2822\" target=\"_blank\">RFC 2822 Date/Time Format - IETF</a></li>"
+                +
+                "<li><a href=\"https://www.epochconverter.com/\" target=\"_blank\">Unix Timestamp Converter - EpochConverter.com</a></li>"
+                +
+                "<li><a href=\"https://www.timeanddate.com/worldclock/converter.html\" target=\"_blank\">UTC Time Converter - TimeAndDate.com</a></li>"
+                +
+                "</ul>" +
                 "</div>" +
                 "<button class=\"test-button\" onclick=\"testApi('/api/time/now')\">Test This API</button>" +
                 "</div>";
