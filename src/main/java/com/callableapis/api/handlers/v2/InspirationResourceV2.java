@@ -30,7 +30,8 @@ public class InspirationResourceV2 {
         Integer second;
         String timezone;
 
-        public BaseDateTime() {}
+        public BaseDateTime() {
+        }
 
         public BaseDateTime(ZonedDateTime zdt) {
             this.year = zdt.getYear();
@@ -42,20 +43,61 @@ public class InspirationResourceV2 {
             this.timezone = zdt.getZone().getId();
         }
 
-        public Integer getYear() { return year; }
-        public void setYear(Integer year) { this.year = year; }
-        public Integer getMonth() { return month; }
-        public void setMonth(Integer month) { this.month = month; }
-        public Integer getDay() { return day; }
-        public void setDay(Integer day) { this.day = day; }
-        public Integer getHour() { return hour; }
-        public void setHour(Integer hour) { this.hour = hour; }
-        public Integer getMinute() { return minute; }
-        public void setMinute(Integer minute) { this.minute = minute; }
-        public Integer getSecond() { return second; }
-        public void setSecond(Integer second) { this.second = second; }
-        public String getTimezone() { return timezone; }
-        public void setTimezone(String timezone) { this.timezone = timezone; }
+        public Integer getYear() {
+            return year;
+        }
+
+        public void setYear(Integer year) {
+            this.year = year;
+        }
+
+        public Integer getMonth() {
+            return month;
+        }
+
+        public void setMonth(Integer month) {
+            this.month = month;
+        }
+
+        public Integer getDay() {
+            return day;
+        }
+
+        public void setDay(Integer day) {
+            this.day = day;
+        }
+
+        public Integer getHour() {
+            return hour;
+        }
+
+        public void setHour(Integer hour) {
+            this.hour = hour;
+        }
+
+        public Integer getMinute() {
+            return minute;
+        }
+
+        public void setMinute(Integer minute) {
+            this.minute = minute;
+        }
+
+        public Integer getSecond() {
+            return second;
+        }
+
+        public void setSecond(Integer second) {
+            this.second = second;
+        }
+
+        public String getTimezone() {
+            return timezone;
+        }
+
+        public void setTimezone(String timezone) {
+            this.timezone = timezone;
+        }
     }
 
     public static class HoroscopeRequest {
@@ -64,14 +106,37 @@ public class InspirationResourceV2 {
         public BaseDateTime at;
         public String seed;
 
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getSign() { return sign; }
-        public void setSign(String sign) { this.sign = sign; }
-        public BaseDateTime getAt() { return at; }
-        public void setAt(BaseDateTime at) { this.at = at; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getSign() {
+            return sign;
+        }
+
+        public void setSign(String sign) {
+            this.sign = sign;
+        }
+
+        public BaseDateTime getAt() {
+            return at;
+        }
+
+        public void setAt(BaseDateTime at) {
+            this.at = at;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class HoroscopeResponse {
@@ -92,46 +157,146 @@ public class InspirationResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getSign() { return sign; }
-        public void setSign(String sign) { this.sign = sign; }
-        public String getSymbol() { return symbol; }
-        public void setSymbol(String symbol) { this.symbol = symbol; }
-        public String getElement() { return element; }
-        public void setElement(String element) { this.element = element; }
-        public String getQuality() { return quality; }
-        public void setQuality(String quality) { this.quality = quality; }
-        public String getTitle() { return title; }
-        public void setTitle(String title) { this.title = title; }
-        public String getContent() { return content; }
-        public void setContent(String content) { this.content = content; }
-        public String getGuidance() { return guidance; }
-        public void setGuidance(String guidance) { this.guidance = guidance; }
-        public String getMood() { return mood; }
-        public void setMood(String mood) { this.mood = mood; }
-        public String getLuckyNumbers() { return luckyNumbers; }
-        public void setLuckyNumbers(String luckyNumbers) { this.luckyNumbers = luckyNumbers; }
-        public String getLuckyColors() { return luckyColors; }
-        public void setLuckyColors(String luckyColors) { this.luckyColors = luckyColors; }
-        public String getCompatibility() { return compatibility; }
-        public void setCompatibility(String compatibility) { this.compatibility = compatibility; }
-        public Map<String, Object> getPlanetaryInfluences() { return planetaryInfluences; }
-        public void setPlanetaryInfluences(Map<String, Object> planetaryInfluences) { this.planetaryInfluences = planetaryInfluences; }
-        public String getGeneratedAt() { return generatedAt; }
-        public void setGeneratedAt(String generatedAt) { this.generatedAt = generatedAt; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getSign() {
+            return sign;
+        }
+
+        public void setSign(String sign) {
+            this.sign = sign;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
+        }
+
+        public String getElement() {
+            return element;
+        }
+
+        public void setElement(String element) {
+            this.element = element;
+        }
+
+        public String getQuality() {
+            return quality;
+        }
+
+        public void setQuality(String quality) {
+            this.quality = quality;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getGuidance() {
+            return guidance;
+        }
+
+        public void setGuidance(String guidance) {
+            this.guidance = guidance;
+        }
+
+        public String getMood() {
+            return mood;
+        }
+
+        public void setMood(String mood) {
+            this.mood = mood;
+        }
+
+        public String getLuckyNumbers() {
+            return luckyNumbers;
+        }
+
+        public void setLuckyNumbers(String luckyNumbers) {
+            this.luckyNumbers = luckyNumbers;
+        }
+
+        public String getLuckyColors() {
+            return luckyColors;
+        }
+
+        public void setLuckyColors(String luckyColors) {
+            this.luckyColors = luckyColors;
+        }
+
+        public String getCompatibility() {
+            return compatibility;
+        }
+
+        public void setCompatibility(String compatibility) {
+            this.compatibility = compatibility;
+        }
+
+        public Map<String, Object> getPlanetaryInfluences() {
+            return planetaryInfluences;
+        }
+
+        public void setPlanetaryInfluences(Map<String, Object> planetaryInfluences) {
+            this.planetaryInfluences = planetaryInfluences;
+        }
+
+        public String getGeneratedAt() {
+            return generatedAt;
+        }
+
+        public void setGeneratedAt(String generatedAt) {
+            this.generatedAt = generatedAt;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class TarotRequest {
         public String spread;
         public String seed;
 
-        public String getSpread() { return spread; }
-        public void setSpread(String spread) { this.spread = spread; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getSpread() {
+            return spread;
+        }
+
+        public void setSpread(String spread) {
+            this.spread = spread;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class TarotCardResponse {
@@ -147,26 +312,85 @@ public class InspirationResourceV2 {
         public boolean isReversed;
 
         // Getters and setters
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public String getSuit() { return suit; }
-        public void setSuit(String suit) { this.suit = suit; }
-        public String getNumber() { return number; }
-        public void setNumber(String number) { this.number = number; }
-        public boolean isMajor() { return isMajor; }
-        public void setMajor(boolean major) { isMajor = major; }
-        public String getElement() { return element; }
-        public void setElement(String element) { this.element = element; }
-        public String getMeaning() { return meaning; }
-        public void setMeaning(String meaning) { this.meaning = meaning; }
-        public String getReversedMeaning() { return reversedMeaning; }
-        public void setReversedMeaning(String reversedMeaning) { this.reversedMeaning = reversedMeaning; }
-        public String getKeywords() { return keywords; }
-        public void setKeywords(String keywords) { this.keywords = keywords; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public boolean isReversed() { return isReversed; }
-        public void setReversed(boolean reversed) { isReversed = reversed; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSuit() {
+            return suit;
+        }
+
+        public void setSuit(String suit) {
+            this.suit = suit;
+        }
+
+        public String getNumber() {
+            return number;
+        }
+
+        public void setNumber(String number) {
+            this.number = number;
+        }
+
+        public boolean isMajor() {
+            return isMajor;
+        }
+
+        public void setMajor(boolean major) {
+            isMajor = major;
+        }
+
+        public String getElement() {
+            return element;
+        }
+
+        public void setElement(String element) {
+            this.element = element;
+        }
+
+        public String getMeaning() {
+            return meaning;
+        }
+
+        public void setMeaning(String meaning) {
+            this.meaning = meaning;
+        }
+
+        public String getReversedMeaning() {
+            return reversedMeaning;
+        }
+
+        public void setReversedMeaning(String reversedMeaning) {
+            this.reversedMeaning = reversedMeaning;
+        }
+
+        public String getKeywords() {
+            return keywords;
+        }
+
+        public void setKeywords(String keywords) {
+            this.keywords = keywords;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public boolean isReversed() {
+            return isReversed;
+        }
+
+        public void setReversed(boolean reversed) {
+            isReversed = reversed;
+        }
     }
 
     public static class TarotReadingResponse {
@@ -180,36 +404,83 @@ public class InspirationResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getSpread() { return spread; }
-        public void setSpread(String spread) { this.spread = spread; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public List<TarotCardResponse> getCards() { return cards; }
-        public void setCards(List<TarotCardResponse> cards) { this.cards = cards; }
-        public String getOverallReading() { return overallReading; }
-        public void setOverallReading(String overallReading) { this.overallReading = overallReading; }
-        public String getGuidance() { return guidance; }
-        public void setGuidance(String guidance) { this.guidance = guidance; }
-        public String getTheme() { return theme; }
-        public void setTheme(String theme) { this.theme = theme; }
-        public String getGeneratedAt() { return generatedAt; }
-        public void setGeneratedAt(String generatedAt) { this.generatedAt = generatedAt; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getSpread() {
+            return spread;
+        }
+
+        public void setSpread(String spread) {
+            this.spread = spread;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<TarotCardResponse> getCards() {
+            return cards;
+        }
+
+        public void setCards(List<TarotCardResponse> cards) {
+            this.cards = cards;
+        }
+
+        public String getOverallReading() {
+            return overallReading;
+        }
+
+        public void setOverallReading(String overallReading) {
+            this.overallReading = overallReading;
+        }
+
+        public String getGuidance() {
+            return guidance;
+        }
+
+        public void setGuidance(String guidance) {
+            this.guidance = guidance;
+        }
+
+        public String getTheme() {
+            return theme;
+        }
+
+        public void setTheme(String theme) {
+            this.theme = theme;
+        }
+
+        public String getGeneratedAt() {
+            return generatedAt;
+        }
+
+        public void setGeneratedAt(String generatedAt) {
+            this.generatedAt = generatedAt;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     @GET
     @Path("horoscope-types")
     @Produces(MediaType.APPLICATION_JSON)
     public String[] getHoroscopeTypes() {
-        return new String[]{"daily", "monthly", "annual"};
+        return new String[] { "daily", "monthly", "annual" };
     }
 
     @GET
     @Path("tarot-spreads")
     @Produces(MediaType.APPLICATION_JSON)
     public String[] getTarotSpreads() {
-        return new String[]{"single", "three", "celtic", "horoscope"};
+        return new String[] { "single", "three", "celtic", "horoscope" };
     }
 
     @GET
@@ -260,7 +531,7 @@ public class InspirationResourceV2 {
         };
 
         InspirationService.HoroscopeResult result = inspirationService.generateHoroscope(
-            horoscopeType, astrologicalSign, at, seed);
+                horoscopeType, astrologicalSign, at, seed);
 
         HoroscopeResponse response = new HoroscopeResponse();
         response.type = result.getType();
@@ -295,8 +566,8 @@ public class InspirationResourceV2 {
         String seed = req.seed;
 
         // Validate spread
-        if (!spread.equals("single") && !spread.equals("three") && 
-            !spread.equals("celtic") && !spread.equals("horoscope")) {
+        if (!spread.equals("single") && !spread.equals("three") &&
+                !spread.equals("celtic") && !spread.equals("horoscope")) {
             throw new IllegalArgumentException("Invalid tarot spread. Must be single, three, celtic, or horoscope");
         }
 
@@ -322,8 +593,8 @@ public class InspirationResourceV2 {
 
         // Convert cards
         response.cards = result.getCards().stream()
-            .map(this::convertTarotCard)
-            .toList();
+                .map(this::convertTarotCard)
+                .toList();
 
         return response;
     }
@@ -343,12 +614,12 @@ public class InspirationResourceV2 {
             @QueryParam("sign") String sign,
             @QueryParam("type") String type,
             @QueryParam("seed") String seed) {
-        
+
         HoroscopeRequest req = new HoroscopeRequest();
         req.sign = sign;
         req.type = type;
         req.seed = seed;
-        
+
         return generateHoroscope(req);
     }
 
@@ -392,10 +663,10 @@ public class InspirationResourceV2 {
         if (base.timezone == null) {
             base.timezone = "UTC";
         }
-        
-        return ZonedDateTime.of(base.year, base.month, base.day, 
-                               base.hour, base.minute, base.second, 0, 
-                               ZoneOffset.of(base.timezone));
+
+        return ZonedDateTime.of(base.year, base.month, base.day,
+                base.hour, base.minute, base.second, 0,
+                ZoneOffset.of(base.timezone));
     }
 
 }

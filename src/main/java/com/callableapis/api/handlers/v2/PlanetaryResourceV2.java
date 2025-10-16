@@ -27,7 +27,8 @@ public class PlanetaryResourceV2 {
         Integer second;
         String timezone;
 
-        public BaseDateTime() {}
+        public BaseDateTime() {
+        }
 
         public BaseDateTime(ZonedDateTime zdt) {
             this.year = zdt.getYear();
@@ -39,20 +40,61 @@ public class PlanetaryResourceV2 {
             this.timezone = zdt.getZone().getId();
         }
 
-        public Integer getYear() { return year; }
-        public void setYear(Integer year) { this.year = year; }
-        public Integer getMonth() { return month; }
-        public void setMonth(Integer month) { this.month = month; }
-        public Integer getDay() { return day; }
-        public void setDay(Integer day) { this.day = day; }
-        public Integer getHour() { return hour; }
-        public void setHour(Integer hour) { this.hour = hour; }
-        public Integer getMinute() { return minute; }
-        public void setMinute(Integer minute) { this.minute = minute; }
-        public Integer getSecond() { return second; }
-        public void setSecond(Integer second) { this.second = second; }
-        public String getTimezone() { return timezone; }
-        public void setTimezone(String timezone) { this.timezone = timezone; }
+        public Integer getYear() {
+            return year;
+        }
+
+        public void setYear(Integer year) {
+            this.year = year;
+        }
+
+        public Integer getMonth() {
+            return month;
+        }
+
+        public void setMonth(Integer month) {
+            this.month = month;
+        }
+
+        public Integer getDay() {
+            return day;
+        }
+
+        public void setDay(Integer day) {
+            this.day = day;
+        }
+
+        public Integer getHour() {
+            return hour;
+        }
+
+        public void setHour(Integer hour) {
+            this.hour = hour;
+        }
+
+        public Integer getMinute() {
+            return minute;
+        }
+
+        public void setMinute(Integer minute) {
+            this.minute = minute;
+        }
+
+        public Integer getSecond() {
+            return second;
+        }
+
+        public void setSecond(Integer second) {
+            this.second = second;
+        }
+
+        public String getTimezone() {
+            return timezone;
+        }
+
+        public void setTimezone(String timezone) {
+            this.timezone = timezone;
+        }
     }
 
     public static class PlanetaryPositionRequest {
@@ -60,12 +102,29 @@ public class PlanetaryResourceV2 {
         public BaseDateTime at;
         public String seed;
 
-        public String getPlanet() { return planet; }
-        public void setPlanet(String planet) { this.planet = planet; }
-        public BaseDateTime getAt() { return at; }
-        public void setAt(BaseDateTime at) { this.at = at; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getPlanet() {
+            return planet;
+        }
+
+        public void setPlanet(String planet) {
+            this.planet = planet;
+        }
+
+        public BaseDateTime getAt() {
+            return at;
+        }
+
+        public void setAt(BaseDateTime at) {
+            this.at = at;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class PlanetaryPositionResponse {
@@ -86,36 +145,125 @@ public class PlanetaryResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getPlanetName() { return planetName; }
-        public void setPlanetName(String planetName) { this.planetName = planetName; }
-        public double getLongitudeDeg() { return longitudeDeg; }
-        public void setLongitudeDeg(double longitudeDeg) { this.longitudeDeg = longitudeDeg; }
-        public double getLatitudeDeg() { return latitudeDeg; }
-        public void setLatitudeDeg(double latitudeDeg) { this.latitudeDeg = latitudeDeg; }
-        public double getDistanceAU() { return distanceAU; }
-        public void setDistanceAU(double distanceAU) { this.distanceAU = distanceAU; }
-        public double getRightAscensionDeg() { return rightAscensionDeg; }
-        public void setRightAscensionDeg(double rightAscensionDeg) { this.rightAscensionDeg = rightAscensionDeg; }
-        public double getDeclinationDeg() { return declinationDeg; }
-        public void setDeclinationDeg(double declinationDeg) { this.declinationDeg = declinationDeg; }
-        public String getAstrologicalSign() { return astrologicalSign; }
-        public void setAstrologicalSign(String astrologicalSign) { this.astrologicalSign = astrologicalSign; }
-        public String getAstrologicalSymbol() { return astrologicalSymbol; }
-        public void setAstrologicalSymbol(String astrologicalSymbol) { this.astrologicalSymbol = astrologicalSymbol; }
-        public String getElement() { return element; }
-        public void setElement(String element) { this.element = element; }
-        public String getQuality() { return quality; }
-        public void setQuality(String quality) { this.quality = quality; }
-        public double getMagnitude() { return magnitude; }
-        public void setMagnitude(double magnitude) { this.magnitude = magnitude; }
-        public boolean isRetrograde() { return isRetrograde; }
-        public void setRetrograde(boolean retrograde) { isRetrograde = retrograde; }
-        public double getElongationDeg() { return elongationDeg; }
-        public void setElongationDeg(double elongationDeg) { this.elongationDeg = elongationDeg; }
-        public String getGeneratedAt() { return generatedAt; }
-        public void setGeneratedAt(String generatedAt) { this.generatedAt = generatedAt; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getPlanetName() {
+            return planetName;
+        }
+
+        public void setPlanetName(String planetName) {
+            this.planetName = planetName;
+        }
+
+        public double getLongitudeDeg() {
+            return longitudeDeg;
+        }
+
+        public void setLongitudeDeg(double longitudeDeg) {
+            this.longitudeDeg = longitudeDeg;
+        }
+
+        public double getLatitudeDeg() {
+            return latitudeDeg;
+        }
+
+        public void setLatitudeDeg(double latitudeDeg) {
+            this.latitudeDeg = latitudeDeg;
+        }
+
+        public double getDistanceAU() {
+            return distanceAU;
+        }
+
+        public void setDistanceAU(double distanceAU) {
+            this.distanceAU = distanceAU;
+        }
+
+        public double getRightAscensionDeg() {
+            return rightAscensionDeg;
+        }
+
+        public void setRightAscensionDeg(double rightAscensionDeg) {
+            this.rightAscensionDeg = rightAscensionDeg;
+        }
+
+        public double getDeclinationDeg() {
+            return declinationDeg;
+        }
+
+        public void setDeclinationDeg(double declinationDeg) {
+            this.declinationDeg = declinationDeg;
+        }
+
+        public String getAstrologicalSign() {
+            return astrologicalSign;
+        }
+
+        public void setAstrologicalSign(String astrologicalSign) {
+            this.astrologicalSign = astrologicalSign;
+        }
+
+        public String getAstrologicalSymbol() {
+            return astrologicalSymbol;
+        }
+
+        public void setAstrologicalSymbol(String astrologicalSymbol) {
+            this.astrologicalSymbol = astrologicalSymbol;
+        }
+
+        public String getElement() {
+            return element;
+        }
+
+        public void setElement(String element) {
+            this.element = element;
+        }
+
+        public String getQuality() {
+            return quality;
+        }
+
+        public void setQuality(String quality) {
+            this.quality = quality;
+        }
+
+        public double getMagnitude() {
+            return magnitude;
+        }
+
+        public void setMagnitude(double magnitude) {
+            this.magnitude = magnitude;
+        }
+
+        public boolean isRetrograde() {
+            return isRetrograde;
+        }
+
+        public void setRetrograde(boolean retrograde) {
+            isRetrograde = retrograde;
+        }
+
+        public double getElongationDeg() {
+            return elongationDeg;
+        }
+
+        public void setElongationDeg(double elongationDeg) {
+            this.elongationDeg = elongationDeg;
+        }
+
+        public String getGeneratedAt() {
+            return generatedAt;
+        }
+
+        public void setGeneratedAt(String generatedAt) {
+            this.generatedAt = generatedAt;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class ConstellationRequest {
@@ -125,16 +273,45 @@ public class PlanetaryResourceV2 {
         public Double longitude;
         public String seed;
 
-        public String getConstellation() { return constellation; }
-        public void setConstellation(String constellation) { this.constellation = constellation; }
-        public BaseDateTime getAt() { return at; }
-        public void setAt(BaseDateTime at) { this.at = at; }
-        public Double getLatitude() { return latitude; }
-        public void setLatitude(Double latitude) { this.latitude = latitude; }
-        public Double getLongitude() { return longitude; }
-        public void setLongitude(Double longitude) { this.longitude = longitude; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getConstellation() {
+            return constellation;
+        }
+
+        public void setConstellation(String constellation) {
+            this.constellation = constellation;
+        }
+
+        public BaseDateTime getAt() {
+            return at;
+        }
+
+        public void setAt(BaseDateTime at) {
+            this.at = at;
+        }
+
+        public Double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(Double latitude) {
+            this.latitude = latitude;
+        }
+
+        public Double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(Double longitude) {
+            this.longitude = longitude;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class ConstellationResponse {
@@ -152,30 +329,101 @@ public class PlanetaryResourceV2 {
         public String generatedAt;
 
         // Getters and setters
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public String getAbbreviation() { return abbreviation; }
-        public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation; }
-        public String getGenitive() { return genitive; }
-        public void setGenitive(String genitive) { this.genitive = genitive; }
-        public double getRightAscensionHours() { return rightAscensionHours; }
-        public void setRightAscensionHours(double rightAscensionHours) { this.rightAscensionHours = rightAscensionHours; }
-        public double getDeclinationDeg() { return declinationDeg; }
-        public void setDeclinationDeg(double declinationDeg) { this.declinationDeg = declinationDeg; }
-        public double getAreaSquareDegrees() { return areaSquareDegrees; }
-        public void setAreaSquareDegrees(double areaSquareDegrees) { this.areaSquareDegrees = areaSquareDegrees; }
-        public String getBrightestStar() { return brightestStar; }
-        public void setBrightestStar(String brightestStar) { this.brightestStar = brightestStar; }
-        public double getMagnitude() { return magnitude; }
-        public void setMagnitude(double magnitude) { this.magnitude = magnitude; }
-        public boolean isVisible() { return isVisible; }
-        public void setVisible(boolean visible) { isVisible = visible; }
-        public double getElevationDeg() { return elevationDeg; }
-        public void setElevationDeg(double elevationDeg) { this.elevationDeg = elevationDeg; }
-        public double getAzimuthDeg() { return azimuthDeg; }
-        public void setAzimuthDeg(double azimuthDeg) { this.azimuthDeg = azimuthDeg; }
-        public String getGeneratedAt() { return generatedAt; }
-        public void setGeneratedAt(String generatedAt) { this.generatedAt = generatedAt; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getAbbreviation() {
+            return abbreviation;
+        }
+
+        public void setAbbreviation(String abbreviation) {
+            this.abbreviation = abbreviation;
+        }
+
+        public String getGenitive() {
+            return genitive;
+        }
+
+        public void setGenitive(String genitive) {
+            this.genitive = genitive;
+        }
+
+        public double getRightAscensionHours() {
+            return rightAscensionHours;
+        }
+
+        public void setRightAscensionHours(double rightAscensionHours) {
+            this.rightAscensionHours = rightAscensionHours;
+        }
+
+        public double getDeclinationDeg() {
+            return declinationDeg;
+        }
+
+        public void setDeclinationDeg(double declinationDeg) {
+            this.declinationDeg = declinationDeg;
+        }
+
+        public double getAreaSquareDegrees() {
+            return areaSquareDegrees;
+        }
+
+        public void setAreaSquareDegrees(double areaSquareDegrees) {
+            this.areaSquareDegrees = areaSquareDegrees;
+        }
+
+        public String getBrightestStar() {
+            return brightestStar;
+        }
+
+        public void setBrightestStar(String brightestStar) {
+            this.brightestStar = brightestStar;
+        }
+
+        public double getMagnitude() {
+            return magnitude;
+        }
+
+        public void setMagnitude(double magnitude) {
+            this.magnitude = magnitude;
+        }
+
+        public boolean isVisible() {
+            return isVisible;
+        }
+
+        public void setVisible(boolean visible) {
+            isVisible = visible;
+        }
+
+        public double getElevationDeg() {
+            return elevationDeg;
+        }
+
+        public void setElevationDeg(double elevationDeg) {
+            this.elevationDeg = elevationDeg;
+        }
+
+        public double getAzimuthDeg() {
+            return azimuthDeg;
+        }
+
+        public void setAzimuthDeg(double azimuthDeg) {
+            this.azimuthDeg = azimuthDeg;
+        }
+
+        public String getGeneratedAt() {
+            return generatedAt;
+        }
+
+        public void setGeneratedAt(String generatedAt) {
+            this.generatedAt = generatedAt;
+        }
     }
 
     @GET
@@ -206,9 +454,9 @@ public class PlanetaryResourceV2 {
     @Path("constellations")
     @Produces(MediaType.APPLICATION_JSON)
     public String[] getAvailableConstellations() {
-        return new String[]{
-            "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
-            "Libra", "Scorpius", "Sagittarius", "Capricornus", "Aquarius", "Pisces"
+        return new String[] {
+                "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+                "Libra", "Scorpius", "Sagittarius", "Capricornus", "Aquarius", "Pisces"
         };
     }
 
@@ -265,7 +513,7 @@ public class PlanetaryResourceV2 {
         Double longitude = req.longitude != null ? req.longitude : 0.0;
 
         PlanetaryService.ConstellationInfo info = planetaryService.getConstellationInfo(
-            req.constellation, at, latitude, longitude);
+                req.constellation, at, latitude, longitude);
 
         if (info == null) {
             throw new IllegalArgumentException("Unknown constellation: " + req.constellation);
@@ -322,10 +570,10 @@ public class PlanetaryResourceV2 {
         if (base.timezone == null) {
             base.timezone = "UTC";
         }
-        
-        return ZonedDateTime.of(base.year, base.month, base.day, 
-                               base.hour, base.minute, base.second, 0, 
-                               ZoneOffset.of(base.timezone));
+
+        return ZonedDateTime.of(base.year, base.month, base.day,
+                base.hour, base.minute, base.second, 0,
+                ZoneOffset.of(base.timezone));
     }
 
 }

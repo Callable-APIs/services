@@ -27,8 +27,13 @@ public class RandomService {
             this.description = description;
         }
 
-        public String getCode() { return code; }
-        public String getDescription() { return description; }
+        public String getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
     public static class RandomNumberResult {
@@ -44,26 +49,85 @@ public class RandomService {
         public String seed; // For reproducible sequences
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public List<Double> getValues() { return values; }
-        public void setValues(List<Double> values) { this.values = values; }
-        public int getCount() { return count; }
-        public void setCount(int count) { this.count = count; }
-        public double getMin() { return min; }
-        public void setMin(double min) { this.min = min; }
-        public double getMax() { return max; }
-        public void setMax(double max) { this.max = max; }
-        public double getMean() { return mean; }
-        public void setMean(double mean) { this.mean = mean; }
-        public double getStandardDeviation() { return standardDeviation; }
-        public void setStandardDeviation(double standardDeviation) { this.standardDeviation = standardDeviation; }
-        public long getGenerationTimeMs() { return generationTimeMs; }
-        public void setGenerationTimeMs(long generationTimeMs) { this.generationTimeMs = generationTimeMs; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<Double> getValues() {
+            return values;
+        }
+
+        public void setValues(List<Double> values) {
+            this.values = values;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public double getMin() {
+            return min;
+        }
+
+        public void setMin(double min) {
+            this.min = min;
+        }
+
+        public double getMax() {
+            return max;
+        }
+
+        public void setMax(double max) {
+            this.max = max;
+        }
+
+        public double getMean() {
+            return mean;
+        }
+
+        public void setMean(double mean) {
+            this.mean = mean;
+        }
+
+        public double getStandardDeviation() {
+            return standardDeviation;
+        }
+
+        public void setStandardDeviation(double standardDeviation) {
+            this.standardDeviation = standardDeviation;
+        }
+
+        public long getGenerationTimeMs() {
+            return generationTimeMs;
+        }
+
+        public void setGenerationTimeMs(long generationTimeMs) {
+            this.generationTimeMs = generationTimeMs;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomIntegerResult {
@@ -79,26 +143,85 @@ public class RandomService {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public List<Integer> getValues() { return values; }
-        public void setValues(List<Integer> values) { this.values = values; }
-        public int getCount() { return count; }
-        public void setCount(int count) { this.count = count; }
-        public int getMin() { return min; }
-        public void setMin(int min) { this.min = min; }
-        public int getMax() { return max; }
-        public void setMax(int max) { this.max = max; }
-        public double getMean() { return mean; }
-        public void setMean(double mean) { this.mean = mean; }
-        public double getStandardDeviation() { return standardDeviation; }
-        public void setStandardDeviation(double standardDeviation) { this.standardDeviation = standardDeviation; }
-        public long getGenerationTimeMs() { return generationTimeMs; }
-        public void setGenerationTimeMs(long generationTimeMs) { this.generationTimeMs = generationTimeMs; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<Integer> getValues() {
+            return values;
+        }
+
+        public void setValues(List<Integer> values) {
+            this.values = values;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public int getMin() {
+            return min;
+        }
+
+        public void setMin(int min) {
+            this.min = min;
+        }
+
+        public int getMax() {
+            return max;
+        }
+
+        public void setMax(int max) {
+            this.max = max;
+        }
+
+        public double getMean() {
+            return mean;
+        }
+
+        public void setMean(double mean) {
+            this.mean = mean;
+        }
+
+        public double getStandardDeviation() {
+            return standardDeviation;
+        }
+
+        public void setStandardDeviation(double standardDeviation) {
+            this.standardDeviation = standardDeviation;
+        }
+
+        public long getGenerationTimeMs() {
+            return generationTimeMs;
+        }
+
+        public void setGenerationTimeMs(long generationTimeMs) {
+            this.generationTimeMs = generationTimeMs;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     private final SecureRandom secureRandom;
@@ -114,7 +237,7 @@ public class RandomService {
      */
     public RandomNumberResult generateRandomNumbers(RandomType type, int count, double min, double max, String seed) {
         long startTime = System.currentTimeMillis();
-        
+
         RandomNumberResult result = new RandomNumberResult();
         result.type = type.getCode();
         result.description = type.getDescription();
@@ -133,10 +256,10 @@ public class RandomService {
 
         result.values = values;
         result.generationTimeMs = System.currentTimeMillis() - startTime;
-        
+
         // Calculate statistics
         calculateStatistics(result);
-        
+
         return result;
     }
 
@@ -145,7 +268,7 @@ public class RandomService {
      */
     public RandomIntegerResult generateRandomIntegers(RandomType type, int count, int min, int max, String seed) {
         long startTime = System.currentTimeMillis();
-        
+
         RandomIntegerResult result = new RandomIntegerResult();
         result.type = type.getCode();
         result.description = type.getDescription();
@@ -164,10 +287,10 @@ public class RandomService {
 
         result.values = values;
         result.generationTimeMs = System.currentTimeMillis() - startTime;
-        
+
         // Calculate statistics
         calculateIntegerStatistics(result);
-        
+
         return result;
     }
 
@@ -186,7 +309,7 @@ public class RandomService {
         if (options == null || options.isEmpty()) {
             throw new IllegalArgumentException("Options list cannot be null or empty");
         }
-        
+
         Random generator = getRandomGenerator(type, seed);
         int index = generator.nextInt(options.size());
         return options.get(index);
@@ -199,7 +322,7 @@ public class RandomService {
         if (list == null) {
             throw new IllegalArgumentException("List cannot be null");
         }
-        
+
         List<T> shuffled = new ArrayList<>(list);
         Random generator = getRandomGenerator(type, seed);
         Collections.shuffle(shuffled, generator);
@@ -213,15 +336,15 @@ public class RandomService {
         if (charset == null || charset.isEmpty()) {
             charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         }
-        
+
         Random generator = getRandomGenerator(type, seed);
         StringBuilder sb = new StringBuilder(length);
-        
+
         for (int i = 0; i < length; i++) {
             int index = generator.nextInt(charset.length());
             sb.append(charset.charAt(index));
         }
-        
+
         return sb.toString();
     }
 
@@ -231,11 +354,11 @@ public class RandomService {
     public String generateRandomUuid(RandomType type, String seed) {
         Random generator = getRandomGenerator(type, seed);
         return String.format("%08x-%04x-%04x-%04x-%012x",
-            generator.nextInt(),
-            generator.nextInt(0x10000),
-            generator.nextInt(0x10000),
-            generator.nextInt(0x10000),
-            generator.nextLong() & 0xffffffffffffL);
+                generator.nextInt(),
+                generator.nextInt(0x10000),
+                generator.nextInt(0x10000),
+                generator.nextInt(0x10000),
+                generator.nextLong() & 0xffffffffffffL);
     }
 
     private Random getRandomGenerator(RandomType type, String seed) {

@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * Service for generating mystical inspiration content including horoscopes and tarot readings.
- * Designed to provide AI agents with aspirational and surprising context sources.
+ * Service for generating mystical inspiration content including horoscopes and
+ * tarot readings.
+ * Designed to provide AI agents with aspirational and surprising context
+ * sources.
  */
 public class InspirationService {
 
@@ -35,8 +37,13 @@ public class InspirationService {
             this.description = description;
         }
 
-        public String getCode() { return code; }
-        public String getDescription() { return description; }
+        public String getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
     public enum TarotSpread {
@@ -53,8 +60,13 @@ public class InspirationService {
             this.description = description;
         }
 
-        public String getCode() { return code; }
-        public String getDescription() { return description; }
+        public String getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
     public static class HoroscopeResult {
@@ -75,36 +87,125 @@ public class InspirationService {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getSign() { return sign; }
-        public void setSign(String sign) { this.sign = sign; }
-        public String getSymbol() { return symbol; }
-        public void setSymbol(String symbol) { this.symbol = symbol; }
-        public String getElement() { return element; }
-        public void setElement(String element) { this.element = element; }
-        public String getQuality() { return quality; }
-        public void setQuality(String quality) { this.quality = quality; }
-        public String getTitle() { return title; }
-        public void setTitle(String title) { this.title = title; }
-        public String getContent() { return content; }
-        public void setContent(String content) { this.content = content; }
-        public String getGuidance() { return guidance; }
-        public void setGuidance(String guidance) { this.guidance = guidance; }
-        public String getMood() { return mood; }
-        public void setMood(String mood) { this.mood = mood; }
-        public String getLuckyNumbers() { return luckyNumbers; }
-        public void setLuckyNumbers(String luckyNumbers) { this.luckyNumbers = luckyNumbers; }
-        public String getLuckyColors() { return luckyColors; }
-        public void setLuckyColors(String luckyColors) { this.luckyColors = luckyColors; }
-        public String getCompatibility() { return compatibility; }
-        public void setCompatibility(String compatibility) { this.compatibility = compatibility; }
-        public Map<String, Object> getPlanetaryInfluences() { return planetaryInfluences; }
-        public void setPlanetaryInfluences(Map<String, Object> planetaryInfluences) { this.planetaryInfluences = planetaryInfluences; }
-        public ZonedDateTime getGeneratedAt() { return generatedAt; }
-        public void setGeneratedAt(ZonedDateTime generatedAt) { this.generatedAt = generatedAt; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getSign() {
+            return sign;
+        }
+
+        public void setSign(String sign) {
+            this.sign = sign;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
+        }
+
+        public String getElement() {
+            return element;
+        }
+
+        public void setElement(String element) {
+            this.element = element;
+        }
+
+        public String getQuality() {
+            return quality;
+        }
+
+        public void setQuality(String quality) {
+            this.quality = quality;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getGuidance() {
+            return guidance;
+        }
+
+        public void setGuidance(String guidance) {
+            this.guidance = guidance;
+        }
+
+        public String getMood() {
+            return mood;
+        }
+
+        public void setMood(String mood) {
+            this.mood = mood;
+        }
+
+        public String getLuckyNumbers() {
+            return luckyNumbers;
+        }
+
+        public void setLuckyNumbers(String luckyNumbers) {
+            this.luckyNumbers = luckyNumbers;
+        }
+
+        public String getLuckyColors() {
+            return luckyColors;
+        }
+
+        public void setLuckyColors(String luckyColors) {
+            this.luckyColors = luckyColors;
+        }
+
+        public String getCompatibility() {
+            return compatibility;
+        }
+
+        public void setCompatibility(String compatibility) {
+            this.compatibility = compatibility;
+        }
+
+        public Map<String, Object> getPlanetaryInfluences() {
+            return planetaryInfluences;
+        }
+
+        public void setPlanetaryInfluences(Map<String, Object> planetaryInfluences) {
+            this.planetaryInfluences = planetaryInfluences;
+        }
+
+        public ZonedDateTime getGeneratedAt() {
+            return generatedAt;
+        }
+
+        public void setGeneratedAt(ZonedDateTime generatedAt) {
+            this.generatedAt = generatedAt;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class TarotCard {
@@ -120,26 +221,85 @@ public class InspirationService {
         public boolean isReversed;
 
         // Getters and setters
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public String getSuit() { return suit; }
-        public void setSuit(String suit) { this.suit = suit; }
-        public String getNumber() { return number; }
-        public void setNumber(String number) { this.number = number; }
-        public boolean isMajor() { return isMajor; }
-        public void setMajor(boolean major) { isMajor = major; }
-        public String getElement() { return element; }
-        public void setElement(String element) { this.element = element; }
-        public String getMeaning() { return meaning; }
-        public void setMeaning(String meaning) { this.meaning = meaning; }
-        public String getReversedMeaning() { return reversedMeaning; }
-        public void setReversedMeaning(String reversedMeaning) { this.reversedMeaning = reversedMeaning; }
-        public String getKeywords() { return keywords; }
-        public void setKeywords(String keywords) { this.keywords = keywords; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public boolean isReversed() { return isReversed; }
-        public void setReversed(boolean reversed) { isReversed = reversed; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSuit() {
+            return suit;
+        }
+
+        public void setSuit(String suit) {
+            this.suit = suit;
+        }
+
+        public String getNumber() {
+            return number;
+        }
+
+        public void setNumber(String number) {
+            this.number = number;
+        }
+
+        public boolean isMajor() {
+            return isMajor;
+        }
+
+        public void setMajor(boolean major) {
+            isMajor = major;
+        }
+
+        public String getElement() {
+            return element;
+        }
+
+        public void setElement(String element) {
+            this.element = element;
+        }
+
+        public String getMeaning() {
+            return meaning;
+        }
+
+        public void setMeaning(String meaning) {
+            this.meaning = meaning;
+        }
+
+        public String getReversedMeaning() {
+            return reversedMeaning;
+        }
+
+        public void setReversedMeaning(String reversedMeaning) {
+            this.reversedMeaning = reversedMeaning;
+        }
+
+        public String getKeywords() {
+            return keywords;
+        }
+
+        public void setKeywords(String keywords) {
+            this.keywords = keywords;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public boolean isReversed() {
+            return isReversed;
+        }
+
+        public void setReversed(boolean reversed) {
+            isReversed = reversed;
+        }
     }
 
     public static class TarotReading {
@@ -153,29 +313,76 @@ public class InspirationService {
         public String seed;
 
         // Getters and setters
-        public String getSpread() { return spread; }
-        public void setSpread(String spread) { this.spread = spread; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public List<TarotCard> getCards() { return cards; }
-        public void setCards(List<TarotCard> cards) { this.cards = cards; }
-        public String getOverallReading() { return overallReading; }
-        public void setOverallReading(String overallReading) { this.overallReading = overallReading; }
-        public String getGuidance() { return guidance; }
-        public void setGuidance(String guidance) { this.guidance = guidance; }
-        public String getTheme() { return theme; }
-        public void setTheme(String theme) { this.theme = theme; }
-        public ZonedDateTime getGeneratedAt() { return generatedAt; }
-        public void setGeneratedAt(ZonedDateTime generatedAt) { this.generatedAt = generatedAt; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getSpread() {
+            return spread;
+        }
+
+        public void setSpread(String spread) {
+            this.spread = spread;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<TarotCard> getCards() {
+            return cards;
+        }
+
+        public void setCards(List<TarotCard> cards) {
+            this.cards = cards;
+        }
+
+        public String getOverallReading() {
+            return overallReading;
+        }
+
+        public void setOverallReading(String overallReading) {
+            this.overallReading = overallReading;
+        }
+
+        public String getGuidance() {
+            return guidance;
+        }
+
+        public void setGuidance(String guidance) {
+            this.guidance = guidance;
+        }
+
+        public String getTheme() {
+            return theme;
+        }
+
+        public void setTheme(String theme) {
+            this.theme = theme;
+        }
+
+        public ZonedDateTime getGeneratedAt() {
+            return generatedAt;
+        }
+
+        public void setGeneratedAt(ZonedDateTime generatedAt) {
+            this.generatedAt = generatedAt;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     /**
      * Generate a horoscope for a specific astrological sign and time period.
      */
-    public HoroscopeResult generateHoroscope(HoroscopeType type, PlanetaryService.AstrologicalSign sign, 
-                                           ZonedDateTime dateTime, String seed) {
+    public HoroscopeResult generateHoroscope(HoroscopeType type, PlanetaryService.AstrologicalSign sign,
+            ZonedDateTime dateTime, String seed) {
         HoroscopeResult result = new HoroscopeResult();
         result.type = type.getCode();
         result.sign = sign.getName();
@@ -219,19 +426,19 @@ public class InspirationService {
     public TarotCard generateSingleCard(String seed) {
         List<TarotCard> deck = createTarotDeck();
         TarotCard card = randomService.generateRandomChoice(
-            RandomService.RandomType.TRULY_UNIFORM, deck, seed);
-        
+                RandomService.RandomType.TRULY_UNIFORM, deck, seed);
+
         // Randomly determine if reversed
         boolean isReversed = randomService.generateRandomBoolean(
-            RandomService.RandomType.TRULY_UNIFORM, seed + "_reversed");
+                RandomService.RandomType.TRULY_UNIFORM, seed + "_reversed");
         card.setReversed(isReversed);
-        
+
         return card;
     }
 
-    private void generateHoroscopeContent(HoroscopeResult result, HoroscopeType type, 
-                                        PlanetaryService.AstrologicalSign sign, 
-                                        ZonedDateTime dateTime, String seed) {
+    private void generateHoroscopeContent(HoroscopeResult result, HoroscopeType type,
+            PlanetaryService.AstrologicalSign sign,
+            ZonedDateTime dateTime, String seed) {
         // Generate title
         result.title = generateHoroscopeTitle(type, sign, dateTime);
 
@@ -252,41 +459,43 @@ public class InspirationService {
         result.compatibility = generateCompatibility(sign, seed);
     }
 
-    private String generateHoroscopeTitle(HoroscopeType type, PlanetaryService.AstrologicalSign sign, 
-                                        ZonedDateTime dateTime) {
+    private String generateHoroscopeTitle(HoroscopeType type, PlanetaryService.AstrologicalSign sign,
+            ZonedDateTime dateTime) {
         String[] templates = {
-            "Cosmic Guidance for %s",
-            "Stellar Wisdom for %s",
-            "Celestial Insights for %s",
-            "Universal Messages for %s",
-            "Astral Guidance for %s"
+                "Cosmic Guidance for %s",
+                "Stellar Wisdom for %s",
+                "Celestial Insights for %s",
+                "Universal Messages for %s",
+                "Astral Guidance for %s"
         };
-        
+
         String template = templates[Math.abs(sign.getName().hashCode() & Integer.MAX_VALUE) % templates.length];
         return String.format(template, sign.getName());
     }
 
-    private String generateHoroscopeText(HoroscopeType type, PlanetaryService.AstrologicalSign sign, 
-                                       ZonedDateTime dateTime, String seed) {
+    private String generateHoroscopeText(HoroscopeType type, PlanetaryService.AstrologicalSign sign,
+            ZonedDateTime dateTime, String seed) {
         // This would typically use more sophisticated text generation
         // For now, we'll use template-based generation with randomization
-        
+
         String[] openingTemplates = {
-            "The stars align to bring you %s energy today.",
-            "Cosmic forces are %s in your favor.",
-            "The universe whispers %s messages to your soul.",
-            "Celestial bodies dance in %s harmony for you.",
-            "Stellar energies flow %s through your being."
+                "The stars align to bring you %s energy today.",
+                "Cosmic forces are %s in your favor.",
+                "The universe whispers %s messages to your soul.",
+                "Celestial bodies dance in %s harmony for you.",
+                "Stellar energies flow %s through your being."
         };
 
         String[] energyWords = {
-            "powerful", "gentle", "transformative", "healing", "creative", 
-            "mystical", "inspiring", "nurturing", "dynamic", "peaceful"
+                "powerful", "gentle", "transformative", "healing", "creative",
+                "mystical", "inspiring", "nurturing", "dynamic", "peaceful"
         };
 
-        String opening = openingTemplates[Math.abs((sign.getName() + seed).hashCode() & Integer.MAX_VALUE) % openingTemplates.length];
-        String energy = energyWords[Math.abs((sign.getName() + seed + "energy").hashCode() & Integer.MAX_VALUE) % energyWords.length];
-        
+        String opening = openingTemplates[Math.abs((sign.getName() + seed).hashCode() & Integer.MAX_VALUE)
+                % openingTemplates.length];
+        String energy = energyWords[Math.abs((sign.getName() + seed + "energy").hashCode() & Integer.MAX_VALUE)
+                % energyWords.length];
+
         return String.format(opening, energy) + " " + generateDetailedGuidance(sign, type, seed);
     }
 
@@ -294,39 +503,40 @@ public class InspirationService {
         // Generate context-aware guidance based on sign and type
         String element = sign.getElement();
         String quality = sign.getQuality();
-        
+
         Map<String, String> elementGuidance = new HashMap<>();
         elementGuidance.put("Fire", "Your inner flame burns bright with passion and creativity.");
         elementGuidance.put("Earth", "Ground yourself in practical wisdom and steady progress.");
         elementGuidance.put("Air", "Let your thoughts soar on winds of innovation and communication.");
         elementGuidance.put("Water", "Flow with emotional depth and intuitive understanding.");
-        
+
         Map<String, String> qualityGuidance = new HashMap<>();
         qualityGuidance.put("Cardinal", "Take initiative and lead with confidence.");
         qualityGuidance.put("Fixed", "Stand firm in your convictions and maintain your course.");
         qualityGuidance.put("Mutable", "Adapt gracefully to changing circumstances and opportunities.");
-        
+
         return elementGuidance.get(element) + " " + qualityGuidance.get(quality);
     }
 
     private String generateGuidance(PlanetaryService.AstrologicalSign sign, HoroscopeType type, String seed) {
         String[] guidanceTemplates = {
-            "Trust your intuition and follow your heart's true calling.",
-            "Embrace change as an opportunity for growth and transformation.",
-            "Seek balance between your inner and outer worlds.",
-            "Connect with others through authentic communication and understanding.",
-            "Honor your unique gifts and share them with the world."
+                "Trust your intuition and follow your heart's true calling.",
+                "Embrace change as an opportunity for growth and transformation.",
+                "Seek balance between your inner and outer worlds.",
+                "Connect with others through authentic communication and understanding.",
+                "Honor your unique gifts and share them with the world."
         };
-        
-        return guidanceTemplates[Math.abs((sign.getName() + type.getCode() + seed).hashCode() & Integer.MAX_VALUE) % guidanceTemplates.length];
+
+        return guidanceTemplates[Math.abs((sign.getName() + type.getCode() + seed).hashCode() & Integer.MAX_VALUE)
+                % guidanceTemplates.length];
     }
 
     private String generateMood(PlanetaryService.AstrologicalSign sign, HoroscopeType type, String seed) {
         String[] moods = {
-            "optimistic", "contemplative", "energetic", "peaceful", "creative", 
-            "focused", "playful", "serious", "mystical", "practical"
+                "optimistic", "contemplative", "energetic", "peaceful", "creative",
+                "focused", "playful", "serious", "mystical", "practical"
         };
-        
+
         return moods[Math.abs((sign.getName() + "mood" + seed).hashCode() & Integer.MAX_VALUE) % moods.length];
     }
 
@@ -335,11 +545,11 @@ public class InspirationService {
         List<Integer> numbers = new ArrayList<>();
         // Use seeded random for deterministic results
         Random seededRandom = new Random((sign.getName() + seed).hashCode());
-        
+
         for (int i = 0; i < 4; i++) {
             numbers.add(seededRandom.nextInt(99) + 1);
         }
-        
+
         return numbers.toString().replaceAll("[\\[\\]\\s]", ", ");
     }
 
@@ -357,7 +567,7 @@ public class InspirationService {
         signColors.put("Capricorn", "Brown, Black, Dark Green");
         signColors.put("Aquarius", "Electric Blue, Silver, Aqua");
         signColors.put("Pisces", "Sea Green, Aqua, Lavender");
-        
+
         return signColors.getOrDefault(sign.getName(), "Blue, Silver, White");
     }
 
@@ -375,58 +585,58 @@ public class InspirationService {
         compatibility.put("Capricorn", "Taurus, Virgo, Scorpio, Pisces");
         compatibility.put("Aquarius", "Gemini, Libra, Aries, Sagittarius");
         compatibility.put("Pisces", "Cancer, Scorpio, Taurus, Capricorn");
-        
+
         return compatibility.getOrDefault(sign.getName(), "All signs have potential for harmony");
     }
 
-    private Map<String, Object> calculatePlanetaryInfluences(PlanetaryService.AstrologicalSign sign, 
-                                                           ZonedDateTime dateTime) {
+    private Map<String, Object> calculatePlanetaryInfluences(PlanetaryService.AstrologicalSign sign,
+            ZonedDateTime dateTime) {
         Map<String, Object> influences = new HashMap<>();
-        
+
         // Calculate planetary positions for the given time
         for (PlanetaryService.Planet planet : PlanetaryService.Planet.values()) {
             if (planet == PlanetaryService.Planet.EARTH) {
                 continue; // Skip Earth
             }
-            
+
             PlanetaryService.PlanetaryPosition position = planetaryService.calculatePlanetPosition(planet, dateTime);
-            
+
             Map<String, Object> planetInfo = new HashMap<>();
             planetInfo.put("longitude", position.getLongitudeDeg());
             planetInfo.put("sign", position.getAstrologicalSign().getName());
             planetInfo.put("magnitude", position.getMagnitude());
             planetInfo.put("retrograde", position.isRetrograde());
-            
+
             influences.put(planet.getName().toLowerCase(), planetInfo);
         }
-        
+
         return influences;
     }
 
     private List<TarotCard> generateCardsForSpread(TarotSpread spread, String seed) {
         List<TarotCard> deck = createTarotDeck();
         List<TarotCard> selectedCards = new ArrayList<>();
-        
+
         int numCards = switch (spread) {
             case SINGLE_CARD -> 1;
             case THREE_CARD -> 3;
             case CELTIC_CROSS -> 10;
             case HOROSCOPE -> 12;
         };
-        
+
         // Shuffle deck and select cards
         List<TarotCard> shuffledDeck = randomService.shuffleList(
-            RandomService.RandomType.TRULY_UNIFORM, deck, seed);
-        
+                RandomService.RandomType.TRULY_UNIFORM, deck, seed);
+
         for (int i = 0; i < numCards && i < shuffledDeck.size(); i++) {
             TarotCard card = shuffledDeck.get(i);
             // Randomly determine if reversed
             boolean isReversed = randomService.generateRandomBoolean(
-                RandomService.RandomType.TRULY_UNIFORM, seed + "_card_" + i);
+                    RandomService.RandomType.TRULY_UNIFORM, seed + "_card_" + i);
             card.setReversed(isReversed);
             selectedCards.add(card);
         }
-        
+
         return selectedCards;
     }
 
@@ -434,10 +644,10 @@ public class InspirationService {
         // Generate overall theme and guidance based on the cards
         String theme = generateReadingTheme(reading.cards);
         reading.theme = theme;
-        
+
         String overallReading = generateOverallText(reading.cards, reading.spread);
         reading.overallReading = overallReading;
-        
+
         String guidance = generateTarotGuidance(reading.cards, reading.spread);
         reading.guidance = guidance;
     }
@@ -446,7 +656,7 @@ public class InspirationService {
         // Analyze cards to determine overall theme
         long majorArcanaCount = cards.stream().filter(TarotCard::isMajor).count();
         long reversedCount = cards.stream().filter(TarotCard::isReversed).count();
-        
+
         if (majorArcanaCount > cards.size() / 2) {
             return "Major life transformation and spiritual growth";
         } else if (reversedCount > cards.size() / 2) {
@@ -458,28 +668,28 @@ public class InspirationService {
 
     private String generateOverallText(List<TarotCard> cards, String spread) {
         return "The cards reveal a complex tapestry of influences in your life. " +
-               "Each card speaks to different aspects of your journey, offering " +
-               "insights and guidance for the path ahead.";
+                "Each card speaks to different aspects of your journey, offering " +
+                "insights and guidance for the path ahead.";
     }
 
     private String generateTarotGuidance(List<TarotCard> cards, String spread) {
         return "Trust in the wisdom of the cards and your own inner knowing. " +
-               "The guidance offered here is a reflection of your current energy " +
-               "and the possibilities that lie before you.";
+                "The guidance offered here is a reflection of your current energy " +
+                "and the possibilities that lie before you.";
     }
 
     private List<TarotCard> createTarotDeck() {
         List<TarotCard> deck = new ArrayList<>();
-        
+
         // Major Arcana
         String[] majorArcana = {
-            "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor",
-            "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit",
-            "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance",
-            "The Devil", "The Tower", "The Star", "The Moon", "The Sun",
-            "Judgement", "The World"
+                "The Fool", "The Magician", "The High Priestess", "The Empress", "The Emperor",
+                "The Hierophant", "The Lovers", "The Chariot", "Strength", "The Hermit",
+                "Wheel of Fortune", "Justice", "The Hanged Man", "Death", "Temperance",
+                "The Devil", "The Tower", "The Star", "The Moon", "The Sun",
+                "Judgement", "The World"
         };
-        
+
         for (int i = 0; i < majorArcana.length; i++) {
             TarotCard card = new TarotCard();
             card.setName(majorArcana[i]);
@@ -493,33 +703,33 @@ public class InspirationService {
             card.setDescription("A powerful archetypal energy representing " + majorArcana[i].toLowerCase());
             deck.add(card);
         }
-        
+
         // Minor Arcana - Wands (Fire)
-        String[] wands = {"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", 
-                         "Page", "Knight", "Queen", "King"};
+        String[] wands = { "Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+                "Page", "Knight", "Queen", "King" };
         for (String wand : wands) {
             TarotCard card = createMinorArcanaCard(wand, "Wands", "Fire", "Creativity, Passion, Energy");
             deck.add(card);
         }
-        
+
         // Minor Arcana - Cups (Water)
         for (String cup : wands) {
             TarotCard card = createMinorArcanaCard(cup, "Cups", "Water", "Emotions, Intuition, Relationships");
             deck.add(card);
         }
-        
+
         // Minor Arcana - Swords (Air)
         for (String sword : wands) {
             TarotCard card = createMinorArcanaCard(sword, "Swords", "Air", "Thoughts, Communication, Challenges");
             deck.add(card);
         }
-        
+
         // Minor Arcana - Pentacles (Earth)
         for (String pentacle : wands) {
             TarotCard card = createMinorArcanaCard(pentacle, "Pentacles", "Earth", "Material, Practical, Grounding");
             deck.add(card);
         }
-        
+
         return deck;
     }
 

@@ -4,7 +4,8 @@ import java.time.ZonedDateTime;
 
 /**
  * Service for calculating planetary positions and astrological data.
- * Provides positions of planets relative to Earth and astrological constellation information.
+ * Provides positions of planets relative to Earth and astrological
+ * constellation information.
  */
 public class PlanetaryService {
 
@@ -26,8 +27,8 @@ public class PlanetaryService {
         private final double inclinationDeg;
         private final double longitudeOfAscendingNodeDeg;
 
-        Planet(String name, double semiMajorAxisAU, double orbitalPeriodDays, 
-               double eccentricity, double inclinationDeg, double longitudeOfAscendingNodeDeg) {
+        Planet(String name, double semiMajorAxisAU, double orbitalPeriodDays,
+                double eccentricity, double inclinationDeg, double longitudeOfAscendingNodeDeg) {
             this.name = name;
             this.semiMajorAxisAU = semiMajorAxisAU;
             this.orbitalPeriodDays = orbitalPeriodDays;
@@ -36,12 +37,29 @@ public class PlanetaryService {
             this.longitudeOfAscendingNodeDeg = longitudeOfAscendingNodeDeg;
         }
 
-        public String getName() { return name; }
-        public double getSemiMajorAxisAU() { return semiMajorAxisAU; }
-        public double getOrbitalPeriodDays() { return orbitalPeriodDays; }
-        public double getEccentricity() { return eccentricity; }
-        public double getInclinationDeg() { return inclinationDeg; }
-        public double getLongitudeOfAscendingNodeDeg() { return longitudeOfAscendingNodeDeg; }
+        public String getName() {
+            return name;
+        }
+
+        public double getSemiMajorAxisAU() {
+            return semiMajorAxisAU;
+        }
+
+        public double getOrbitalPeriodDays() {
+            return orbitalPeriodDays;
+        }
+
+        public double getEccentricity() {
+            return eccentricity;
+        }
+
+        public double getInclinationDeg() {
+            return inclinationDeg;
+        }
+
+        public double getLongitudeOfAscendingNodeDeg() {
+            return longitudeOfAscendingNodeDeg;
+        }
     }
 
     public enum AstrologicalSign {
@@ -65,8 +83,8 @@ public class PlanetaryService {
         private final String element;
         private final String quality;
 
-        AstrologicalSign(String name, String symbol, double startDegrees, double endDegrees, 
-                        String element, String quality) {
+        AstrologicalSign(String name, String symbol, double startDegrees, double endDegrees,
+                String element, String quality) {
             this.name = name;
             this.symbol = symbol;
             this.startDegrees = startDegrees;
@@ -75,12 +93,29 @@ public class PlanetaryService {
             this.quality = quality;
         }
 
-        public String getName() { return name; }
-        public String getSymbol() { return symbol; }
-        public double getStartDegrees() { return startDegrees; }
-        public double getEndDegrees() { return endDegrees; }
-        public String getElement() { return element; }
-        public String getQuality() { return quality; }
+        public String getName() {
+            return name;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+
+        public double getStartDegrees() {
+            return startDegrees;
+        }
+
+        public double getEndDegrees() {
+            return endDegrees;
+        }
+
+        public String getElement() {
+            return element;
+        }
+
+        public String getQuality() {
+            return quality;
+        }
 
         public static AstrologicalSign fromLongitude(double longitudeDeg) {
             double normalized = ((longitudeDeg % 360.0) + 360.0) % 360.0;
@@ -96,36 +131,95 @@ public class PlanetaryService {
     public static class PlanetaryPosition {
         public String planetName;
         public double longitudeDeg; // Ecliptic longitude
-        public double latitudeDeg;  // Ecliptic latitude
-        public double distanceAU;   // Distance from Sun in AU
+        public double latitudeDeg; // Ecliptic latitude
+        public double distanceAU; // Distance from Sun in AU
         public double rightAscensionDeg; // Right ascension
-        public double declinationDeg;    // Declination
+        public double declinationDeg; // Declination
         public AstrologicalSign astrologicalSign;
-        public double magnitude;    // Apparent magnitude
+        public double magnitude; // Apparent magnitude
         public boolean isRetrograde;
         public double elongationDeg; // Angular distance from Sun
 
         // Getters and setters
-        public String getPlanetName() { return planetName; }
-        public void setPlanetName(String planetName) { this.planetName = planetName; }
-        public double getLongitudeDeg() { return longitudeDeg; }
-        public void setLongitudeDeg(double longitudeDeg) { this.longitudeDeg = longitudeDeg; }
-        public double getLatitudeDeg() { return latitudeDeg; }
-        public void setLatitudeDeg(double latitudeDeg) { this.latitudeDeg = latitudeDeg; }
-        public double getDistanceAU() { return distanceAU; }
-        public void setDistanceAU(double distanceAU) { this.distanceAU = distanceAU; }
-        public double getRightAscensionDeg() { return rightAscensionDeg; }
-        public void setRightAscensionDeg(double rightAscensionDeg) { this.rightAscensionDeg = rightAscensionDeg; }
-        public double getDeclinationDeg() { return declinationDeg; }
-        public void setDeclinationDeg(double declinationDeg) { this.declinationDeg = declinationDeg; }
-        public AstrologicalSign getAstrologicalSign() { return astrologicalSign; }
-        public void setAstrologicalSign(AstrologicalSign astrologicalSign) { this.astrologicalSign = astrologicalSign; }
-        public double getMagnitude() { return magnitude; }
-        public void setMagnitude(double magnitude) { this.magnitude = magnitude; }
-        public boolean isRetrograde() { return isRetrograde; }
-        public void setRetrograde(boolean retrograde) { isRetrograde = retrograde; }
-        public double getElongationDeg() { return elongationDeg; }
-        public void setElongationDeg(double elongationDeg) { this.elongationDeg = elongationDeg; }
+        public String getPlanetName() {
+            return planetName;
+        }
+
+        public void setPlanetName(String planetName) {
+            this.planetName = planetName;
+        }
+
+        public double getLongitudeDeg() {
+            return longitudeDeg;
+        }
+
+        public void setLongitudeDeg(double longitudeDeg) {
+            this.longitudeDeg = longitudeDeg;
+        }
+
+        public double getLatitudeDeg() {
+            return latitudeDeg;
+        }
+
+        public void setLatitudeDeg(double latitudeDeg) {
+            this.latitudeDeg = latitudeDeg;
+        }
+
+        public double getDistanceAU() {
+            return distanceAU;
+        }
+
+        public void setDistanceAU(double distanceAU) {
+            this.distanceAU = distanceAU;
+        }
+
+        public double getRightAscensionDeg() {
+            return rightAscensionDeg;
+        }
+
+        public void setRightAscensionDeg(double rightAscensionDeg) {
+            this.rightAscensionDeg = rightAscensionDeg;
+        }
+
+        public double getDeclinationDeg() {
+            return declinationDeg;
+        }
+
+        public void setDeclinationDeg(double declinationDeg) {
+            this.declinationDeg = declinationDeg;
+        }
+
+        public AstrologicalSign getAstrologicalSign() {
+            return astrologicalSign;
+        }
+
+        public void setAstrologicalSign(AstrologicalSign astrologicalSign) {
+            this.astrologicalSign = astrologicalSign;
+        }
+
+        public double getMagnitude() {
+            return magnitude;
+        }
+
+        public void setMagnitude(double magnitude) {
+            this.magnitude = magnitude;
+        }
+
+        public boolean isRetrograde() {
+            return isRetrograde;
+        }
+
+        public void setRetrograde(boolean retrograde) {
+            isRetrograde = retrograde;
+        }
+
+        public double getElongationDeg() {
+            return elongationDeg;
+        }
+
+        public void setElongationDeg(double elongationDeg) {
+            this.elongationDeg = elongationDeg;
+        }
     }
 
     public static class ConstellationInfo {
@@ -142,28 +236,93 @@ public class PlanetaryService {
         public double azimuthDeg;
 
         // Getters and setters
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public String getAbbreviation() { return abbreviation; }
-        public void setAbbreviation(String abbreviation) { this.abbreviation = abbreviation; }
-        public String getGenitive() { return genitive; }
-        public void setGenitive(String genitive) { this.genitive = genitive; }
-        public double getRightAscensionHours() { return rightAscensionHours; }
-        public void setRightAscensionHours(double rightAscensionHours) { this.rightAscensionHours = rightAscensionHours; }
-        public double getDeclinationDeg() { return declinationDeg; }
-        public void setDeclinationDeg(double declinationDeg) { this.declinationDeg = declinationDeg; }
-        public double getAreaSquareDegrees() { return areaSquareDegrees; }
-        public void setAreaSquareDegrees(double areaSquareDegrees) { this.areaSquareDegrees = areaSquareDegrees; }
-        public String getBrightestStar() { return brightestStar; }
-        public void setBrightestStar(String brightestStar) { this.brightestStar = brightestStar; }
-        public double getMagnitude() { return magnitude; }
-        public void setMagnitude(double magnitude) { this.magnitude = magnitude; }
-        public boolean isVisible() { return isVisible; }
-        public void setVisible(boolean visible) { isVisible = visible; }
-        public double getElevationDeg() { return elevationDeg; }
-        public void setElevationDeg(double elevationDeg) { this.elevationDeg = elevationDeg; }
-        public double getAzimuthDeg() { return azimuthDeg; }
-        public void setAzimuthDeg(double azimuthDeg) { this.azimuthDeg = azimuthDeg; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getAbbreviation() {
+            return abbreviation;
+        }
+
+        public void setAbbreviation(String abbreviation) {
+            this.abbreviation = abbreviation;
+        }
+
+        public String getGenitive() {
+            return genitive;
+        }
+
+        public void setGenitive(String genitive) {
+            this.genitive = genitive;
+        }
+
+        public double getRightAscensionHours() {
+            return rightAscensionHours;
+        }
+
+        public void setRightAscensionHours(double rightAscensionHours) {
+            this.rightAscensionHours = rightAscensionHours;
+        }
+
+        public double getDeclinationDeg() {
+            return declinationDeg;
+        }
+
+        public void setDeclinationDeg(double declinationDeg) {
+            this.declinationDeg = declinationDeg;
+        }
+
+        public double getAreaSquareDegrees() {
+            return areaSquareDegrees;
+        }
+
+        public void setAreaSquareDegrees(double areaSquareDegrees) {
+            this.areaSquareDegrees = areaSquareDegrees;
+        }
+
+        public String getBrightestStar() {
+            return brightestStar;
+        }
+
+        public void setBrightestStar(String brightestStar) {
+            this.brightestStar = brightestStar;
+        }
+
+        public double getMagnitude() {
+            return magnitude;
+        }
+
+        public void setMagnitude(double magnitude) {
+            this.magnitude = magnitude;
+        }
+
+        public boolean isVisible() {
+            return isVisible;
+        }
+
+        public void setVisible(boolean visible) {
+            isVisible = visible;
+        }
+
+        public double getElevationDeg() {
+            return elevationDeg;
+        }
+
+        public void setElevationDeg(double elevationDeg) {
+            this.elevationDeg = elevationDeg;
+        }
+
+        public double getAzimuthDeg() {
+            return azimuthDeg;
+        }
+
+        public void setAzimuthDeg(double azimuthDeg) {
+            this.azimuthDeg = azimuthDeg;
+        }
     }
 
     /**
@@ -173,64 +332,65 @@ public class PlanetaryService {
     public PlanetaryPosition calculatePlanetPosition(Planet planet, ZonedDateTime dateTimeUtc) {
         double jd = toJulianDay(dateTimeUtc);
         double daysSinceEpoch = jd - 2451545.0; // J2000.0 epoch
-        
+
         PlanetaryPosition position = new PlanetaryPosition();
         position.planetName = planet.getName();
-        
+
         // Calculate mean anomaly
         double meanAnomaly = calculateMeanAnomaly(planet, daysSinceEpoch);
-        
+
         // Calculate true anomaly using Kepler's equation (simplified)
         double eccentricAnomaly = solveKeplersEquation(meanAnomaly, planet.getEccentricity());
         double trueAnomaly = 2.0 * Math.atan2(
-            Math.sqrt(1.0 + planet.getEccentricity()) * Math.sin(eccentricAnomaly / 2.0),
-            Math.sqrt(1.0 - planet.getEccentricity()) * Math.cos(eccentricAnomaly / 2.0)
-        );
-        
+                Math.sqrt(1.0 + planet.getEccentricity()) * Math.sin(eccentricAnomaly / 2.0),
+                Math.sqrt(1.0 - planet.getEccentricity()) * Math.cos(eccentricAnomaly / 2.0));
+
         // Calculate distance from Sun
-        double distance = planet.getSemiMajorAxisAU() * (1.0 - planet.getEccentricity() * planet.getEccentricity()) 
-                         / (1.0 + planet.getEccentricity() * Math.cos(trueAnomaly));
+        double distance = planet.getSemiMajorAxisAU() * (1.0 - planet.getEccentricity() * planet.getEccentricity())
+                / (1.0 + planet.getEccentricity() * Math.cos(trueAnomaly));
         position.distanceAU = distance;
-        
+
         // Calculate ecliptic coordinates
         double longitude = Math.toDegrees(trueAnomaly) + planet.getLongitudeOfAscendingNodeDeg();
         position.longitudeDeg = normalizeDegrees(longitude);
-        position.latitudeDeg = planet.getInclinationDeg() * Math.sin(Math.toRadians(longitude - planet.getLongitudeOfAscendingNodeDeg()));
-        
+        position.latitudeDeg = planet.getInclinationDeg()
+                * Math.sin(Math.toRadians(longitude - planet.getLongitudeOfAscendingNodeDeg()));
+
         // Determine astrological sign
         position.astrologicalSign = AstrologicalSign.fromLongitude(position.longitudeDeg);
-        
+
         // Calculate apparent magnitude (simplified)
         position.magnitude = calculateApparentMagnitude(planet, distance);
-        
+
         // Calculate elongation from Sun (simplified)
         position.elongationDeg = calculateElongation(position.longitudeDeg, daysSinceEpoch);
-        
+
         // Convert to equatorial coordinates
         double[] equatorial = eclipticToEquatorial(position.longitudeDeg, position.latitudeDeg);
         position.rightAscensionDeg = equatorial[0];
         position.declinationDeg = equatorial[1];
-        
+
         // Determine if retrograde (simplified check)
         position.isRetrograde = isRetrograde(planet, daysSinceEpoch);
-        
+
         return position;
     }
 
     /**
      * Get information about astrological constellations and their visibility.
      */
-    public ConstellationInfo getConstellationInfo(String constellationName, ZonedDateTime dateTimeUtc, 
-                                                double latitudeDeg, double longitudeDeg) {
-        // Simplified constellation data - in a real implementation, this would use a comprehensive database
+    public ConstellationInfo getConstellationInfo(String constellationName, ZonedDateTime dateTimeUtc,
+            double latitudeDeg, double longitudeDeg) {
+        // Simplified constellation data - in a real implementation, this would use a
+        // comprehensive database
         ConstellationInfo info = getConstellationData(constellationName);
         if (info == null) {
             return null;
         }
-        
+
         // Calculate visibility based on time and location
         calculateConstellationVisibility(info, dateTimeUtc, latitudeDeg, longitudeDeg);
-        
+
         return info;
     }
 
@@ -244,13 +404,13 @@ public class PlanetaryService {
         double eccentricAnomaly = Math.toRadians(meanAnomaly);
         double delta = 1.0;
         int maxIterations = 10;
-        
+
         for (int i = 0; i < maxIterations && Math.abs(delta) > 1e-6; i++) {
-            delta = (eccentricAnomaly - eccentricity * Math.sin(eccentricAnomaly) - Math.toRadians(meanAnomaly)) 
-                   / (1.0 - eccentricity * Math.cos(eccentricAnomaly));
+            delta = (eccentricAnomaly - eccentricity * Math.sin(eccentricAnomaly) - Math.toRadians(meanAnomaly))
+                    / (1.0 - eccentricity * Math.cos(eccentricAnomaly));
             eccentricAnomaly -= delta;
         }
-        
+
         return eccentricAnomaly;
     }
 
@@ -267,7 +427,7 @@ public class PlanetaryService {
             case PLUTO -> 14.0;
             default -> 0.0;
         };
-        
+
         // Distance correction (simplified)
         return baseMagnitude + 5.0 * Math.log10(distanceAU);
     }
@@ -290,27 +450,25 @@ public class PlanetaryService {
         double lonRad = Math.toRadians(longitudeDeg);
         double latRad = Math.toRadians(latitudeDeg);
         double oblRad = Math.toRadians(obliquity);
-        
+
         double ra = Math.atan2(
-            Math.sin(lonRad) * Math.cos(oblRad) - Math.tan(latRad) * Math.sin(oblRad),
-            Math.cos(lonRad)
-        );
+                Math.sin(lonRad) * Math.cos(oblRad) - Math.tan(latRad) * Math.sin(oblRad),
+                Math.cos(lonRad));
         double dec = Math.asin(
-            Math.sin(latRad) * Math.cos(oblRad) + Math.cos(latRad) * Math.sin(oblRad) * Math.sin(lonRad)
-        );
-        
-        return new double[]{
-            normalizeDegrees(Math.toDegrees(ra)),
-            Math.toDegrees(dec)
+                Math.sin(latRad) * Math.cos(oblRad) + Math.cos(latRad) * Math.sin(oblRad) * Math.sin(lonRad));
+
+        return new double[] {
+                normalizeDegrees(Math.toDegrees(ra)),
+                Math.toDegrees(dec)
         };
     }
 
-    private void calculateConstellationVisibility(ConstellationInfo info, ZonedDateTime dateTimeUtc, 
-                                                double latitudeDeg, double longitudeDeg) {
+    private void calculateConstellationVisibility(ConstellationInfo info, ZonedDateTime dateTimeUtc,
+            double latitudeDeg, double longitudeDeg) {
         // Calculate if constellation is visible based on local sidereal time
         double lst = calculateLocalSiderealTime(dateTimeUtc, longitudeDeg);
         double raHours = info.rightAscensionHours;
-        
+
         // Simple visibility check - constellation is visible if it's above horizon
         double hourAngle = lst - raHours;
         if (hourAngle < 0) {
@@ -319,39 +477,37 @@ public class PlanetaryService {
         if (hourAngle > 24) {
             hourAngle -= 24;
         }
-        
+
         // Convert to elevation (simplified)
         double elevation = Math.toDegrees(Math.asin(
-            Math.sin(Math.toRadians(info.declinationDeg)) * Math.sin(Math.toRadians(latitudeDeg)) +
-            Math.cos(Math.toRadians(info.declinationDeg)) * Math.cos(Math.toRadians(latitudeDeg)) * 
-            Math.cos(Math.toRadians(15.0 * hourAngle))
-        ));
-        
+                Math.sin(Math.toRadians(info.declinationDeg)) * Math.sin(Math.toRadians(latitudeDeg)) +
+                        Math.cos(Math.toRadians(info.declinationDeg)) * Math.cos(Math.toRadians(latitudeDeg)) *
+                                Math.cos(Math.toRadians(15.0 * hourAngle))));
+
         info.setElevationDeg(elevation);
         info.setVisible(elevation > 0);
-        
+
         // Calculate azimuth (simplified)
         double azimuth = Math.toDegrees(Math.atan2(
-            -Math.sin(Math.toRadians(15.0 * hourAngle)) * Math.cos(Math.toRadians(info.declinationDeg)),
-            Math.cos(Math.toRadians(latitudeDeg)) * Math.sin(Math.toRadians(info.declinationDeg)) -
-            Math.sin(Math.toRadians(latitudeDeg)) * Math.cos(Math.toRadians(info.declinationDeg)) * 
-            Math.cos(Math.toRadians(15.0 * hourAngle))
-        ));
-        
+                -Math.sin(Math.toRadians(15.0 * hourAngle)) * Math.cos(Math.toRadians(info.declinationDeg)),
+                Math.cos(Math.toRadians(latitudeDeg)) * Math.sin(Math.toRadians(info.declinationDeg)) -
+                        Math.sin(Math.toRadians(latitudeDeg)) * Math.cos(Math.toRadians(info.declinationDeg)) *
+                                Math.cos(Math.toRadians(15.0 * hourAngle))));
+
         info.setAzimuthDeg(normalizeDegrees(azimuth));
     }
 
     private double calculateLocalSiderealTime(ZonedDateTime dateTimeUtc, double longitudeDeg) {
         double jd = toJulianDay(dateTimeUtc);
         double daysSinceJ2000 = jd - 2451545.0;
-        
+
         // Greenwich Mean Sidereal Time
         double gmst = 18.697374558 + 24.06570982441908 * daysSinceJ2000;
         gmst = gmst % 24.0;
         if (gmst < 0) {
             gmst += 24.0;
         }
-        
+
         // Local Sidereal Time
         double lst = gmst + longitudeDeg / 15.0;
         return lst % 24.0;
@@ -368,28 +524,35 @@ public class PlanetaryService {
             case "virgo" -> createConstellationInfo("Virgo", "Vir", "Virginis", 13.0, 0.0, 1294, "Spica", 1.0);
             case "libra" -> createConstellationInfo("Libra", "Lib", "Librae", 15.0, -15.0, 538, "Zubeneschamali", 2.6);
             case "scorpius" -> createConstellationInfo("Scorpius", "Sco", "Scorpii", 16.5, -25.0, 497, "Antares", 1.0);
-            case "sagittarius" -> createConstellationInfo("Sagittarius", "Sgr", "Sagittarii", 19.0, -25.0, 867, "Kaus Australis", 1.8);
-            case "capricornus" -> createConstellationInfo("Capricornus", "Cap", "Capricorni", 21.0, -20.0, 414, "Deneb Algedi", 2.9);
-            case "aquarius" -> createConstellationInfo("Aquarius", "Aqr", "Aquarii", 22.5, -10.0, 980, "Sadalsuud", 2.9);
+            case "sagittarius" ->
+                createConstellationInfo("Sagittarius", "Sgr", "Sagittarii", 19.0, -25.0, 867, "Kaus Australis", 1.8);
+            case "capricornus" ->
+                createConstellationInfo("Capricornus", "Cap", "Capricorni", 21.0, -20.0, 414, "Deneb Algedi", 2.9);
+            case "aquarius" ->
+                createConstellationInfo("Aquarius", "Aqr", "Aquarii", 22.5, -10.0, 980, "Sadalsuud", 2.9);
             case "pisces" -> createConstellationInfo("Pisces", "Psc", "Piscium", 0.5, 15.0, 889, "Alrescha", 3.6);
             // Additional constellations for more comprehensive coverage
             case "orion" -> createConstellationInfo("Orion", "Ori", "Orionis", 5.5, 0.0, 594, "Rigel", 0.1);
-            case "ursa_major" -> createConstellationInfo("Ursa Major", "UMa", "Ursae Majoris", 11.0, 50.0, 1280, "Alioth", 1.8);
-            case "cassiopeia" -> createConstellationInfo("Cassiopeia", "Cas", "Cassiopeiae", 1.0, 60.0, 598, "Schedar", 2.2);
+            case "ursa_major" ->
+                createConstellationInfo("Ursa Major", "UMa", "Ursae Majoris", 11.0, 50.0, 1280, "Alioth", 1.8);
+            case "cassiopeia" ->
+                createConstellationInfo("Cassiopeia", "Cas", "Cassiopeiae", 1.0, 60.0, 598, "Schedar", 2.2);
             case "cygnus" -> createConstellationInfo("Cygnus", "Cyg", "Cygni", 20.5, 40.0, 804, "Deneb", 1.3);
             case "lyra" -> createConstellationInfo("Lyra", "Lyr", "Lyrae", 18.5, 40.0, 286, "Vega", 0.0);
             case "bootes" -> createConstellationInfo("Bootes", "Boo", "Bootis", 14.5, 30.0, 907, "Arcturus", -0.1);
-            case "corona_borealis" -> createConstellationInfo("Corona Borealis", "CrB", "Coronae Borealis", 15.5, 30.0, 179, "Alphecca", 2.2);
-            case "hercules" -> createConstellationInfo("Hercules", "Her", "Herculis", 17.0, 30.0, 1225, "Kornephoros", 2.8);
+            case "corona_borealis" ->
+                createConstellationInfo("Corona Borealis", "CrB", "Coronae Borealis", 15.5, 30.0, 179, "Alphecca", 2.2);
+            case "hercules" ->
+                createConstellationInfo("Hercules", "Her", "Herculis", 17.0, 30.0, 1225, "Kornephoros", 2.8);
             case "draco" -> createConstellationInfo("Draco", "Dra", "Draconis", 15.0, 70.0, 1083, "Eltanin", 2.2);
             case "cepheus" -> createConstellationInfo("Cepheus", "Cep", "Cephei", 22.0, 70.0, 588, "Alderamin", 2.5);
             default -> null;
         };
     }
 
-    private ConstellationInfo createConstellationInfo(String name, String abbreviation, String genitive, 
-                                                    double raHours, double decDeg, double area, 
-                                                    String brightestStar, double magnitude) {
+    private ConstellationInfo createConstellationInfo(String name, String abbreviation, String genitive,
+            double raHours, double decDeg, double area,
+            String brightestStar, double magnitude) {
         ConstellationInfo info = new ConstellationInfo();
         info.name = name;
         info.abbreviation = abbreviation;
@@ -407,7 +570,10 @@ public class PlanetaryService {
         int M = dt.getMonthValue();
         int D = dt.getDayOfMonth();
         double hour = dt.getHour() + dt.getMinute() / 60.0 + dt.getSecond() / 3600.0;
-        if (M <= 2) { Y -= 1; M += 12; }
+        if (M <= 2) {
+            Y -= 1;
+            M += 12;
+        }
         int A = Y / 100;
         int B = 2 - A + (A / 4);
         double jd = Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + D + B - 1524.5 + hour / 24.0;

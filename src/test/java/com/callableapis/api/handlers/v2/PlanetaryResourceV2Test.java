@@ -16,10 +16,10 @@ public class PlanetaryResourceV2Test {
     @Test
     void testGetAvailablePlanets() {
         String[] planets = resource.getAvailablePlanets();
-        
+
         assertNotNull(planets);
         assertEquals(9, planets.length);
-        
+
         // Check that all expected planets are present
         assertTrue(containsPlanet(planets, "Mercury"));
         assertTrue(containsPlanet(planets, "Venus"));
@@ -35,10 +35,10 @@ public class PlanetaryResourceV2Test {
     @Test
     void testGetAvailableSigns() {
         String[] signs = resource.getAvailableSigns();
-        
+
         assertNotNull(signs);
         assertEquals(12, signs.length);
-        
+
         // Check that all astrological signs are present
         assertTrue(containsSign(signs, "Aries"));
         assertTrue(containsSign(signs, "Taurus"));
@@ -57,10 +57,10 @@ public class PlanetaryResourceV2Test {
     @Test
     void testGetAvailableConstellations() {
         String[] constellations = resource.getAvailableConstellations();
-        
+
         assertNotNull(constellations);
         assertEquals(12, constellations.length);
-        
+
         // Check that all astrological constellations are present
         assertTrue(containsConstellation(constellations, "Aries"));
         assertTrue(containsConstellation(constellations, "Taurus"));
@@ -81,9 +81,9 @@ public class PlanetaryResourceV2Test {
         PlanetaryResourceV2.PlanetaryPositionRequest request = new PlanetaryResourceV2.PlanetaryPositionRequest();
         request.planet = "Mars";
         request.seed = "test-seed";
-        
+
         PlanetaryResourceV2.PlanetaryPositionResponse response = resource.getPlanetaryPosition(request);
-        
+
         assertNotNull(response);
         assertEquals("Mars", response.getPlanetName());
         assertTrue(response.getLongitudeDeg() >= 0 && response.getLongitudeDeg() < 360);
@@ -102,7 +102,7 @@ public class PlanetaryResourceV2Test {
     void testGetPlanetaryPositionInvalidPlanet() {
         PlanetaryResourceV2.PlanetaryPositionRequest request = new PlanetaryResourceV2.PlanetaryPositionRequest();
         request.planet = "InvalidPlanet";
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             resource.getPlanetaryPosition(request);
         });
@@ -112,7 +112,7 @@ public class PlanetaryResourceV2Test {
     void testGetPlanetaryPositionNullPlanet() {
         PlanetaryResourceV2.PlanetaryPositionRequest request = new PlanetaryResourceV2.PlanetaryPositionRequest();
         request.planet = null;
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             resource.getPlanetaryPosition(request);
         });
@@ -125,9 +125,9 @@ public class PlanetaryResourceV2Test {
         request.latitude = 40.0;
         request.longitude = -74.0;
         request.seed = "test-seed";
-        
+
         PlanetaryResourceV2.ConstellationResponse response = resource.getConstellationInfo(request);
-        
+
         assertNotNull(response);
         assertEquals("Aries", response.getName());
         assertEquals("Ari", response.getAbbreviation());
@@ -144,7 +144,7 @@ public class PlanetaryResourceV2Test {
     void testGetConstellationInfoUnknownConstellation() {
         PlanetaryResourceV2.ConstellationRequest request = new PlanetaryResourceV2.ConstellationRequest();
         request.constellation = "UnknownConstellation";
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             resource.getConstellationInfo(request);
         });
@@ -154,7 +154,7 @@ public class PlanetaryResourceV2Test {
     void testGetConstellationInfoNullConstellation() {
         PlanetaryResourceV2.ConstellationRequest request = new PlanetaryResourceV2.ConstellationRequest();
         request.constellation = null;
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             resource.getConstellationInfo(request);
         });
@@ -163,7 +163,7 @@ public class PlanetaryResourceV2Test {
     @Test
     void testGetCurrentPlanetaryPosition() {
         PlanetaryResourceV2.PlanetaryPositionResponse response = resource.getCurrentPlanetaryPosition("Mars");
-        
+
         assertNotNull(response);
         assertEquals("Mars", response.getPlanetName());
         assertTrue(response.getLongitudeDeg() >= 0 && response.getLongitudeDeg() < 360);
@@ -182,7 +182,7 @@ public class PlanetaryResourceV2Test {
         baseDateTime.minute = 0;
         baseDateTime.second = 0;
         baseDateTime.timezone = "UTC";
-        
+
         assertEquals(Integer.valueOf(2024), baseDateTime.getYear());
         assertEquals(Integer.valueOf(1), baseDateTime.getMonth());
         assertEquals(Integer.valueOf(1), baseDateTime.getDay());
@@ -197,7 +197,7 @@ public class PlanetaryResourceV2Test {
         PlanetaryResourceV2.PlanetaryPositionRequest request = new PlanetaryResourceV2.PlanetaryPositionRequest();
         request.planet = "Mars";
         request.seed = "test-seed";
-        
+
         assertEquals("Mars", request.getPlanet());
         assertEquals("test-seed", request.getSeed());
     }
@@ -209,7 +209,7 @@ public class PlanetaryResourceV2Test {
         request.latitude = 40.0;
         request.longitude = -74.0;
         request.seed = "test-seed";
-        
+
         assertEquals("Aries", request.getConstellation());
         assertEquals(Double.valueOf(40.0), request.getLatitude());
         assertEquals(Double.valueOf(-74.0), request.getLongitude());

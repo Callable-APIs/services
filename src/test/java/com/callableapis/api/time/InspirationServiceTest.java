@@ -19,13 +19,13 @@ public class InspirationServiceTest {
     @Test
     void testGenerateHoroscope() {
         ZonedDateTime testDate = ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC);
-        
+
         InspirationService.HoroscopeResult result = inspirationService.generateHoroscope(
-            InspirationService.HoroscopeType.DAILY, 
-            PlanetaryService.AstrologicalSign.ARIES, 
-            testDate, 
-            "test-seed");
-        
+                InspirationService.HoroscopeType.DAILY,
+                PlanetaryService.AstrologicalSign.ARIES,
+                testDate,
+                "test-seed");
+
         assertNotNull(result);
         assertEquals("daily", result.getType());
         assertEquals("Aries", result.getSign());
@@ -46,8 +46,8 @@ public class InspirationServiceTest {
     @Test
     void testGenerateTarotReading() {
         InspirationService.TarotReading result = inspirationService.generateTarotReading(
-            InspirationService.TarotSpread.SINGLE_CARD, "test-seed");
-        
+                InspirationService.TarotSpread.SINGLE_CARD, "test-seed");
+
         assertNotNull(result);
         assertEquals("single", result.getSpread());
         assertNotNull(result.getDescription());
@@ -62,8 +62,8 @@ public class InspirationServiceTest {
     @Test
     void testGenerateTarotReadingThreeCard() {
         InspirationService.TarotReading result = inspirationService.generateTarotReading(
-            InspirationService.TarotSpread.THREE_CARD, "test-seed");
-        
+                InspirationService.TarotSpread.THREE_CARD, "test-seed");
+
         assertNotNull(result);
         assertEquals("three", result.getSpread());
         assertNotNull(result.getCards());
@@ -73,8 +73,8 @@ public class InspirationServiceTest {
     @Test
     void testGenerateTarotReadingCelticCross() {
         InspirationService.TarotReading result = inspirationService.generateTarotReading(
-            InspirationService.TarotSpread.CELTIC_CROSS, "test-seed");
-        
+                InspirationService.TarotSpread.CELTIC_CROSS, "test-seed");
+
         assertNotNull(result);
         assertEquals("celtic", result.getSpread());
         assertNotNull(result.getCards());
@@ -84,8 +84,8 @@ public class InspirationServiceTest {
     @Test
     void testGenerateTarotReadingHoroscope() {
         InspirationService.TarotReading result = inspirationService.generateTarotReading(
-            InspirationService.TarotSpread.HOROSCOPE, "test-seed");
-        
+                InspirationService.TarotSpread.HOROSCOPE, "test-seed");
+
         assertNotNull(result);
         assertEquals("horoscope", result.getSpread());
         assertNotNull(result.getCards());
@@ -95,7 +95,7 @@ public class InspirationServiceTest {
     @Test
     void testGenerateSingleCard() {
         InspirationService.TarotCard card = inspirationService.generateSingleCard("test-seed");
-        
+
         assertNotNull(card);
         assertNotNull(card.getName());
         assertNotNull(card.getSuit());
@@ -113,7 +113,7 @@ public class InspirationServiceTest {
     void testHoroscopeTypeEnum() {
         InspirationService.HoroscopeType[] types = InspirationService.HoroscopeType.values();
         assertEquals(3, types.length);
-        
+
         assertTrue(containsHoroscopeType(types, "daily"));
         assertTrue(containsHoroscopeType(types, "monthly"));
         assertTrue(containsHoroscopeType(types, "annual"));
@@ -123,7 +123,7 @@ public class InspirationServiceTest {
     void testTarotSpreadEnum() {
         InspirationService.TarotSpread[] spreads = InspirationService.TarotSpread.values();
         assertEquals(4, spreads.length);
-        
+
         assertTrue(containsTarotSpread(spreads, "single"));
         assertTrue(containsTarotSpread(spreads, "three"));
         assertTrue(containsTarotSpread(spreads, "celtic"));
@@ -147,20 +147,20 @@ public class InspirationServiceTest {
     @Test
     void testHoroscopeDifferentSigns() {
         ZonedDateTime testDate = ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC);
-        
+
         // Test different signs produce different results
         InspirationService.HoroscopeResult ariesResult = inspirationService.generateHoroscope(
-            InspirationService.HoroscopeType.DAILY, 
-            PlanetaryService.AstrologicalSign.ARIES, 
-            testDate, 
-            "test-seed");
-        
+                InspirationService.HoroscopeType.DAILY,
+                PlanetaryService.AstrologicalSign.ARIES,
+                testDate,
+                "test-seed");
+
         InspirationService.HoroscopeResult taurusResult = inspirationService.generateHoroscope(
-            InspirationService.HoroscopeType.DAILY, 
-            PlanetaryService.AstrologicalSign.TAURUS, 
-            testDate, 
-            "test-seed");
-        
+                InspirationService.HoroscopeType.DAILY,
+                PlanetaryService.AstrologicalSign.TAURUS,
+                testDate,
+                "test-seed");
+
         assertEquals("Aries", ariesResult.getSign());
         assertEquals("Taurus", taurusResult.getSign());
         assertNotEquals(ariesResult.getContent(), taurusResult.getContent());
@@ -169,20 +169,20 @@ public class InspirationServiceTest {
     @Test
     void testHoroscopeDifferentTypes() {
         ZonedDateTime testDate = ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC);
-        
+
         // Test different types produce different results
         InspirationService.HoroscopeResult dailyResult = inspirationService.generateHoroscope(
-            InspirationService.HoroscopeType.DAILY, 
-            PlanetaryService.AstrologicalSign.ARIES, 
-            testDate, 
-            "test-seed");
-        
+                InspirationService.HoroscopeType.DAILY,
+                PlanetaryService.AstrologicalSign.ARIES,
+                testDate,
+                "test-seed");
+
         InspirationService.HoroscopeResult monthlyResult = inspirationService.generateHoroscope(
-            InspirationService.HoroscopeType.MONTHLY, 
-            PlanetaryService.AstrologicalSign.ARIES, 
-            testDate, 
-            "test-seed");
-        
+                InspirationService.HoroscopeType.MONTHLY,
+                PlanetaryService.AstrologicalSign.ARIES,
+                testDate,
+                "test-seed");
+
         assertEquals("daily", dailyResult.getType());
         assertEquals("monthly", monthlyResult.getType());
         // Note: Content may be similar due to deterministic generation with same seed
@@ -193,7 +193,7 @@ public class InspirationServiceTest {
     @Test
     void testTarotCardProperties() {
         InspirationService.TarotCard card = inspirationService.generateSingleCard("test-seed");
-        
+
         // Test that card has valid properties
         assertFalse(card.getName().isEmpty());
         assertFalse(card.getSuit().isEmpty());
@@ -209,11 +209,11 @@ public class InspirationServiceTest {
     void testTarotReadingConsistency() {
         // Test that same seed produces same result
         InspirationService.TarotReading result1 = inspirationService.generateTarotReading(
-            InspirationService.TarotSpread.SINGLE_CARD, "consistent-seed");
-        
+                InspirationService.TarotSpread.SINGLE_CARD, "consistent-seed");
+
         InspirationService.TarotReading result2 = inspirationService.generateTarotReading(
-            InspirationService.TarotSpread.SINGLE_CARD, "consistent-seed");
-        
+                InspirationService.TarotSpread.SINGLE_CARD, "consistent-seed");
+
         assertEquals(result1.getCards().size(), result2.getCards().size());
         assertEquals(result1.getCards().get(0).getName(), result2.getCards().get(0).getName());
     }

@@ -22,16 +22,45 @@ public class RandomResourceV2 {
         public Double max;
         public String seed;
 
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public Integer getCount() { return count; }
-        public void setCount(Integer count) { this.count = count; }
-        public Double getMin() { return min; }
-        public void setMin(Double min) { this.min = min; }
-        public Double getMax() { return max; }
-        public void setMax(Double max) { this.max = max; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
+
+        public Double getMin() {
+            return min;
+        }
+
+        public void setMin(Double min) {
+            this.min = min;
+        }
+
+        public Double getMax() {
+            return max;
+        }
+
+        public void setMax(Double max) {
+            this.max = max;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomIntegerRequest {
@@ -41,26 +70,66 @@ public class RandomResourceV2 {
         public Integer max;
         public String seed;
 
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public Integer getCount() { return count; }
-        public void setCount(Integer count) { this.count = count; }
-        public Integer getMin() { return min; }
-        public void setMin(Integer min) { this.min = min; }
-        public Integer getMax() { return max; }
-        public void setMax(Integer max) { this.max = max; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public Integer getCount() {
+            return count;
+        }
+
+        public void setCount(Integer count) {
+            this.count = count;
+        }
+
+        public Integer getMin() {
+            return min;
+        }
+
+        public void setMin(Integer min) {
+            this.min = min;
+        }
+
+        public Integer getMax() {
+            return max;
+        }
+
+        public void setMax(Integer max) {
+            this.max = max;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomBooleanRequest {
         public String type;
         public String seed;
 
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomStringRequest {
@@ -69,24 +138,58 @@ public class RandomResourceV2 {
         public String charset;
         public String seed;
 
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public Integer getLength() { return length; }
-        public void setLength(Integer length) { this.length = length; }
-        public String getCharset() { return charset; }
-        public void setCharset(String charset) { this.charset = charset; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public Integer getLength() {
+            return length;
+        }
+
+        public void setLength(Integer length) {
+            this.length = length;
+        }
+
+        public String getCharset() {
+            return charset;
+        }
+
+        public void setCharset(String charset) {
+            this.charset = charset;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomUuidRequest {
         public String type;
         public String seed;
 
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomNumberResponse {
@@ -102,26 +205,85 @@ public class RandomResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public List<Double> getValues() { return values; }
-        public void setValues(List<Double> values) { this.values = values; }
-        public int getCount() { return count; }
-        public void setCount(int count) { this.count = count; }
-        public double getMin() { return min; }
-        public void setMin(double min) { this.min = min; }
-        public double getMax() { return max; }
-        public void setMax(double max) { this.max = max; }
-        public double getMean() { return mean; }
-        public void setMean(double mean) { this.mean = mean; }
-        public double getStandardDeviation() { return standardDeviation; }
-        public void setStandardDeviation(double standardDeviation) { this.standardDeviation = standardDeviation; }
-        public long getGenerationTimeMs() { return generationTimeMs; }
-        public void setGenerationTimeMs(long generationTimeMs) { this.generationTimeMs = generationTimeMs; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<Double> getValues() {
+            return values;
+        }
+
+        public void setValues(List<Double> values) {
+            this.values = values;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public double getMin() {
+            return min;
+        }
+
+        public void setMin(double min) {
+            this.min = min;
+        }
+
+        public double getMax() {
+            return max;
+        }
+
+        public void setMax(double max) {
+            this.max = max;
+        }
+
+        public double getMean() {
+            return mean;
+        }
+
+        public void setMean(double mean) {
+            this.mean = mean;
+        }
+
+        public double getStandardDeviation() {
+            return standardDeviation;
+        }
+
+        public void setStandardDeviation(double standardDeviation) {
+            this.standardDeviation = standardDeviation;
+        }
+
+        public long getGenerationTimeMs() {
+            return generationTimeMs;
+        }
+
+        public void setGenerationTimeMs(long generationTimeMs) {
+            this.generationTimeMs = generationTimeMs;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomIntegerResponse {
@@ -137,26 +299,85 @@ public class RandomResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public List<Integer> getValues() { return values; }
-        public void setValues(List<Integer> values) { this.values = values; }
-        public int getCount() { return count; }
-        public void setCount(int count) { this.count = count; }
-        public int getMin() { return min; }
-        public void setMin(int min) { this.min = min; }
-        public int getMax() { return max; }
-        public void setMax(int max) { this.max = max; }
-        public double getMean() { return mean; }
-        public void setMean(double mean) { this.mean = mean; }
-        public double getStandardDeviation() { return standardDeviation; }
-        public void setStandardDeviation(double standardDeviation) { this.standardDeviation = standardDeviation; }
-        public long getGenerationTimeMs() { return generationTimeMs; }
-        public void setGenerationTimeMs(long generationTimeMs) { this.generationTimeMs = generationTimeMs; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<Integer> getValues() {
+            return values;
+        }
+
+        public void setValues(List<Integer> values) {
+            this.values = values;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public int getMin() {
+            return min;
+        }
+
+        public void setMin(int min) {
+            this.min = min;
+        }
+
+        public int getMax() {
+            return max;
+        }
+
+        public void setMax(int max) {
+            this.max = max;
+        }
+
+        public double getMean() {
+            return mean;
+        }
+
+        public void setMean(double mean) {
+            this.mean = mean;
+        }
+
+        public double getStandardDeviation() {
+            return standardDeviation;
+        }
+
+        public void setStandardDeviation(double standardDeviation) {
+            this.standardDeviation = standardDeviation;
+        }
+
+        public long getGenerationTimeMs() {
+            return generationTimeMs;
+        }
+
+        public void setGenerationTimeMs(long generationTimeMs) {
+            this.generationTimeMs = generationTimeMs;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomBooleanResponse {
@@ -167,16 +388,45 @@ public class RandomResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public boolean isValue() { return value; }
-        public void setValue(boolean value) { this.value = value; }
-        public long getGenerationTimeMs() { return generationTimeMs; }
-        public void setGenerationTimeMs(long generationTimeMs) { this.generationTimeMs = generationTimeMs; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public boolean isValue() {
+            return value;
+        }
+
+        public void setValue(boolean value) {
+            this.value = value;
+        }
+
+        public long getGenerationTimeMs() {
+            return generationTimeMs;
+        }
+
+        public void setGenerationTimeMs(long generationTimeMs) {
+            this.generationTimeMs = generationTimeMs;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomStringResponse {
@@ -189,20 +439,61 @@ public class RandomResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public String getValue() { return value; }
-        public void setValue(String value) { this.value = value; }
-        public int getLength() { return length; }
-        public void setLength(int length) { this.length = length; }
-        public String getCharset() { return charset; }
-        public void setCharset(String charset) { this.charset = charset; }
-        public long getGenerationTimeMs() { return generationTimeMs; }
-        public void setGenerationTimeMs(long generationTimeMs) { this.generationTimeMs = generationTimeMs; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public int getLength() {
+            return length;
+        }
+
+        public void setLength(int length) {
+            this.length = length;
+        }
+
+        public String getCharset() {
+            return charset;
+        }
+
+        public void setCharset(String charset) {
+            this.charset = charset;
+        }
+
+        public long getGenerationTimeMs() {
+            return generationTimeMs;
+        }
+
+        public void setGenerationTimeMs(long generationTimeMs) {
+            this.generationTimeMs = generationTimeMs;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     public static class RandomUuidResponse {
@@ -213,16 +504,45 @@ public class RandomResourceV2 {
         public String seed;
 
         // Getters and setters
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
-        public String getDescription() { return description; }
-        public void setDescription(String description) { this.description = description; }
-        public String getValue() { return value; }
-        public void setValue(String value) { this.value = value; }
-        public long getGenerationTimeMs() { return generationTimeMs; }
-        public void setGenerationTimeMs(long generationTimeMs) { this.generationTimeMs = generationTimeMs; }
-        public String getSeed() { return seed; }
-        public void setSeed(String seed) { this.seed = seed; }
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public long getGenerationTimeMs() {
+            return generationTimeMs;
+        }
+
+        public void setGenerationTimeMs(long generationTimeMs) {
+            this.generationTimeMs = generationTimeMs;
+        }
+
+        public String getSeed() {
+            return seed;
+        }
+
+        public void setSeed(String seed) {
+            this.seed = seed;
+        }
     }
 
     @GET
@@ -258,7 +578,7 @@ public class RandomResourceV2 {
 
         RandomService.RandomType randomType = randomService.getRandomTypeByCode(type);
         RandomService.RandomNumberResult result = randomService.generateRandomNumbers(
-            randomType, count, min, max, seed);
+                randomType, count, min, max, seed);
 
         RandomNumberResponse response = new RandomNumberResponse();
         response.type = result.getType();
@@ -299,7 +619,7 @@ public class RandomResourceV2 {
 
         RandomService.RandomType randomType = randomService.getRandomTypeByCode(type);
         RandomService.RandomIntegerResult result = randomService.generateRandomIntegers(
-            randomType, count, min, max, seed);
+                randomType, count, min, max, seed);
 
         RandomIntegerResponse response = new RandomIntegerResponse();
         response.type = result.getType();
@@ -413,14 +733,14 @@ public class RandomResourceV2 {
             @QueryParam("min") Double min,
             @QueryParam("max") Double max,
             @QueryParam("seed") String seed) {
-        
+
         RandomNumberRequest req = new RandomNumberRequest();
         req.type = type;
         req.count = 1;
         req.min = min;
         req.max = max;
         req.seed = seed;
-        
+
         return generateNumbers(req);
     }
 
@@ -432,14 +752,14 @@ public class RandomResourceV2 {
             @QueryParam("min") Integer min,
             @QueryParam("max") Integer max,
             @QueryParam("seed") String seed) {
-        
+
         RandomIntegerRequest req = new RandomIntegerRequest();
         req.type = type;
         req.count = 1;
         req.min = min;
         req.max = max;
         req.seed = seed;
-        
+
         return generateIntegers(req);
     }
 
@@ -449,11 +769,11 @@ public class RandomResourceV2 {
     public RandomBooleanResponse generateSingleBoolean(
             @QueryParam("type") String type,
             @QueryParam("seed") String seed) {
-        
+
         RandomBooleanRequest req = new RandomBooleanRequest();
         req.type = type;
         req.seed = seed;
-        
+
         return generateBoolean(req);
     }
 }

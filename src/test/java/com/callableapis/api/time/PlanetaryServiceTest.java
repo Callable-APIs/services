@@ -19,10 +19,10 @@ public class PlanetaryServiceTest {
     @Test
     void testCalculatePlanetPosition() {
         ZonedDateTime testDate = ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC);
-        
+
         PlanetaryService.PlanetaryPosition position = planetaryService.calculatePlanetPosition(
-            PlanetaryService.Planet.MARS, testDate);
-        
+                PlanetaryService.Planet.MARS, testDate);
+
         assertNotNull(position);
         assertEquals("Mars", position.getPlanetName());
         assertTrue(position.getLongitudeDeg() >= 0 && position.getLongitudeDeg() < 360);
@@ -33,23 +33,23 @@ public class PlanetaryServiceTest {
 
     @Test
     void testAstrologicalSignFromLongitude() {
-        assertEquals(PlanetaryService.AstrologicalSign.ARIES, 
-                    PlanetaryService.AstrologicalSign.fromLongitude(0.0));
-        assertEquals(PlanetaryService.AstrologicalSign.ARIES, 
-                    PlanetaryService.AstrologicalSign.fromLongitude(29.9));
-        assertEquals(PlanetaryService.AstrologicalSign.TAURUS, 
-                    PlanetaryService.AstrologicalSign.fromLongitude(30.0));
-        assertEquals(PlanetaryService.AstrologicalSign.PISCES, 
-                    PlanetaryService.AstrologicalSign.fromLongitude(359.9));
+        assertEquals(PlanetaryService.AstrologicalSign.ARIES,
+                PlanetaryService.AstrologicalSign.fromLongitude(0.0));
+        assertEquals(PlanetaryService.AstrologicalSign.ARIES,
+                PlanetaryService.AstrologicalSign.fromLongitude(29.9));
+        assertEquals(PlanetaryService.AstrologicalSign.TAURUS,
+                PlanetaryService.AstrologicalSign.fromLongitude(30.0));
+        assertEquals(PlanetaryService.AstrologicalSign.PISCES,
+                PlanetaryService.AstrologicalSign.fromLongitude(359.9));
     }
 
     @Test
     void testGetConstellationInfo() {
         ZonedDateTime testDate = ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC);
-        
+
         PlanetaryService.ConstellationInfo info = planetaryService.getConstellationInfo(
-            "Aries", testDate, 40.0, -74.0);
-        
+                "Aries", testDate, 40.0, -74.0);
+
         assertNotNull(info);
         assertEquals("Aries", info.getName());
         assertEquals("Ari", info.getAbbreviation());
@@ -61,10 +61,10 @@ public class PlanetaryServiceTest {
     @Test
     void testGetConstellationInfoUnknown() {
         ZonedDateTime testDate = ZonedDateTime.of(2024, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC);
-        
+
         PlanetaryService.ConstellationInfo info = planetaryService.getConstellationInfo(
-            "UnknownConstellation", testDate, 40.0, -74.0);
-        
+                "UnknownConstellation", testDate, 40.0, -74.0);
+
         assertNull(info);
     }
 
@@ -72,7 +72,7 @@ public class PlanetaryServiceTest {
     void testPlanetEnumValues() {
         PlanetaryService.Planet[] planets = PlanetaryService.Planet.values();
         assertEquals(9, planets.length);
-        
+
         assertTrue(containsPlanet(planets, "Mercury"));
         assertTrue(containsPlanet(planets, "Venus"));
         assertTrue(containsPlanet(planets, "Earth"));
@@ -88,7 +88,7 @@ public class PlanetaryServiceTest {
     void testAstrologicalSignEnumValues() {
         PlanetaryService.AstrologicalSign[] signs = PlanetaryService.AstrologicalSign.values();
         assertEquals(12, signs.length);
-        
+
         assertTrue(containsSign(signs, "Aries"));
         assertTrue(containsSign(signs, "Taurus"));
         assertTrue(containsSign(signs, "Gemini"));
