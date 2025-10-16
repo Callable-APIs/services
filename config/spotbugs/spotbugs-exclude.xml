@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
-    <!-- Example exclusions can go here if needed -->
+    <!-- Exclude DMI_RANDOM_USED_ONLY_ONCE for InspirationService.generateLuckyNumbers -->
+    <!-- This is acceptable for our use case where we need deterministic seeded random numbers -->
+    <Match>
+        <Class name="com.callableapis.api.time.InspirationService"/>
+        <Method name="generateLuckyNumbers"/>
+        <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/>
+    </Match>
 </FindBugsFilter>

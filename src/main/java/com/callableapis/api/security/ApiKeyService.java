@@ -16,9 +16,12 @@ public final class ApiKeyService implements ApiKeyStore, RateLimitService {
     private final ConcurrentHashMap<String, Long> apiKeyToCallCount = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Long> apiKeyToLastCallTime = new ConcurrentHashMap<>();
 
-    private ApiKeyService() {}
+    private ApiKeyService() {
+    }
 
-    public static ApiKeyService getInstance() { return INSTANCE; }
+    public static ApiKeyService getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public String getOrCreateApiKeyForIdentity(String oidcIdentity) {
@@ -79,8 +82,10 @@ public final class ApiKeyService implements ApiKeyStore, RateLimitService {
 
     public boolean isRateLimited(String apiKey) {
         double permitsPerSecond = getRateLimitQps();
-        RateLimiter limiter = apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
-        // For now, just return false since we don't have a good way to check without consuming
+        // Create limiter for the API key (even though we don't use it for rate limiting yet)
+        apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
+        // For now, just return false since we don't have a good way to check without
+        // consuming
         // In a real implementation, we might track recent calls separately
         return false;
     }

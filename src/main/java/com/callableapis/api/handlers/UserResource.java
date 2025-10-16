@@ -29,8 +29,7 @@ public class UserResource {
         String apiKey = apiKeyService.getOrCreateApiKeyForIdentity(identity);
         return Response.ok(Map.of(
                 "identity", identity,
-                "apiKey", apiKey
-        )).build();
+                "apiKey", apiKey)).build();
     }
 
     @POST
@@ -44,8 +43,7 @@ public class UserResource {
         String apiKey = apiKeyService.rotateApiKeyForIdentity(identity);
         return Response.ok(Map.of(
                 "identity", identity,
-                "apiKey", apiKey
-        )).build();
+                "apiKey", apiKey)).build();
     }
 
     @GET
@@ -57,19 +55,18 @@ public class UserResource {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Unauthorized").build();
         }
         String apiKey = apiKeyService.getOrCreateApiKeyForIdentity(identity);
-        
+
         long callCount = apiKeyService.getCallCount(apiKey);
         long lastCallTime = apiKeyService.getLastCallTime(apiKey);
         double rateLimitQps = apiKeyService.getRateLimitQps();
         boolean isRateLimited = apiKeyService.isRateLimited(apiKey);
-        
+
         return Response.ok(Map.of(
                 "identity", identity,
                 "callCount", callCount,
                 "lastCallTime", lastCallTime,
                 "rateLimitQps", rateLimitQps,
                 "isRateLimited", isRateLimited,
-                "rateLimitStatus", isRateLimited ? "Limited" : "Available"
-        )).build();
+                "rateLimitStatus", isRateLimited ? "Limited" : "Available")).build();
     }
 }

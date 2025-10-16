@@ -318,6 +318,51 @@ https://api.callableapis.com/api/user/key/rotate</code></pre>
                     </div>
 
                     <div class="api-card">
+                        <h3>🪐 Planetary API</h3>
+                        <p>Planetary positions and astrological data</p>
+                        <div class="endpoint">
+                            <span class="method method-get">GET</span>/api/v2/planetary/planets
+                        </div>
+                        <div class="endpoint">
+                            <span class="method method-post">POST</span>/api/v2/planetary/position
+                        </div>
+                        <div class="endpoint">
+                            <span class="method method-post">POST</span>/api/v2/planetary/constellation
+                        </div>
+                    </div>
+
+                    <div class="api-card">
+                        <h3>🎲 Random API</h3>
+                        <p>Random number generation with multiple algorithms</p>
+                        <div class="endpoint">
+                            <span class="method method-get">GET</span>/api/v2/random/types
+                        </div>
+                        <div class="endpoint">
+                            <span class="method method-post">POST</span>/api/v2/random/numbers
+                        </div>
+                        <div class="endpoint">
+                            <span class="method method-post">POST</span>/api/v2/random/integers
+                        </div>
+                        <div class="endpoint">
+                            <span class="method method-get">GET</span>/api/v2/random/boolean
+                        </div>
+                    </div>
+
+                    <div class="api-card">
+                        <h3>🔮 Inspiration API</h3>
+                        <p>Mystical inspiration for AI agents</p>
+                        <div class="endpoint">
+                            <span class="method method-post">POST</span>/api/v2/inspiration/horoscope
+                        </div>
+                        <div class="endpoint">
+                            <span class="method method-post">POST</span>/api/v2/inspiration/tarot
+                        </div>
+                        <div class="endpoint">
+                            <span class="method method-get">GET</span>/api/v2/inspiration/tarot/single
+                        </div>
+                    </div>
+
+                    <div class="api-card">
                         <h3>💚 Health Check</h3>
                         <p>Service health and status monitoring</p>
                         <div class="endpoint">
