@@ -79,7 +79,8 @@ public final class ApiKeyService implements ApiKeyStore, RateLimitService {
 
     public boolean isRateLimited(String apiKey) {
         double permitsPerSecond = getRateLimitQps();
-        RateLimiter limiter = apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
+        // Create limiter for the API key (even though we don't use it for rate limiting yet)
+        apiKeyToLimiter.computeIfAbsent(apiKey, k -> RateLimiter.create(permitsPerSecond));
         // For now, just return false since we don't have a good way to check without consuming
         // In a real implementation, we might track recent calls separately
         return false;
