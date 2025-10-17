@@ -201,28 +201,33 @@ public class AuthenticatedResource {
                 ".api-test-result { border: 1px solid #e1e4e8; border-radius: 8px; padding: 1.5rem; margin: 1rem 0; }" +
                 ".api-test-result.success { border-color: #28a745; background: #f8fff9; }" +
                 ".api-test-result.error { border-color: #dc3545; background: #fff8f8; }" +
-                ".test-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }" +
+                ".test-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }"
+                +
                 ".test-header h4 { margin: 0; color: #2da44e; }" +
                 ".test-meta { display: flex; gap: 1rem; font-size: 0.875rem; color: #6a737d; }" +
                 ".status-code { font-weight: bold; }" +
                 ".response-time { font-style: italic; }" +
                 ".test-details h5 { margin: 1rem 0 0.5rem 0; color: #2da44e; }" +
-                ".request-info, .response-content, .error-content { background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 4px; padding: 1rem; margin: 0.5rem 0; }" +
+                ".request-info, .response-content, .error-content { background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 4px; padding: 1rem; margin: 0.5rem 0; }"
+                +
                 ".response-content pre { margin: 0; white-space: pre-wrap; word-break: break-word; }" +
                 ".error-content { background: #fef2f2; border-color: #fecaca; }" +
                 ".endpoint-tabs { margin-top: 1rem; }" +
                 ".endpoint-tab-navigation { display: flex; border-bottom: 1px solid #e1e4e8; margin-bottom: 1rem; }" +
-                ".endpoint-tab-button { background: none; border: none; padding: 0.75rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; color: #6a737d; font-size: 0.875rem; }" +
+                ".endpoint-tab-button { background: none; border: none; padding: 0.75rem 1rem; cursor: pointer; border-bottom: 2px solid transparent; color: #6a737d; font-size: 0.875rem; }"
+                +
                 ".endpoint-tab-button:hover { color: #2da44e; background: #f6f8fa; }" +
                 ".endpoint-tab-button.active { color: #2da44e; border-bottom-color: #2da44e; background: #f6f8fa; }" +
                 ".endpoint-tab-pane { display: none; }" +
                 ".endpoint-tab-pane.active { display: block; }" +
-                ".test-interface { background: #f8f9fa; border: 1px solid #e1e4e8; border-radius: 8px; padding: 1.5rem; }" +
+                ".test-interface { background: #f8f9fa; border: 1px solid #e1e4e8; border-radius: 8px; padding: 1.5rem; }"
+                +
                 ".test-controls { margin: 1rem 0; }" +
                 ".test-info { margin-top: 0.5rem; color: #6a737d; }" +
                 ".rate-limit-status.available { color: #28a745; font-weight: bold; }" +
                 ".rate-limit-status.limited { color: #dc3545; font-weight: bold; }" +
-                ".refresh-button { background: #0366d6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem; }" +
+                ".refresh-button { background: #0366d6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem; }"
+                +
                 ".refresh-button:hover { background: #0256cc; }" +
                 "@media (max-width: 768px) { .tab-navigation { flex-direction: column; } .tab-button { border-bottom: 1px solid #e1e4e8; border-right: none; } .sub-tab-navigation { flex-wrap: wrap; } .api-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } .test-meta { flex-direction: column; gap: 0.5rem; } .endpoint-tab-navigation { flex-wrap: wrap; } }";
     }
@@ -809,7 +814,8 @@ public class AuthenticatedResource {
                 "</div>" +
                 "<h5>Response:</h5>" +
                 "<div class=\"response-content\">" +
-                "<pre>${typeof responseData === 'object' ? JSON.stringify(responseData, null, 2) : responseData}</pre>" +
+                "<pre>${typeof responseData === 'object' ? JSON.stringify(responseData, null, 2) : responseData}</pre>"
+                +
                 "</div>" +
                 "</div>" +
                 "</div>" +

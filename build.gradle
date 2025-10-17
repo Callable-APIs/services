@@ -124,6 +124,7 @@ tasks.withType(Checkstyle) {
 spotbugs {
     toolVersion = '4.8.6'
     ignoreFailures = false
+    excludeFilter = file('config/spotbugs/spotbugs-exclude.xml')
 }
 
 tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
