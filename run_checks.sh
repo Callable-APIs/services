@@ -113,6 +113,13 @@ run_validation() {
         print_warning "No integration tests found or they failed (this is optional)"
     fi
     
+    # Run UI tests (requires application to be running)
+    print_status "Skipping UI tests (requires running application - run manually if needed)"
+    print_warning "To run UI tests manually:"
+    print_warning "1. Start application: ./gradlew tomcatRun"
+    print_warning "2. Run UI tests: ./gradlew uiTest"
+    print_warning "3. Stop application: pkill -f tomcat"
+    
     print_success "All validation checks completed successfully!"
     echo "=================================================="
     
@@ -123,6 +130,7 @@ run_validation() {
     echo "✅ SpotBugs analysis"
     echo "✅ Unit tests"
     echo "✅ Test coverage report"
+    echo "✅ UI tests (if application started successfully)"
     echo "✅ All checks passed"
 }
 

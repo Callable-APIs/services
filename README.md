@@ -72,10 +72,25 @@ This project provides a REST API service for Callable APIs, featuring:
    ./gradlew test
    ```
 
-3. **Build WAR file:**
+3. **Run UI tests (requires running application):**
+   ```bash
+   ./run_ui_tests.sh
+   ```
+
+4. **Build WAR file:**
    ```bash
    ./gradlew war
    ```
+
+### Testing
+
+The project includes comprehensive testing:
+
+- **Unit Tests**: `./gradlew test`
+- **UI Tests**: `./run_ui_tests.sh` (Selenium WebDriver tests for JavaScript error detection)
+- **Validation**: `./run_checks.sh` (runs all checks including static analysis)
+
+For more information about UI testing, see [UI_TESTING.md](UI_TESTING.md).
 
 ### Project Structure
 
@@ -88,15 +103,27 @@ src/
 │   │       └── handlers/v1/
 │   │           └── CalendarResource.java    # REST endpoint implementation
 │   └── webapp/
+│       ├── index.jsp                       # Home page
+│       ├── authenticated.jsp               # Authenticated user page
 │       └── WEB-INF/
 │           └── web.xml                     # Tomcat deployment descriptor
 ├── test/
 │   └── java/
 │       └── com/callableapis/api/
 │           └── CalendarResourceTest.java   # Unit tests
+├── uiTest/
+│   └── java/
+│       └── com/callableapis/api/ui/
+│           ├── BaseUITest.java             # Base UI test class
+│           ├── OIDCFlowUITest.java         # OIDC flow UI tests
+│           └── JavaScriptErrorDetectionTest.java # JavaScript error detection
 Dockerfile                                 # Docker container configuration
+Dockerfile.validator                       # Docker image for validation
 docker-compose.yml                        # Docker Compose configuration
 build.gradle                             # Gradle build configuration
+run_checks.sh                            # Validation script
+run_ui_tests.sh                          # UI test execution script
+UI_TESTING.md                            # UI testing documentation
 ```
 
 ## Deployment

@@ -9,6 +9,7 @@ plugins {
     id 'com.github.spotbugs' version '6.0.15'
     id 'jacoco'
     id 'com.gorylenko.gradle-git-properties' version '2.4.1'
+    id 'com.bmuschko.tomcat' version '2.7.0'
 }
 
 java {
@@ -57,6 +58,13 @@ dependencies {
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.10.0'
     testImplementation 'org.glassfish.jersey.test-framework:jersey-test-framework-core:3.1.3'
     testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:3.1.3'
+    
+    // Selenium WebDriver for UI testing
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.15.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.15.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-firefox-driver:4.15.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-edge-driver:4.15.0'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.6.2'
 }
 
 // JSP precompilation using Jasper
@@ -108,6 +116,34 @@ test {
     useJUnitPlatform()
 }
 
+// UI tests configuration
+sourceSets {
+    uiTest {
+        java {
+            srcDir 'src/uiTest/java'
+        }
+        resources {
+            srcDir 'src/uiTest/resources'
+        }
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    uiTestImplementation.extendsFrom testImplementation
+    uiTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+task uiTest(type: Test) {
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.uiTest.output.classesDirs
+    classpath = sourceSets.uiTest.runtimeClasspath
+    shouldRunAfter test
+}
+
+check.dependsOn uiTest
+
 checkstyle {
     toolVersion = '10.17.0'
     config = resources.text.fromFile('config/checkstyle/checkstyle.xml')
@@ -143,6 +179,19 @@ jacocoTestReport {
 }
 
 check.dependsOn 'checkstyleMain', 'checkstyleTest', 'spotbugsMain', 'spotbugsTest', 'jacocoTestReport'
+
+// Tomcat configuration for UI tests
+tomcat {
+    httpPort = 8080
+    httpsPort = 8443
+    enableSSL = false
+    contextPath = '/'
+}
+
+tomcatRun {
+    dependsOn war
+    daemon = true
+}
 
 // Git properties configuration
 gitProperties {
