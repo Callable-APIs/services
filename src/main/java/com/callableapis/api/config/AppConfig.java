@@ -1,5 +1,6 @@
 package com.callableapis.api.config;
 
+import com.callableapis.api.secrets.VaultSecretsManager;
 import java.net.URI;
 import java.util.logging.Logger;
 
@@ -8,12 +9,17 @@ public final class AppConfig {
     private static final Logger logger = Logger.getLogger(AppConfig.class.getName());
     private static final String PUBLIC_BASE_URL = "https://api.callableapis.com";
     private static final ParameterStoreService parameterStore;
+    private static final VaultSecretsManager vaultSecretsManager;
     
     static {
         logger.info("=== AppConfig Static Initialization Started ===");
         try {
             parameterStore = ParameterStoreService.getInstance();
             logger.info("ParameterStoreService instance obtained successfully");
+            
+            // Initialize VaultSecretsManager for dual secrets management
+            vaultSecretsManager = new VaultSecretsManager();
+            logger.info("VaultSecretsManager initialized successfully");
             
             // Test configuration loading immediately
             logger.info("Testing configuration loading...");
@@ -38,21 +44,35 @@ public final class AppConfig {
     }
 
     public static String getGithubClientId() {
-        String value = parameterStore.getParameterWithEnvFallback(
-            "/callableapis/github/client-id", 
-            "GITHUB_CLIENT_ID", 
-            "dev-client-id-placeholder"
-        );
+        // Try VaultSecretsManager first (Ansible Vault -> AWS Parameter Store)
+        String value = vaultSecretsManager.getGitHubClientId();
+        
+        // Fallback to original ParameterStoreService if VaultSecretsManager fails
+        if (value == null) {
+            value = parameterStore.getParameterWithEnvFallback(
+                "/callableapis/github/client-id", 
+                "GITHUB_CLIENT_ID", 
+                "dev-client-id-placeholder"
+            );
+        }
+        
         logger.info("GitHub Client ID: " + (value != null ? "***" + value.substring(Math.max(0, value.length() - 4)) : "null"));
         return value;
     }
 
     public static String getGithubClientSecret() {
-        String value = parameterStore.getParameterWithEnvFallback(
-            "/callableapis/github/client-secret", 
-            "GITHUB_CLIENT_SECRET", 
-            "dev-client-secret-placeholder"
-        );
+        // Try VaultSecretsManager first (Ansible Vault -> AWS Parameter Store)
+        String value = vaultSecretsManager.getGitHubClientSecret();
+        
+        // Fallback to original ParameterStoreService if VaultSecretsManager fails
+        if (value == null) {
+            value = parameterStore.getParameterWithEnvFallback(
+                "/callableapis/github/client-secret", 
+                "GITHUB_CLIENT_SECRET", 
+                "dev-client-secret-placeholder"
+            );
+        }
+        
         logger.info("GitHub Client Secret: " + (value != null ? "***" + value.substring(Math.max(0, value.length() - 4)) : "null"));
         return value;
     }
@@ -68,15 +88,36 @@ public final class AppConfig {
     }
 
     public static String getGithubCallbackUrl() {
-        String redirectUri = parameterStore.getParameterWithEnvFallback(
-            "/callableapis/github/redirect-uri", 
-            "GITHUB_REDIRECT_URI", 
-            getPublicBaseUrl() + "/api/auth/callback"
-        );
+        // Try VaultSecretsManager first (Ansible Vault -> AWS Parameter Store)
+        String redirectUri = vaultSecretsManager.getGitHubRedirectUri();
+        
+        // Fallback to original ParameterStoreService if VaultSecretsManager fails
+        if (redirectUri == null) {
+            redirectUri = parameterStore.getParameterWithEnvFallback(
+                "/callableapis/github/redirect-uri", 
+                "GITHUB_REDIRECT_URI", 
+                getPublicBaseUrl() + "/api/auth/callback"
+            );
+        }
+        
         return redirectUri;
     }
 
     public static String getPublicBaseUrl() { return PUBLIC_BASE_URL; }
+    
+    /**
+     * Get the VaultSecretsManager instance for advanced operations.
+     */
+    public static VaultSecretsManager getVaultSecretsManager() {
+        return vaultSecretsManager;
+    }
+    
+    /**
+     * Get a summary of the secrets management status.
+     */
+    public static String getSecretsStatusSummary() {
+        return vaultSecretsManager.getStatusSummary();
+    }
 
     public static String getApiKeySalt() {
         return parameterStore.getParameterWithEnvFallback(
@@ -116,13 +157,6 @@ public final class AppConfig {
         return URI.create("https://api.github.com/user");
     }
 
-    private static String requireEnv(String key) {
-        String v = System.getenv(key);
-        if (v == null || v.isBlank()) {
-            throw new IllegalStateException("Missing required environment variable: " + key);
-        }
-        return v;
-    }
 
     private static String urlEncode(String v) {
         try {
