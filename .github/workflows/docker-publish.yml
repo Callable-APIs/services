@@ -69,8 +69,9 @@ jobs:
                   push: ${{ github.event_name != 'pull_request' }}
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
-                  cache-from: type=gha
-                  cache-to: type=gha,mode=max
+                  # Disable caching temporarily to avoid cache conflicts
+                  # cache-from: type=gha
+                  # cache-to: type=gha,mode=max
 
             - name: Generate container version
               if: github.event_name != 'pull_request'
