@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * VaultSecretsManager provides dual secrets management:
@@ -128,6 +129,8 @@ public class VaultSecretsManager {
     /**
      * Check if Ansible Vault is available on this node.
      */
+    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", 
+                       justification = "Hardcoded paths are required for Ansible Vault integration")
     private boolean isAnsibleVaultAvailable() {
         File vaultPasswordFile = new File(VAULT_PASSWORD_PATH);
         File vaultSecretsFile = new File(VAULT_SECRETS_PATH);
@@ -146,6 +149,8 @@ public class VaultSecretsManager {
     /**
      * Get secret from Ansible Vault by reading the decrypted secrets file.
      */
+    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", 
+                       justification = "Hardcoded path is required for Ansible Vault integration")
     private String getSecretFromAnsibleVault(String key) {
         try {
             Path secretsPath = Paths.get(VAULT_SECRETS_PATH);

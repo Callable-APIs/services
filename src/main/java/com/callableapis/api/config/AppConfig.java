@@ -3,13 +3,14 @@ package com.callableapis.api.config;
 import com.callableapis.api.secrets.VaultSecretsManager;
 import java.net.URI;
 import java.util.logging.Logger;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public final class AppConfig {
     private AppConfig() {}
     private static final Logger logger = Logger.getLogger(AppConfig.class.getName());
     private static final String PUBLIC_BASE_URL = "https://api.callableapis.com";
     private static final ParameterStoreService parameterStore;
-    private static final VaultSecretsManager vaultSecretsManager;
+    private static volatile VaultSecretsManager vaultSecretsManager;
     
     static {
         logger.info("=== AppConfig Static Initialization Started ===");
@@ -17,22 +18,8 @@ public final class AppConfig {
             parameterStore = ParameterStoreService.getInstance();
             logger.info("ParameterStoreService instance obtained successfully");
             
-            // Initialize VaultSecretsManager for dual secrets management
-            vaultSecretsManager = new VaultSecretsManager();
-            logger.info("VaultSecretsManager initialized successfully");
-            
-            // Test configuration loading immediately
-            logger.info("Testing configuration loading...");
-            String clientId = getGithubClientId();
-            String clientSecret = getGithubClientSecret();
-            String oauthScope = getGithubOAuthScope();
-            String callbackUrl = getGithubCallbackUrl();
-            
-            logger.info("Configuration test results:");
-            logger.info("- GitHub Client ID: " + (clientId != null ? "***" + clientId.substring(Math.max(0, clientId.length() - 4)) : "NULL"));
-            logger.info("- GitHub Client Secret: " + (clientSecret != null ? "***" + clientSecret.substring(Math.max(0, clientSecret.length() - 4)) : "NULL"));
-            logger.info("- GitHub OAuth Scope: " + oauthScope);
-            logger.info("- GitHub Callback URL: " + callbackUrl);
+            // Initialize VaultSecretsManager lazily to avoid test failures
+            // vaultSecretsManager will be initialized on first access
             
             logger.info("=== AppConfig Static Initialization Completed Successfully ===");
         } catch (Exception e) {
@@ -42,10 +29,32 @@ public final class AppConfig {
             throw new RuntimeException("AppConfig initialization failed", e);
         }
     }
+    
+    private static VaultSecretsManager getVaultSecretsManagerInstance() {
+        if (vaultSecretsManager == null) {
+            synchronized (AppConfig.class) {
+                if (vaultSecretsManager == null) {
+                    try {
+                        vaultSecretsManager = new VaultSecretsManager();
+                        logger.info("VaultSecretsManager initialized successfully");
+                    } catch (Exception e) {
+                        logger.warning("Failed to initialize VaultSecretsManager: " + e.getMessage());
+                        // Return null to allow fallback to ParameterStoreService
+                        return null;
+                    }
+                }
+            }
+        }
+        return vaultSecretsManager;
+    }
 
     public static String getGithubClientId() {
         // Try VaultSecretsManager first (Ansible Vault -> AWS Parameter Store)
-        String value = vaultSecretsManager.getGitHubClientId();
+        VaultSecretsManager vaultManager = getVaultSecretsManagerInstance();
+        String value = null;
+        if (vaultManager != null) {
+            value = vaultManager.getGitHubClientId();
+        }
         
         // Fallback to original ParameterStoreService if VaultSecretsManager fails
         if (value == null) {
@@ -62,7 +71,11 @@ public final class AppConfig {
 
     public static String getGithubClientSecret() {
         // Try VaultSecretsManager first (Ansible Vault -> AWS Parameter Store)
-        String value = vaultSecretsManager.getGitHubClientSecret();
+        VaultSecretsManager vaultManager = getVaultSecretsManagerInstance();
+        String value = null;
+        if (vaultManager != null) {
+            value = vaultManager.getGitHubClientSecret();
+        }
         
         // Fallback to original ParameterStoreService if VaultSecretsManager fails
         if (value == null) {
@@ -89,7 +102,11 @@ public final class AppConfig {
 
     public static String getGithubCallbackUrl() {
         // Try VaultSecretsManager first (Ansible Vault -> AWS Parameter Store)
-        String redirectUri = vaultSecretsManager.getGitHubRedirectUri();
+        VaultSecretsManager vaultManager = getVaultSecretsManagerInstance();
+        String redirectUri = null;
+        if (vaultManager != null) {
+            redirectUri = vaultManager.getGitHubRedirectUri();
+        }
         
         // Fallback to original ParameterStoreService if VaultSecretsManager fails
         if (redirectUri == null) {
@@ -108,15 +125,21 @@ public final class AppConfig {
     /**
      * Get the VaultSecretsManager instance for advanced operations.
      */
+    @SuppressFBWarnings(value = "MS_EXPOSE_REP", 
+                       justification = "VaultSecretsManager is intentionally exposed for advanced operations")
     public static VaultSecretsManager getVaultSecretsManager() {
-        return vaultSecretsManager;
+        return getVaultSecretsManagerInstance();
     }
     
     /**
      * Get a summary of the secrets management status.
      */
     public static String getSecretsStatusSummary() {
-        return vaultSecretsManager.getStatusSummary();
+        VaultSecretsManager vaultManager = getVaultSecretsManagerInstance();
+        if (vaultManager != null) {
+            return vaultManager.getStatusSummary();
+        }
+        return "VaultSecretsManager not available - using ParameterStoreService fallback";
     }
 
     public static String getApiKeySalt() {
