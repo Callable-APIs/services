@@ -92,6 +92,32 @@ The project includes comprehensive testing:
 
 For more information about UI testing, see [UI_TESTING.md](UI_TESTING.md).
 
+### Secrets Management
+
+The service implements a dual secrets management system supporting both Ansible Vault (primary) and AWS Parameter Store (fallback) for cloud migration:
+
+- **Primary**: Ansible Vault for Oracle/Google/IBM nodes
+- **Fallback**: AWS Parameter Store for Elastic Beanstalk
+- **Backward Compatibility**: Maintains existing functionality
+
+#### Configuration
+
+- **Ansible Vault**: `/app/vault-password` and `/app/secrets/all-secrets.env`
+- **AWS Parameter Store**: `/callableapis/github-oidc/` parameters
+- **Environment Variables**: Fallback for development
+
+See [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md) for detailed documentation.
+
+### Docker Hub Publishing
+
+The service automatically builds and publishes Docker images to Docker Hub:
+
+- **Latest**: `callableapis/services:latest`
+- **Versioned**: `callableapis/services:v1.0.0`
+- **Development**: `callableapis/services:commit-sha-branch`
+
+See [DOCKER_HUB_SETUP.md](DOCKER_HUB_SETUP.md) for setup instructions and usage examples.
+
 ### Project Structure
 
 ```
@@ -100,6 +126,11 @@ src/
 │   ├── java/
 │   │   └── com/callableapis/api/
 │   │       ├── APIApplication.java          # Jersey application configuration
+│   │       ├── config/
+│   │       │   ├── AppConfig.java           # Application configuration
+│   │       │   └── SecretsConfig.java       # Secrets management configuration
+│   │       ├── secrets/
+│   │       │   └── VaultSecretsManager.java # Dual secrets management (Ansible Vault + AWS)
 │   │       └── handlers/v1/
 │   │           └── CalendarResource.java    # REST endpoint implementation
 │   └── webapp/
@@ -110,6 +141,11 @@ src/
 ├── test/
 │   └── java/
 │       └── com/callableapis/api/
+│           ├── config/
+│           │   ├── SecretsConfigTest.java   # Secrets configuration tests
+│           │   └── AppConfigIntegrationTest.java # AppConfig integration tests
+│           ├── secrets/
+│           │   └── VaultSecretsManagerTest.java # VaultSecretsManager tests
 │           └── CalendarResourceTest.java   # Unit tests
 ├── uiTest/
 │   └── java/
@@ -124,6 +160,9 @@ build.gradle                             # Gradle build configuration
 run_checks.sh                            # Validation script
 run_ui_tests.sh                          # UI test execution script
 UI_TESTING.md                            # UI testing documentation
+SECRETS_MANAGEMENT.md                    # Secrets management documentation
+DOCKER_HUB_SETUP.md                      # Docker Hub publishing documentation
+.github/workflows/docker-publish.yml     # Docker Hub publishing workflow
 ```
 
 ## Deployment
