@@ -86,8 +86,12 @@ public class StatusController {
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", "--version");
             Process process = pb.start();
-            int exitCode = process.waitFor();
-            return exitCode == 0;
+            try {
+                int exitCode = process.waitFor();
+                return exitCode == 0;
+            } finally {
+                process.destroy();
+            }
         } catch (Exception e) {
             return false;
         }
