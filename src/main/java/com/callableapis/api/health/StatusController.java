@@ -1,6 +1,7 @@
 package com.callableapis.api.health;
 
 import com.callableapis.api.config.AppConfig;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -23,6 +24,7 @@ public class StatusController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @SuppressFBWarnings(value = "DM_SYSTEM_GETPROPERTY", justification = "System.getProperty is safe for reading system properties")
     public Response getStatus() {
         Map<String, Object> status = new HashMap<>();
 
@@ -37,7 +39,7 @@ public class StatusController {
         RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
         runtime.put("java_version", System.getProperty("java.version"));
         runtime.put("java_vendor", System.getProperty("java.vendor"));
-        runtime.put("tomcat_version", "9.0");
+        runtime.put("tomcat_version", "10.1.18");
         runtime.put("uptime_ms", runtimeBean.getUptime());
         runtime.put("start_time", Instant.ofEpochMilli(runtimeBean.getStartTime()).toString());
         status.put("runtime", runtime);

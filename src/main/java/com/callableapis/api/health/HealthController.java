@@ -1,5 +1,6 @@
 package com.callableapis.api.health;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -18,6 +19,7 @@ public class HealthController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @SuppressFBWarnings(value = "DM_SYSTEM_GETPROPERTY", justification = "System.getProperty is safe for reading system properties")
     public Response getHealth() {
         Map<String, Object> health = new HashMap<>();
         health.put("status", "UP");
@@ -26,7 +28,7 @@ public class HealthController {
         health.put("timestamp", Instant.now().toString());
         health.put("container", "rl337/callableapis:services");
         health.put("java_version", System.getProperty("java.version"));
-        health.put("tomcat_version", "9.0");
+        health.put("tomcat_version", "10.1.18");
 
         return Response.ok(health).build();
     }
