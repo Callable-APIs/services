@@ -18,7 +18,7 @@ import java.util.Map;
  * Provides comprehensive status including base container features and Tomcat
  * info.
  */
-@Path("/api/v1/status")
+@Path("/v1/status")
 public class StatusController {
 
     @GET

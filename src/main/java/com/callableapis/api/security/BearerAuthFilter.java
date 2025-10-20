@@ -31,6 +31,10 @@ public class BearerAuthFilter implements ContainerRequestFilter {
         if (path.startsWith("time/")) {
             return;
         }
+        // Allow health and status endpoints to be public (no authentication required)
+        if (path.startsWith("v1/health") || path.startsWith("v1/status")) {
+            return;
+        }
         if (!isProtectedApi) {
             return;
         }

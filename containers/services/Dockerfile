@@ -55,14 +55,15 @@ RUN mkdir -p $CATALINA_HOME && \
     mkdir -p /opt/tomcat/work && \
     mkdir -p /opt/tomcat/temp
 
-# Download and install Tomcat 9
+# Download and install Tomcat 10 (supports Jakarta EE)
 RUN cd /tmp && \
-    wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.100/bin/apache-tomcat-9.0.100.tar.gz && \
-    tar -xzf apache-tomcat-9.0.100.tar.gz && \
-    cp -r apache-tomcat-9.0.100/* $CATALINA_HOME/ && \
-    rm -rf /tmp/apache-tomcat-9.0.100*
+    wget https://archive.apache.org/dist/tomcat/tomcat-10/v10.1.18/bin/apache-tomcat-10.1.18.tar.gz && \
+    tar -xzf apache-tomcat-10.1.18.tar.gz && \
+    cp -r apache-tomcat-10.1.18/* $CATALINA_HOME/ && \
+    rm -rf /tmp/apache-tomcat-10.1.18*
 
-# Copy the WAR file from builder stage to Tomcat webapps
+# Remove any existing ROOT directory and copy the WAR file from builder stage
+RUN rm -rf $CATALINA_BASE/webapps/ROOT
 COPY --from=builder /app/build/libs/ROOT.war $CATALINA_BASE/webapps/ROOT.war
 
 # Create secrets directories for Ansible Vault integration
