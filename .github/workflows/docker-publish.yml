@@ -10,8 +10,10 @@ on:
 env:
     # Use docker.io for Docker Hub
     REGISTRY: docker.io
-    # Use GitHub repository name for Docker Hub
-    IMAGE_NAME: ${{ github.repository }}
+    # Use specific image name for Docker Hub
+    IMAGE_NAME: rl337/callableapis
+    # Services image tag
+    SERVICES_TAG: services
 
 jobs:
     build-and-push:
@@ -55,17 +57,15 @@ jobs:
               with:
                   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
                   tags: |
-                      type=ref,event=branch
-                      type=ref,event=pr
-                      type=semver,pattern={{version}}
-                      type=semver,pattern={{major}}.{{minor}}
+                      type=raw,value=${{ env.SERVICES_TAG }}
+                      type=raw,value=${{ env.SERVICES_TAG }}-{{sha}}
                       type=raw,value=latest,enable={{is_default_branch}}
 
             - name: Build and push Docker image
               uses: docker/build-push-action@v5
               with:
                   context: .
-                  file: ./Dockerfile
+                  file: ./containers/services/Dockerfile
                   push: ${{ github.event_name != 'pull_request' }}
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
@@ -105,18 +105,26 @@ jobs:
                   body: |
                       ## Docker Image
 
-                      **Image**: `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CONTAINER_VERSION }}`
+                      **Image**: `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SERVICES_TAG }}`
 
                       **Tags**:
+                      - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SERVICES_TAG }}`
+                      - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SERVICES_TAG }}-{{sha}}`
                       - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest`
-                      - `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CONTAINER_VERSION }}`
 
                       ## Usage
 
                       ```bash
-                      docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CONTAINER_VERSION }}
-                      docker run -p 8080:8080 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CONTAINER_VERSION }}
+                      docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SERVICES_TAG }}
+                      docker run -p 8080:8080 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SERVICES_TAG }}
                       ```
+
+                      ## Features
+
+                      - Based on Alpine 3.19 with OpenJDK 21
+                      - Includes Tomcat 11 for web application hosting
+                      - Supports dual secrets management (Ansible Vault + AWS Parameter Store)
+                      - Health checks and proper logging
                   draft: false
                   prerelease: false
 

@@ -19,22 +19,19 @@ public class SecretsConfig {
     private String githubClientSecret;
     private String githubRedirectUri;
 
-    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", 
-                       justification = "Constructor intentionally throws exception for configuration validation")
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Constructor intentionally throws exception for configuration validation")
     public SecretsConfig() {
         this.vaultSecretsManager = new VaultSecretsManager();
         initializeSecrets();
     }
 
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", 
-                       justification = "VaultSecretsManager is intentionally shared for testing")
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "VaultSecretsManager is intentionally shared for testing")
     public SecretsConfig(VaultSecretsManager vaultSecretsManager) {
         this.vaultSecretsManager = vaultSecretsManager;
         // Don't initialize in constructor for testing
     }
-    
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", 
-                       justification = "VaultSecretsManager is intentionally shared for testing")
+
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "VaultSecretsManager is intentionally shared for testing")
     public SecretsConfig(VaultSecretsManager vaultSecretsManager, boolean initialize) {
         this.vaultSecretsManager = vaultSecretsManager;
         if (initialize) {
@@ -101,8 +98,7 @@ public class SecretsConfig {
     /**
      * Get the VaultSecretsManager instance for advanced operations.
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP", 
-                       justification = "VaultSecretsManager is intentionally exposed for advanced operations")
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "VaultSecretsManager is intentionally exposed for advanced operations")
     public VaultSecretsManager getVaultSecretsManager() {
         return vaultSecretsManager;
     }

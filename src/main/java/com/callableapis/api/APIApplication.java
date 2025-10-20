@@ -11,6 +11,8 @@ import com.callableapis.api.handlers.v2.RandomResourceV2;
 import com.callableapis.api.handlers.v2.InspirationResourceV2;
 import com.callableapis.api.handlers.UserResource;
 import com.callableapis.api.health.HealthResource;
+import com.callableapis.api.health.HealthController;
+import com.callableapis.api.health.StatusController;
 import com.callableapis.api.security.BearerAuthFilter;
 import com.callableapis.api.di.AppBinder;
 import com.callableapis.api.web.NotFoundRedirectMapper;
@@ -34,6 +36,8 @@ public class APIApplication extends ResourceConfig {
         register(AuthResource.class);
         register(UserResource.class);
         register(HealthResource.class);
+        register(HealthController.class);
+        register(StatusController.class);
         register(DebugResource.class);
         // Filters
         register(BearerAuthFilter.class);
