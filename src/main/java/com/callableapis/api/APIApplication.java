@@ -10,7 +10,6 @@ import com.callableapis.api.handlers.v2.PlanetaryResourceV2;
 import com.callableapis.api.handlers.v2.RandomResourceV2;
 import com.callableapis.api.handlers.v2.InspirationResourceV2;
 import com.callableapis.api.handlers.UserResource;
-import com.callableapis.api.health.HealthResource;
 import com.callableapis.api.health.HealthController;
 import com.callableapis.api.health.StatusController;
 import com.callableapis.api.security.BearerAuthFilter;
@@ -35,7 +34,6 @@ public class APIApplication extends ResourceConfig {
         register(InspirationResourceV2.class);
         register(AuthResource.class);
         register(UserResource.class);
-        register(HealthResource.class);
         register(HealthController.class);
         register(StatusController.class);
         register(DebugResource.class);

@@ -13,7 +13,7 @@ import java.util.Map;
  * Health check controller for the Callable APIs services container.
  * Implements the health endpoints as recommended by the infrastructure agent.
  */
-@Path("/v1/health")
+@Path("/health")
 public class HealthController {
 
     @GET

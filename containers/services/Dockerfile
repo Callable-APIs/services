@@ -84,9 +84,9 @@ EXPOSE 8080
 # Set working directory
 WORKDIR $CATALINA_BASE
 
-# Health check - use /api/v1/health as recommended by infra agent
+# Health check - use /api/health as recommended by infra agent
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:8080/api/v1/health || exit 1
+  CMD curl -f http://localhost:8080/api/health || exit 1
 
 # Start Tomcat
 CMD ["/opt/tomcat/bin/catalina.sh", "run"]

@@ -18,7 +18,7 @@ import java.util.Map;
  * Provides comprehensive status including base container features and Tomcat
  * info.
  */
-@Path("/v1/status")
+@Path("/status")
 public class StatusController {
 
     @GET
@@ -71,8 +71,8 @@ public class StatusController {
 
         // Service endpoints
         Map<String, Object> endpoints = new HashMap<>();
-        endpoints.put("health", "/api/v1/health");
-        endpoints.put("status", "/api/v1/status");
+        endpoints.put("health", "/api/health");
+        endpoints.put("status", "/api/status");
         endpoints.put("calendar_v1", "/api/v1/calendar");
         endpoints.put("calendar_v2", "/api/v2/calendar");
         endpoints.put("astronomy_v1", "/api/v1/astronomy");
