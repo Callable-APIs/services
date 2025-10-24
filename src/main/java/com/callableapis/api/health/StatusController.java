@@ -94,7 +94,7 @@ public class StatusController {
             } finally {
                 process.destroy();
             }
-        } catch (Exception e) {
+        } catch (java.io.IOException | InterruptedException e) {
             return false;
         }
     }
