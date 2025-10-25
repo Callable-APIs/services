@@ -54,17 +54,24 @@ public class VaultSecretsManager {
         this.secretsCache = new HashMap<>();
         this.ansibleVaultAvailable = isAnsibleVaultAvailable();
 
-        logger.info("VaultSecretsManager initialized. Ansible Vault available: {}", ansibleVaultAvailable);
+        logger.info("VaultSecretsManager initialized. Ansible Vault available: {}, AWS Parameter Store available: {}", 
+                   ansibleVaultAvailable, ssmClient != null);
     }
 
     /**
      * Create SSM client. This method can be overridden for testing.
      */
     protected SsmClient createSSMClient() {
-        return SsmClient.builder()
-                .region(Region.US_EAST_1)
-                .credentialsProvider(DefaultCredentialsProvider.create())
-                .build();
+        try {
+            return SsmClient.builder()
+                    .region(Region.US_EAST_1)
+                    .credentialsProvider(DefaultCredentialsProvider.create())
+                    .build();
+        } catch (Exception e) {
+            logger.warn("Failed to create SSM client (AWS credentials not available): {}", e.getMessage());
+            logger.warn("Application will use Ansible Vault and environment variables only");
+            return null;
+        }
     }
 
     /**
@@ -185,6 +192,12 @@ public class VaultSecretsManager {
      * Get secret from AWS Parameter Store.
      */
     private String getSecretFromAWSParameterStore(String key) {
+        // Check if SSM client is available
+        if (ssmClient == null) {
+            logger.debug("SSM client not available - AWS Parameter Store disabled for key: {}", key);
+            return null;
+        }
+        
         try {
             // Convert environment variable name to AWS parameter name
             String parameterName = convertKeyToAWSParameterName(key);
