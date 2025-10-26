@@ -121,6 +121,7 @@ public class AuthenticationStatsServiceTest {
     @DisplayName("Should return all statistics as map")
     void testGetAllStats() {
         authStatsService.recordSuccessfulAuth("github");
+        authStatsService.recordSuccessfulAuth("github");
         authStatsService.recordFailedAuth("github");
 
         Map<String, Map<String, Long>> allStats = authStatsService.getAllStats();
