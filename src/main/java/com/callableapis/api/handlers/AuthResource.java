@@ -2,6 +2,7 @@ package com.callableapis.api.handlers;
 
 import com.callableapis.api.config.AppConfig;
 import com.callableapis.api.security.ApiKeyStore;
+import com.callableapis.api.security.AuthenticationStatsService;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.annotation.JsonbProperty;
@@ -26,6 +27,9 @@ public class AuthResource {
 	private static final Logger logger = Logger.getLogger(AuthResource.class.getName());
 	@Inject
 	private ApiKeyStore apiKeyStore;
+
+	@Inject
+	private AuthenticationStatsService authStatsService;
 
 	@GET
 	@Path("/login")
@@ -77,18 +81,21 @@ public class AuthResource {
 
 		if (code == null || code.isBlank()) {
 			logger.warning("Missing code parameter");
+			authStatsService.recordFailedAuth("github");
 			return Response.status(Response.Status.BAD_REQUEST).entity("Missing code").build();
 		}
 
 		String token = exchangeCodeForToken(code);
 		if (token == null || token.isBlank()) {
 			logger.warning("Token exchange failed");
+			authStatsService.recordFailedAuth("github");
 			return Response.status(Response.Status.BAD_GATEWAY).entity("Token exchange failed").build();
 		}
 
 		String login = fetchGithubLogin(token);
 		if (login == null || login.isBlank()) {
 			logger.warning("Failed to fetch user login");
+			authStatsService.recordFailedAuth("github");
 			return Response.status(Response.Status.BAD_GATEWAY).entity("Failed to fetch user").build();
 		}
 
@@ -98,6 +105,9 @@ public class AuthResource {
 		logger.info("Authentication successful for identity: " + identity);
 		logger.info("Generated/retrieved API key: "
 				+ (apiKey != null ? "***" + apiKey.substring(Math.max(0, apiKey.length() - 4)) : "null"));
+
+		// Record successful authentication
+		authStatsService.recordSuccessfulAuth("github");
 
 		// Redirect to authenticated page instead of returning JSON
 		String redirectUrl = "/api/authenticated?identity=" +
