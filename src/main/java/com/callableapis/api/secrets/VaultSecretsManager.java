@@ -16,9 +16,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.HashSet;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -54,8 +58,8 @@ public class VaultSecretsManager {
         this.secretsCache = new HashMap<>();
         this.ansibleVaultAvailable = isAnsibleVaultAvailable();
 
-        logger.info("VaultSecretsManager initialized. Ansible Vault available: {}, AWS Parameter Store available: {}", 
-                   ansibleVaultAvailable, ssmClient != null);
+        logger.info("VaultSecretsManager initialized. Ansible Vault available: {}, AWS Parameter Store available: {}",
+                ansibleVaultAvailable, ssmClient != null);
     }
 
     /**
@@ -197,7 +201,7 @@ public class VaultSecretsManager {
             logger.debug("SSM client not available - AWS Parameter Store disabled for key: {}", key);
             return null;
         }
-        
+
         try {
             // Convert environment variable name to AWS parameter name
             String parameterName = convertKeyToAWSParameterName(key);
@@ -208,6 +212,10 @@ public class VaultSecretsManager {
                     .build();
 
             GetParameterResponse response = ssmClient.getParameter(request);
+            if (response == null || response.parameter() == null) {
+                logger.debug("Null response or parameter from AWS Parameter Store for key: {}", key);
+                return null;
+            }
             return response.parameter().value();
 
         } catch (ParameterNotFoundException e) {
@@ -255,6 +263,70 @@ public class VaultSecretsManager {
     }
 
     /**
+     * Calculate SHA1 hash of a file.
+     */
+    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Hardcoded paths are required for Ansible Vault integration")
+    private String calculateFileSHA1(String filePath) {
+        try {
+            Path path = Paths.get(filePath);
+            if (!Files.exists(path)) {
+                return "file_not_found";
+            }
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            byte[] fileBytes = Files.readAllBytes(path);
+            byte[] hashBytes = digest.digest(fileBytes);
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException | IOException e) {
+            logger.warn("Failed to calculate SHA1 for file {}: {}", filePath, e.getMessage());
+            return "error_calculating_hash";
+        }
+    }
+
+    /**
+     * Get all discovered secret keys from the vault secrets file.
+     */
+    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Hardcoded path is required for Ansible Vault integration")
+    private Set<String> getDiscoveredSecretKeys() {
+        Set<String> discoveredKeys = new HashSet<>();
+
+        if (!ansibleVaultAvailable) {
+            return discoveredKeys;
+        }
+
+        try {
+            Path secretsPath = Paths.get(VAULT_SECRETS_PATH);
+            if (!Files.exists(secretsPath)) {
+                return discoveredKeys;
+            }
+
+            Properties secrets = new Properties();
+            try (FileInputStream fis = new FileInputStream(secretsPath.toFile())) {
+                secrets.load(fis);
+            }
+
+            // Get all property keys
+            for (String key : secrets.stringPropertyNames()) {
+                discoveredKeys.add(key);
+            }
+
+        } catch (IOException e) {
+            logger.warn("Failed to read secrets file for key discovery: {}", e.getMessage());
+        }
+
+        return discoveredKeys;
+    }
+
+    /**
      * Get a summary of the secrets management status.
      */
     public String getStatusSummary() {
@@ -267,6 +339,19 @@ public class VaultSecretsManager {
         if (ansibleVaultAvailable) {
             summary.append("  Primary Source: Ansible Vault\n");
             summary.append("  Fallback Source: AWS Parameter Store\n");
+
+            // Add file hashes
+            String vaultPasswordHash = calculateFileSHA1(VAULT_PASSWORD_PATH);
+            String vaultSecretsHash = calculateFileSHA1(VAULT_SECRETS_PATH);
+            summary.append("  Vault Password File SHA1: ").append(vaultPasswordHash).append("\n");
+            summary.append("  Vault Secrets File SHA1: ").append(vaultSecretsHash).append("\n");
+
+            // Add discovered secret keys
+            Set<String> discoveredKeys = getDiscoveredSecretKeys();
+            summary.append("  Discovered Secret Keys: ").append(discoveredKeys.size()).append("\n");
+            if (!discoveredKeys.isEmpty()) {
+                summary.append("  Secret Keys: ").append(String.join(", ", discoveredKeys)).append("\n");
+            }
         } else {
             summary.append("  Primary Source: AWS Parameter Store\n");
             summary.append("  Fallback Source: None\n");
