@@ -21,7 +21,19 @@ ensions
 
     <servlet-mapping>
         <servlet-name>JerseyServlet</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Health servlet for root-level endpoint -->
+    <servlet>
+        <servlet-name>HealthServlet</servlet-name>
+        <servlet-class>com.callableapis.api.health.HealthStatusServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HealthServlet</servlet-name>
+        <url-pattern>/health</url-pattern>
     </servlet-mapping>
 
 </web-app>
