@@ -1,6 +1,7 @@
 package com.callableapis.api.health;
 
 import com.callableapis.api.config.AppConfig;
+import com.callableapis.api.config.VersionService;
 import com.callableapis.api.security.AuthenticationStatsService;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.ws.rs.GET;
@@ -8,7 +9,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.inject.Inject;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.RuntimeMXBean;
@@ -24,8 +24,16 @@ import java.util.Map;
 @Path("/status")
 public class StatusController {
 
-    @Inject
     private AuthenticationStatsService authStatsService;
+
+    // Constructor-based initialization to handle optional dependency
+    public StatusController() {
+        try {
+            this.authStatsService = new AuthenticationStatsService();
+        } catch (Exception e) {
+            this.authStatsService = null;
+        }
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,7 +43,8 @@ public class StatusController {
 
         // Basic service info
         status.put("service", "Callable APIs Services");
-        status.put("version", "1.0.0");
+        String gitCommit = VersionService.getInstance().getShortCommitHash();
+        status.put("version", "1.0.0-" + gitCommit);
         status.put("timestamp", Instant.now().toString());
         status.put("container", "rl337/callableapis:services");
 
@@ -72,31 +81,37 @@ public class StatusController {
         // Authentication statistics
         Map<String, Object> authStats = new HashMap<>();
         try {
-            Map<String, Map<String, Long>> allAuthStats = authStatsService.getAllStats();
-            authStats.put("status", "available");
-            authStats.put("providers", allAuthStats);
-            
-            // Add summary for each provider
-            Map<String, Object> summary = new HashMap<>();
-            for (Map.Entry<String, Map<String, Long>> entry : allAuthStats.entrySet()) {
-                String provider = entry.getKey();
-                Map<String, Long> stats = entry.getValue();
-                long successful = stats.getOrDefault("successful", 0L);
-                long failed = stats.getOrDefault("failed", 0L);
-                long total = successful + failed;
-                
-                Map<String, Object> providerSummary = new HashMap<>();
-                providerSummary.put("total_attempts", total);
-                providerSummary.put("successful", successful);
-                providerSummary.put("failed", failed);
-                if (total > 0) {
-                    providerSummary.put("success_rate_percent", Math.round((double) successful / total * 100 * 10) / 10.0);
-                } else {
-                    providerSummary.put("success_rate_percent", 0.0);
+            if (authStatsService != null) {
+                Map<String, Map<String, Long>> allAuthStats = authStatsService.getAllStats();
+                authStats.put("status", "available");
+                authStats.put("providers", allAuthStats);
+
+                // Add summary for each provider
+                Map<String, Object> summary = new HashMap<>();
+                for (Map.Entry<String, Map<String, Long>> entry : allAuthStats.entrySet()) {
+                    String provider = entry.getKey();
+                    Map<String, Long> stats = entry.getValue();
+                    long successful = stats.getOrDefault("successful", 0L);
+                    long failed = stats.getOrDefault("failed", 0L);
+                    long total = successful + failed;
+
+                    Map<String, Object> providerSummary = new HashMap<>();
+                    providerSummary.put("total_attempts", total);
+                    providerSummary.put("successful", successful);
+                    providerSummary.put("failed", failed);
+                    if (total > 0) {
+                        providerSummary.put("success_rate_percent",
+                                Math.round((double) successful / total * 100 * 10) / 10.0);
+                    } else {
+                        providerSummary.put("success_rate_percent", 0.0);
+                    }
+                    summary.put(provider, providerSummary);
                 }
-                summary.put(provider, providerSummary);
+                authStats.put("summary", summary);
+            } else {
+                authStats.put("status", "not_available");
+                authStats.put("message", "Authentication statistics service not available");
             }
-            authStats.put("summary", summary);
         } catch (Exception e) {
             authStats.put("status", "error");
             authStats.put("error", e.getMessage());

@@ -1,6 +1,7 @@
 package com.callableapis.api.health;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import com.callableapis.api.config.VersionService;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -24,7 +25,8 @@ public class HealthController {
         Map<String, Object> health = new HashMap<>();
         health.put("status", "UP");
         health.put("service", "Callable APIs Services");
-        health.put("version", "1.0.0");
+        String gitCommit = VersionService.getInstance().getShortCommitHash();
+        health.put("version", "1.0.0-" + gitCommit);
         health.put("timestamp", Instant.now().toString());
         health.put("container", "rl337/callableapis:services");
         health.put("java_version", System.getProperty("java.version"));
