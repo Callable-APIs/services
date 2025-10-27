@@ -20,6 +20,7 @@ import java.util.Map;
  * Status endpoint at /status (without /api prefix).
  * Provides detailed service status information.
  */
+@Path("/")
 public class StatusResource {
 
     @Inject

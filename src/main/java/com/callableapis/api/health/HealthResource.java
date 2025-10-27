@@ -14,6 +14,7 @@ import java.util.Map;
  * Simple health check endpoint at /health (without /api prefix).
  * This is a light-weight endpoint for load balancer health checks.
  */
+@Path("/")
 public class HealthResource {
 
     @GET
