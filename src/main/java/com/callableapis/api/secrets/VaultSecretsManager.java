@@ -312,6 +312,7 @@ public class VaultSecretsManager {
     /**
      * Get a summary of the secrets management status.
      */
+    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Hardcoded paths are required for Ansible Vault integration")
     public String getStatusSummary() {
         StringBuilder summary = new StringBuilder();
         summary.append("VaultSecretsManager Status:\n");
