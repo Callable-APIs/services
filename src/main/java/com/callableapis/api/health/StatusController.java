@@ -41,22 +41,25 @@ public class StatusController {
     public Response getStatus() {
         Map<String, Object> status = new HashMap<>();
 
-        // Basic service info
+        // Java/Tomcat info
+        Map<String, Object> runtime = new HashMap<>();
+        RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
+        long uptimeMs = runtimeBean.getUptime();
+        runtime.put("java_version", System.getProperty("java.version"));
+        runtime.put("java_vendor", System.getProperty("java.vendor"));
+        runtime.put("tomcat_version", "10.1.18");
+        runtime.put("uptime_ms", uptimeMs);
+        runtime.put("start_time", Instant.ofEpochMilli(runtimeBean.getStartTime()).toString());
+        status.put("runtime", runtime);
+
+        // Basic service info with REQUIRED top-level fields
+        status.put("status", "running");  // REQUIRED: Top-level status field
+        status.put("uptime", formatUptime(uptimeMs));  // REQUIRED: Top-level uptime field  
         status.put("service", "Callable APIs Services");
         String gitCommit = VersionService.getInstance().getShortCommitHash();
         status.put("version", "1.0.0-" + gitCommit);
         status.put("timestamp", Instant.now().toString());
         status.put("container", "rl337/callableapis:services");
-
-        // Java/Tomcat info
-        Map<String, Object> runtime = new HashMap<>();
-        RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
-        runtime.put("java_version", System.getProperty("java.version"));
-        runtime.put("java_vendor", System.getProperty("java.vendor"));
-        runtime.put("tomcat_version", "10.1.18");
-        runtime.put("uptime_ms", runtimeBean.getUptime());
-        runtime.put("start_time", Instant.ofEpochMilli(runtimeBean.getStartTime()).toString());
-        status.put("runtime", runtime);
 
         // Memory info
         Map<String, Object> memory = new HashMap<>();
@@ -150,6 +153,24 @@ public class StatusController {
             }
         } catch (java.io.IOException | InterruptedException e) {
             return false;
+        }
+    }
+
+    /**
+     * Convert uptime in milliseconds to human-readable format.
+     * Format: "1 day, 12:22:53" or "12:22:53" if less than 24 hours
+     */
+    private String formatUptime(long uptimeMs) {
+        long seconds = uptimeMs / 1000;
+        long days = seconds / 86400;
+        long hours = (seconds % 86400) / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long secs = seconds % 60;
+
+        if (days > 0) {
+            return String.format("%d day, %d:%02d:%02d", days, hours, minutes, secs);
+        } else {
+            return String.format("%d:%02d:%02d", hours, minutes, secs);
         }
     }
 }
