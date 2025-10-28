@@ -209,8 +209,14 @@ gitProperties {
     dateFormatTimeZone = "UTC"
     keys = ['git.commit.id.abbrev', 'git.build.time', 'git.branch', 'git.commit.id.full']
     failOnNoGitDirectory = false
-    customProperty 'git.commit.id.abbrev', 'unknown'
-    customProperty 'git.build.time', new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    customProperty 'git.branch', 'unknown'
-    customProperty 'git.commit.id.full', 'unknown'
+    
+    // Use environment variables if available, otherwise fallback to defaults
+    def gitCommitId = System.getenv('GIT_COMMIT_ID') ?: 'unknown'
+    def gitBranch = System.getenv('GIT_BRANCH') ?: 'unknown'
+    def buildTime = System.getenv('BUILD_TIME') ?: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+    
+    customProperty 'git.commit.id.abbrev', gitCommitId.length() > 7 ? gitCommitId.substring(0, 7) : gitCommitId
+    customProperty 'git.build.time', buildTime
+    customProperty 'git.branch', gitBranch
+    customProperty 'git.commit.id.full', gitCommitId
 }

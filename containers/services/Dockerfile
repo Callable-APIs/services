@@ -7,6 +7,11 @@ FROM gradle:8.5-jdk21 AS builder
 # Set working directory
 WORKDIR /app
 
+# Build arguments for git information
+ARG GIT_COMMIT_ID
+ARG GIT_BRANCH
+ARG BUILD_TIME
+
 # Copy Gradle files
 COPY build.gradle settings.gradle gradlew ./
 COPY gradle/ gradle/
@@ -16,6 +21,11 @@ RUN gradle dependencies --no-daemon
 
 # Copy source code
 COPY src/ src/
+
+# Set git properties as system properties for gradle
+ENV GIT_COMMIT_ID=${GIT_COMMIT_ID}
+ENV GIT_BRANCH=${GIT_BRANCH}
+ENV BUILD_TIME=${BUILD_TIME}
 
 # Build the WAR file
 RUN gradle war --no-daemon
