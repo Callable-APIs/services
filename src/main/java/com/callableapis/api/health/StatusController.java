@@ -53,7 +53,7 @@ public class StatusController {
         status.put("runtime", runtime);
 
         // Basic service info with REQUIRED top-level fields
-        status.put("status", "running");  // REQUIRED: Top-level status field
+        status.put("status", "healthy");  // REQUIRED: Top-level status field (infra agent expects "healthy")
         status.put("uptime", formatUptime(uptimeMs));  // REQUIRED: Top-level uptime field  
         status.put("service", "Callable APIs Services");
         String gitCommit = VersionService.getInstance().getShortCommitHash();
