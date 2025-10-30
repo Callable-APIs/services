@@ -38,6 +38,14 @@ LABEL maintainer="rlee@tokyo3.com"
 LABEL description="Callable APIs REST Service with Tomcat"
 LABEL version="1.0"
 
+# Propagate build-time git info to runtime for VersionService fallback
+ARG GIT_COMMIT_ID
+ARG GIT_BRANCH
+ARG BUILD_TIME
+ENV GIT_COMMIT_ID=${GIT_COMMIT_ID} \
+    GIT_BRANCH=${GIT_BRANCH} \
+    BUILD_TIME=${BUILD_TIME}
+
 # Switch to root for installation
 USER root
 

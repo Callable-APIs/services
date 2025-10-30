@@ -220,3 +220,31 @@ gitProperties {
     customProperty 'git.branch', gitBranch
     customProperty 'git.commit.id.full', gitCommitId
 }
+
+// Ensure git.properties is generated before resources are processed
+tasks.named('processResources') {
+    dependsOn tasks.named('generateGitProperties')
+}
+
+// Fallback: explicitly generate git.properties from environment if plugin didn't
+tasks.register('generateVersionProperties') {
+    doLast {
+        def outDir = file("$buildDir/resources/main")
+        outDir.mkdirs()
+        def gitCommitId = System.getenv('GIT_COMMIT_ID') ?: 'unknown'
+        def gitBranch = System.getenv('GIT_BRANCH') ?: 'unknown'
+        def buildTime = System.getenv('BUILD_TIME') ?: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        def abbrev = gitCommitId.length() > 7 ? gitCommitId.substring(0, 7) : gitCommitId
+        def props = new Properties()
+        props.setProperty('git.commit.id.abbrev', abbrev)
+        props.setProperty('git.commit.id.full', gitCommitId)
+        props.setProperty('git.branch', gitBranch)
+        props.setProperty('git.build.time', buildTime)
+        def outFile = new File(outDir, 'git.properties')
+        outFile.withOutputStream { os -> props.store(os, null) }
+    }
+}
+
+tasks.named('processResources') {
+    dependsOn tasks.named('generateVersionProperties')
+}
