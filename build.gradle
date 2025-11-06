@@ -266,6 +266,11 @@ tasks.register('generateVersionProperties') {
     }
 }
 
+// Configure git-properties plugin to not fail when git is not available
+tasks.named('generateGitProperties') {
+    onlyIf { false } // Disable git-properties task since we use generateVersionProperties
+}
+
 // Ensure version.properties is generated before resources are processed
 tasks.named('processResources') {
     dependsOn tasks.named('generateVersionProperties')
