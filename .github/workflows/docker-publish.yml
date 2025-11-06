@@ -42,6 +42,9 @@ jobs:
 
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
+              with:
+                  # Build for both AMD64 (Intel/AMD) and ARM64 (Apple Silicon, AWS Graviton, etc.)
+                  platforms: linux/amd64,linux/arm64
 
             - name: Log in to Docker Hub
               if: github.event_name != 'pull_request'
@@ -61,14 +64,21 @@ jobs:
                       type=raw,value=${{ env.SERVICES_TAG }}-{{sha}}
                       type=raw,value=latest,enable={{is_default_branch}}
 
-            - name: Build and push Docker image
+            - name: Build and push Docker image (multi-arch)
               uses: docker/build-push-action@v5
               with:
                   context: .
                   file: ./containers/services/Dockerfile
+                  # Build for both AMD64 and ARM64 architectures
+                  # Docker will automatically create a manifest that supports both
+                  platforms: linux/amd64,linux/arm64
                   push: ${{ github.event_name != 'pull_request' }}
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
+                  build-args: |
+                      GIT_COMMIT_ID=${{ github.sha }}
+                      GIT_BRANCH=${{ github.ref_name }}
+                      BUILD_TIME=${{ github.event.head_commit.timestamp || github.event.repository.pushed_at || '' }}
                   # Disable caching temporarily to avoid cache conflicts
                   # cache-from: type=gha
                   # cache-to: type=gha,mode=max

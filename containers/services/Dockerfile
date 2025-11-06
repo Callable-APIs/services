@@ -1,5 +1,6 @@
 # Multi-stage build for Callable APIs Services
 # Based on rl337/callableapis:base (Alpine 3.19)
+# This Dockerfile is architecture-agnostic and supports both AMD64 and ARM64
 
 # Build stage
 FROM gradle:8.5-jdk21 AS builder
