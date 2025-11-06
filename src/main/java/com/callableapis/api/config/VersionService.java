@@ -63,6 +63,9 @@ public final class VersionService {
     }
     
     public String getShortCommitHash() {
+        if (gitCommitHash == null || gitCommitHash.isEmpty() || gitCommitHash.equals("unknown")) {
+            return "";
+        }
         return gitCommitHash.length() > 7 ? gitCommitHash.substring(0, 7) : gitCommitHash;
     }
 }
