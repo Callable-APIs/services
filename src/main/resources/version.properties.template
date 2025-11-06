@@ -1,0 +1,6 @@
+# Version information - placeholders will be replaced during build
+version.commit=@VERSION@
+version.build.time=@BUILD_TIME@
+version.branch=@BRANCH@
+version.full=@FULL_VERSION@
+

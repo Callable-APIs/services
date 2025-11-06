@@ -114,6 +114,8 @@ war {
     from("$buildDir/jsp") {
         into 'WEB-INF/classes'
     }
+    // Exclude template file from WAR - only include the generated version.properties
+    exclude '**/version.properties.template'
     dependsOn precompileJsp
 }
 
@@ -202,49 +204,71 @@ tomcatRun {
     daemon = true
 }
 
-// Git properties configuration
-gitProperties {
-    gitPropertiesDir = file("$buildDir/resources/main")
-    dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-    dateFormatTimeZone = "UTC"
-    keys = ['git.commit.id.abbrev', 'git.build.time', 'git.branch', 'git.commit.id.full']
-    failOnNoGitDirectory = false
-    
-    // Use environment variables if available, otherwise fallback to defaults
-    def gitCommitId = System.getenv('GIT_COMMIT_ID') ?: 'unknown'
-    def gitBranch = System.getenv('GIT_BRANCH') ?: 'unknown'
-    def buildTime = System.getenv('BUILD_TIME') ?: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-    
-    customProperty 'git.commit.id.abbrev', gitCommitId.length() > 7 ? gitCommitId.substring(0, 7) : gitCommitId
-    customProperty 'git.build.time', buildTime
-    customProperty 'git.branch', gitBranch
-    customProperty 'git.commit.id.full', gitCommitId
-}
-
-// Ensure git.properties is generated before resources are processed
-tasks.named('processResources') {
-    dependsOn tasks.named('generateGitProperties')
-}
-
-// Fallback: explicitly generate git.properties from environment if plugin didn't
+// Version properties generation from template
 tasks.register('generateVersionProperties') {
     doLast {
         def outDir = file("$buildDir/resources/main")
         outDir.mkdirs()
-        def gitCommitId = System.getenv('GIT_COMMIT_ID') ?: 'unknown'
-        def gitBranch = System.getenv('GIT_BRANCH') ?: 'unknown'
+        
+        // Get git commit hash - try multiple methods
+        def gitCommitId = 'unknown'
+        try {
+            // Try to get from git command first
+            def gitProc = "git rev-parse HEAD".execute()
+            gitProc.waitFor()
+            if (gitProc.exitValue() == 0) {
+                gitCommitId = gitProc.text.trim()
+            }
+        } catch (Exception e) {
+            // Fall back to environment variable
+            gitCommitId = System.getenv('GIT_COMMIT_ID') ?: System.getenv('GITHUB_SHA') ?: 'unknown'
+        }
+        
+        // Get branch name
+        def gitBranch = 'unknown'
+        try {
+            def branchProc = "git rev-parse --abbrev-ref HEAD".execute()
+            branchProc.waitFor()
+            if (branchProc.exitValue() == 0) {
+                gitBranch = branchProc.text.trim()
+            }
+        } catch (Exception e) {
+            gitBranch = System.getenv('GIT_BRANCH') ?: System.getenv('GITHUB_REF_NAME') ?: 'unknown'
+        }
+        
+        // Get build time
         def buildTime = System.getenv('BUILD_TIME') ?: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        
+        // Calculate short commit hash
         def abbrev = gitCommitId.length() > 7 ? gitCommitId.substring(0, 7) : gitCommitId
-        def props = new Properties()
-        props.setProperty('git.commit.id.abbrev', abbrev)
-        props.setProperty('git.commit.id.full', gitCommitId)
-        props.setProperty('git.branch', gitBranch)
-        props.setProperty('git.build.time', buildTime)
-        def outFile = new File(outDir, 'git.properties')
-        outFile.withOutputStream { os -> props.store(os, null) }
+        def fullVersion = "1.0.0-${abbrev}"
+        
+        // Read template file
+        def templateFile = file('src/main/resources/version.properties.template')
+        if (!templateFile.exists()) {
+            throw new GradleException("Template file not found: ${templateFile}")
+        }
+        
+        def templateContent = templateFile.text
+        
+        // Replace placeholders
+        def versionContent = templateContent
+            .replace('@VERSION@', abbrev)
+            .replace('@BUILD_TIME@', buildTime)
+            .replace('@BRANCH@', gitBranch)
+            .replace('@FULL_VERSION@', fullVersion)
+        
+        // Write version.properties to build output
+        def outFile = new File(outDir, 'version.properties')
+        outFile.text = versionContent
+        
+        logger.info("Generated version.properties: commit=${abbrev}, branch=${gitBranch}, time=${buildTime}")
     }
 }
 
+// Ensure version.properties is generated before resources are processed
 tasks.named('processResources') {
     dependsOn tasks.named('generateVersionProperties')
+    // Exclude template file from being copied to build output
+    exclude '**/version.properties.template'
 }
