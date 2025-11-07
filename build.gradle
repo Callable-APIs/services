@@ -210,7 +210,7 @@ tasks.register('generateVersionProperties') {
         def outDir = file("$buildDir/resources/main")
         outDir.mkdirs()
         
-        // Get git commit hash - try multiple methods
+        // Get git commit hash (full) - try multiple methods
         def gitCommitId = 'unknown'
         try {
             // Try to get from git command first
@@ -222,6 +222,29 @@ tasks.register('generateVersionProperties') {
         } catch (Exception e) {
             // Fall back to environment variable
             gitCommitId = System.getenv('GIT_COMMIT_ID') ?: System.getenv('GITHUB_SHA') ?: 'unknown'
+        }
+        
+        // Get repo name (format: owner/repo)
+        def repoName = 'Callable-APIs/services'
+        try {
+            // Try to get from git remote
+            def remoteProc = "git remote get-url origin".execute()
+            remoteProc.waitFor()
+            if (remoteProc.exitValue() == 0) {
+                def remoteUrl = remoteProc.text.trim()
+                // Extract owner/repo from git URL (handles both https and ssh formats)
+                // Pattern matches: :owner/repo or /owner/repo (with optional .git suffix)
+                def pattern = java.util.regex.Pattern.compile('[:/]([^/]+)/([^/]+?)(?:\\.git)?$')
+                def matcher = pattern.matcher(remoteUrl)
+                if (matcher.find()) {
+                    def owner = matcher.group(1)
+                    def repo = matcher.group(2)
+                    repoName = "${owner}/${repo}"
+                }
+            }
+        } catch (Exception e) {
+            // Fall back to environment variable or default
+            repoName = System.getenv('GITHUB_REPOSITORY') ?: System.getenv('REPO_NAME') ?: 'Callable-APIs/services'
         }
         
         // Get branch name
@@ -239,9 +262,8 @@ tasks.register('generateVersionProperties') {
         // Get build time
         def buildTime = System.getenv('BUILD_TIME') ?: new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         
-        // Calculate short commit hash
+        // Calculate short commit hash (for backward compatibility)
         def abbrev = gitCommitId.length() > 7 ? gitCommitId.substring(0, 7) : gitCommitId
-        def fullVersion = "1.0.0-${abbrev}"
         
         // Read template file
         def templateFile = file('src/main/resources/version.properties.template')
@@ -254,15 +276,16 @@ tasks.register('generateVersionProperties') {
         // Replace placeholders
         def versionContent = templateContent
             .replace('@VERSION@', abbrev)
+            .replace('@FULL_COMMIT@', gitCommitId)
+            .replace('@REPO@', repoName)
             .replace('@BUILD_TIME@', buildTime)
             .replace('@BRANCH@', gitBranch)
-            .replace('@FULL_VERSION@', fullVersion)
         
         // Write version.properties to build output
         def outFile = new File(outDir, 'version.properties')
         outFile.text = versionContent
         
-        logger.info("Generated version.properties: commit=${abbrev}, branch=${gitBranch}, time=${buildTime}")
+        logger.info("Generated version.properties: repo=${repoName}, commit=${gitCommitId}, branch=${gitBranch}, time=${buildTime}")
     }
 }
 

@@ -56,20 +56,8 @@ public class StatusController {
         status.put("status", "healthy");  // REQUIRED: Top-level status field (infra agent expects "healthy")
         status.put("uptime", formatUptime(uptimeMs));  // REQUIRED: Top-level uptime field  
         status.put("service", "Callable APIs Services");
-        String gitCommit = VersionService.getInstance().getShortCommitHash();
-        // Format version: use git commit if available, otherwise use build time or "dev"
-        String version;
-        if (gitCommit != null && !gitCommit.isEmpty() && !gitCommit.equals("unknown")) {
-            version = "1.0.0-" + gitCommit;
-        } else {
-            // Fallback to build time or "dev" if git info is not available
-            String buildTime = VersionService.getInstance().getBuildTime();
-            if (buildTime != null && !buildTime.equals("unknown")) {
-                version = "1.0.0-dev-" + buildTime.substring(0, Math.min(10, buildTime.length()));
-            } else {
-                version = "1.0.0-dev";
-            }
-        }
+        // Format version as: repo/full-commit-hash (e.g., Callable-APIs/services/99f046cbd4fa2741d293310a6b1b7310e96f1ba3)
+        String version = VersionService.getInstance().getFullVersionString();
         status.put("version", version);
         status.put("timestamp", Instant.now().toString());
         status.put("container", "rl337/callableapis:services");
