@@ -7,4 +7,36 @@
         <Method name="generateLuckyNumbers"/>
         <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/>
     </Match>
+    <!-- Exclude DMI_RANDOM_USED_ONLY_ONCE for AffirmationService methods -->
+    <!-- This is acceptable for our use case where we need deterministic seeded random numbers -->
+    <Match>
+        <Class name="com.callableapis.api.time.AffirmationService"/>
+        <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/>
+    </Match>
+    <!-- Exclude EI_EXPOSE_REP and EI_EXPOSE_REP2 for AffirmationResourceV2 request/response classes -->
+    <!-- These are DTOs that intentionally expose their fields for JSON serialization -->
+    <Match>
+        <Class name="com.callableapis.api.handlers.v2.AffirmationResourceV2$AffirmationRequest"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.handlers.v2.AffirmationResourceV2$AffirmationRequest"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.handlers.v2.AffirmationResourceV2$AffirmationResponse"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.handlers.v2.AffirmationResourceV2$AffirmationResponse"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.time.AffirmationService$AffirmationResult"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.time.AffirmationService$AffirmationResult"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
 </FindBugsFilter>

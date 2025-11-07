@@ -9,6 +9,7 @@ import com.callableapis.api.handlers.v2.CalendarResourceV2;
 import com.callableapis.api.handlers.v2.PlanetaryResourceV2;
 import com.callableapis.api.handlers.v2.RandomResourceV2;
 import com.callableapis.api.handlers.v2.InspirationResourceV2;
+import com.callableapis.api.handlers.v2.AffirmationResourceV2;
 import com.callableapis.api.handlers.UserResource;
 import com.callableapis.api.health.HealthController;
 import com.callableapis.api.health.StatusController;
@@ -32,6 +33,7 @@ public class APIApplication extends ResourceConfig {
         register(PlanetaryResourceV2.class);
         register(RandomResourceV2.class);
         register(InspirationResourceV2.class);
+        register(AffirmationResourceV2.class);
         register(AuthResource.class);
         register(UserResource.class);
         register(HealthController.class);
