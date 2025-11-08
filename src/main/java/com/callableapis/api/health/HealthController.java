@@ -22,15 +22,12 @@ public class HealthController {
     @Produces(MediaType.APPLICATION_JSON)
     @SuppressFBWarnings(value = "DM_SYSTEM_GETPROPERTY", justification = "System.getProperty is safe for reading system properties")
     public Response getHealth() {
-        Map<String, Object> health = new HashMap<>();
-        health.put("status", "UP");
-        health.put("service", "Callable APIs Services");
-        String gitCommit = VersionService.getInstance().getShortCommitHash();
-        health.put("version", "1.0.0-" + gitCommit);
+        // Compliance: /api/health should return "ok" status (different from /health which returns "healthy")
+        // Return only status, timestamp, and version
+        Map<String, String> health = new HashMap<>();
+        health.put("status", "ok");
         health.put("timestamp", Instant.now().toString());
-        health.put("container", "rl337/callableapis:services");
-        health.put("java_version", System.getProperty("java.version"));
-        health.put("tomcat_version", "10.1.18");
+        health.put("version", VersionService.getInstance().getFullVersionString());
 
         return Response.ok(health).build();
     }

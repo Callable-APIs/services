@@ -26,14 +26,11 @@ public class HealthStatusServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        Map<String, Object> health = new HashMap<>();
-        health.put("status", "UP");
-        health.put("service", "Callable APIs Services");
-        health.put("version", "1.0.0-" + com.callableapis.api.config.VersionService.getInstance().getShortCommitHash());
+        // Compliance: Return only status, timestamp, and version
+        Map<String, String> health = new HashMap<>();
+        health.put("status", "healthy");  // Changed from "UP" to "healthy"
         health.put("timestamp", java.time.Instant.now().toString());
-        health.put("container", "rl337/callableapis:services");
-        health.put("java_version", System.getProperty("java.version"));
-        health.put("tomcat_version", "10.1.18");
+        health.put("version", com.callableapis.api.config.VersionService.getInstance().getFullVersionString());
         
         response.setStatus(HttpServletResponse.SC_OK);
         objectMapper.writeValue(response.getWriter(), health);
