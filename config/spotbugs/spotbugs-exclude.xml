@@ -53,4 +53,14 @@
         <Class name="com.callableapis.api.AppConfigurationTest"/>
         <Bug pattern="NP_NULL_ON_SOME_PATH"/>
     </Match>
+    <!-- Exclude common test code patterns that are acceptable in tests -->
+    <!-- Tests may use reflection, have unused variables for setup, etc. -->
+    <Match>
+        <Package name="~.*\.test\..*"/>
+        <Bug pattern="DP_DO_INSIDE_DO_PRIVILEGED"/>
+    </Match>
+    <Match>
+        <Package name="~.*\.test\..*"/>
+        <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+    </Match>
 </FindBugsFilter>
