@@ -31,11 +31,11 @@ Once a task is started and a Github Issue is created the following steps in the 
 3. If checks introduced in step 2 of starting steps fail, those failures become part of the scope of this task.
 ## Closing Steps
 1. Verify changes are logically complete and consistent with the overall style of the project
-2. **Run a build and test before committing** - Always run at minimum a compilation check (`./gradlew compileJava compileTestJava` or equivalent) before committing. Ideally run the full test suite or `run_checks.sh` to catch issues early.
-3. Run all checks defined in the run_checks.sh
-4. Clean up any artifacts that might have been created during development of the task.  Add relevant entries to .gitignore. Fix problems found with step 3.  If there were problems fixed, return to step 1.  
+2. **Run run_checks.sh before committing** - **MANDATORY**: Always run `./run_checks.sh` before committing any changes. This script runs all automated tests, static checks (SpotBugs, Checkstyle), style linting, and test coverage. This catches compilation errors, test failures, and static analysis issues before they reach CI. If `run_checks.sh` is not available or cannot run in the current environment, run at minimum: `./gradlew compileJava compileTestJava spotbugsMain spotbugsTest checkstyleMain checkstyleTest test`
+3. Fix any issues found by run_checks.sh. If problems are found, fix them and return to step 2. Do not commit until all checks pass.
+4. Clean up any artifacts that might have been created during development of the task.  Add relevant entries to .gitignore.
 5. Check in all relevant changes and new files into the branch.  Push changes to to remote.
 6. **Create a pull request against main that references the GitHub issue using "Closes #<issue_number>" in the PR title or description.**
-7. Wait for verification github action to complete.  If the action fails, analyze failure treating that failure like a local test failure and return to step 4.
+7. Wait for verification github action to complete.  If the action fails, analyze failure treating that failure like a local test failure and return to step 2.
 8. When previous closing steps are complete, update the GitHub issue with what was accomplished.
 
