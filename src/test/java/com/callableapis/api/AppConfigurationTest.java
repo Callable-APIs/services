@@ -167,8 +167,7 @@ public class AppConfigurationTest {
         Field apiKeyServiceField = UserResource.class.getDeclaredField("apiKeyService");
         apiKeyServiceField.setAccessible(true);
         Object apiKeyService = apiKeyServiceField.get(resource);
-        // ApiKeyService might be injectable via its interface bindings
-        // or we might need to explicitly bind it
+        // ApiKeyService should be injectable via its interface bindings or direct binding
         assertNotNull("apiKeyService should be injected in UserResource", apiKeyService);
     }
 
