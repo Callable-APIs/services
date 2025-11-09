@@ -99,7 +99,9 @@ public class AppConfigurationTest {
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
         ServiceLocatorUtilities.bind(locator, new AppBinder());
         
-        AuthResource authResource = locator.create(AuthResource.class);
+        AuthResource authResource = new AuthResource();
+        // Manually inject dependencies using the service locator
+        locator.inject(authResource);
         
         // Use reflection to check that @Inject fields are not null
         Field apiKeyStoreField = AuthResource.class.getDeclaredField("apiKeyStore");
@@ -124,7 +126,9 @@ public class AppConfigurationTest {
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
         ServiceLocatorUtilities.bind(locator, new AppBinder());
         
-        BearerAuthFilter filter = locator.create(BearerAuthFilter.class);
+        BearerAuthFilter filter = new BearerAuthFilter();
+        // Manually inject dependencies using the service locator
+        locator.inject(filter);
         
         Field apiKeyStoreField = BearerAuthFilter.class.getDeclaredField("apiKeyStore");
         apiKeyStoreField.setAccessible(true);
@@ -145,7 +149,9 @@ public class AppConfigurationTest {
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
         ServiceLocatorUtilities.bind(locator, new AppBinder());
         
-        AuthenticatedResource resource = locator.create(AuthenticatedResource.class);
+        AuthenticatedResource resource = new AuthenticatedResource();
+        // Manually inject dependencies using the service locator
+        locator.inject(resource);
         
         Field apiKeyStoreField = AuthenticatedResource.class.getDeclaredField("apiKeyStore");
         apiKeyStoreField.setAccessible(true);
@@ -162,7 +168,9 @@ public class AppConfigurationTest {
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
         ServiceLocatorUtilities.bind(locator, new AppBinder());
         
-        UserResource resource = locator.create(UserResource.class);
+        UserResource resource = new UserResource();
+        // Manually inject dependencies using the service locator
+        locator.inject(resource);
         
         Field apiKeyServiceField = UserResource.class.getDeclaredField("apiKeyService");
         apiKeyServiceField.setAccessible(true);
