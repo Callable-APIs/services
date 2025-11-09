@@ -1,4 +1,4 @@
-# Callable APIs Web Application
+# Callable APIs Services
 
 A modernized Java REST API service built with Jersey and deployed on Tomcat in Docker containers.
 
@@ -9,12 +9,26 @@ This project provides a REST API service for Callable APIs, featuring:
 - Jersey 3.x for REST API implementation
 - Tomcat 11 for application server
 - Docker containerization for consistent deployment
+- OIDC authentication via GitHub
+- API key-based authentication
 - Health checks and monitoring
-- Optimized for AWS Elastic Beanstalk deployment
+- Multi-architecture support (AMD64/ARM64)
 
 ## API Endpoints
 
+### Public Endpoints
+- `GET /` - Home page with API documentation
+- `GET /health` - Health check endpoint (returns JSON)
+- `GET /api/health` - API health check (returns JSON)
+- `GET /api/status` - Detailed status information (returns JSON)
+- `GET /api/auth/login` - Initiate GitHub OAuth login
+
+### Authenticated Endpoints (Require Bearer Token)
 - `GET /api/v1/calendar/date` - Returns current date in JSON format
+- `GET /api/v2/calendar/*` - V2 calendar endpoints
+- `GET /user/me` - Get current user identity and API key
+- `POST /user/key/rotate` - Rotate API key
+- `GET /user/stats` - Get user API usage statistics
 
 ## Prerequisites
 
@@ -22,7 +36,7 @@ This project provides a REST API service for Callable APIs, featuring:
 - Java 21+ (for local development)
 - Gradle 8+ (for local development)
 
-## Quick Start with Docker
+## Quick Start
 
 ### Using Docker Compose (Recommended)
 
@@ -41,25 +55,6 @@ This project provides a REST API service for Callable APIs, featuring:
    docker-compose down
    ```
 
-### Using Docker directly
-
-1. **Build the WAR file:**
-   ```bash
-   ./gradlew war
-   ```
-
-2. **Build the Docker image:**
-   ```bash
-   docker build -t callableapis-webapp .
-   ```
-
-3. **Run the container:**
-   ```bash
-   docker run -p 8080:8080 callableapis-webapp
-   ```
-
-## Development
-
 ### Local Development Setup
 
 1. **Build the project:**
@@ -72,9 +67,9 @@ This project provides a REST API service for Callable APIs, featuring:
    ./gradlew test
    ```
 
-3. **Run UI tests (requires running application):**
+3. **Run validation checks:**
    ```bash
-   ./run_ui_tests.sh
+   ./run_checks.sh
    ```
 
 4. **Build WAR file:**
@@ -82,173 +77,170 @@ This project provides a REST API service for Callable APIs, featuring:
    ./gradlew war
    ```
 
-### Testing
+## Configuration
+
+### OIDC Authentication Setup
+
+The service uses GitHub OAuth for authentication. To set up:
+
+1. **Create GitHub OAuth App:**
+   - Go to https://github.com/settings/developers
+   - Click "New OAuth App"
+   - Set Authorization callback URL: `https://api.callableapis.com/api/auth/callback` (production) or `http://localhost:8080/api/auth/callback` (local)
+   - Copy Client ID and Client Secret
+
+2. **Configure Secrets** (see Secrets Management section below)
+
+### Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `GITHUB_CLIENT_ID` | GitHub OAuth client ID | - | Yes |
+| `GITHUB_CLIENT_SECRET` | GitHub OAuth client secret | - | Yes |
+| `GITHUB_REDIRECT_URI` | OAuth redirect URI | `https://api.callableapis.com/api/auth/callback` | No |
+| `API_KEY_SALT` | API key generation salt | - | Yes |
+| `API_RATE_LIMIT_QPS` | Rate limit (queries per second) | `10` | No |
+| `JAVA_OPTS` | JVM options | `-Xmx512m -Xms256m` | No |
+| `AWS_DEFAULT_REGION` | AWS region for Parameter Store | `us-east-1` | No |
+
+### Secrets Management
+
+The service supports multiple secrets management approaches:
+
+1. **Ansible Vault** (Primary - for containerized nodes):
+   - Vault password: `/app/vault-password`
+   - Secrets file: `/app/secrets/all-secrets.env`
+   - Format: YAML with `vault_` prefix converted to environment variables
+
+2. **AWS Parameter Store** (Fallback - for Elastic Beanstalk):
+   - Path: `/callableapis/github-oidc/`
+   - Parameters: `github_client_id`, `github_client_secret`, `github_redirect_uri`
+   - Uses version-based cache invalidation for immediate updates
+
+3. **Environment Variables** (Development):
+   - Direct environment variable configuration
+   - Used when vault/Parameter Store unavailable
+
+For detailed secrets management documentation, see [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md).
+
+## Testing
 
 The project includes comprehensive testing:
 
 - **Unit Tests**: `./gradlew test`
-- **UI Tests**: `./run_ui_tests.sh` (Selenium WebDriver tests for JavaScript error detection)
+- **Integration Tests**: Included in test suite
+- **UI Tests**: `./run_ui_tests.sh` (Selenium WebDriver tests)
 - **Validation**: `./run_checks.sh` (runs all checks including static analysis)
 
-For more information about UI testing, see [UI_TESTING.md](UI_TESTING.md).
+### Running Tests
 
-### Secrets Management
+```bash
+# Run all unit tests
+./gradlew test
 
-The service implements a dual secrets management system supporting both Ansible Vault (primary) and AWS Parameter Store (fallback) for cloud migration:
+# Run UI tests (requires running application)
+./run_ui_tests.sh
 
-- **Primary**: Ansible Vault for Oracle/Google/IBM nodes
-- **Fallback**: AWS Parameter Store for Elastic Beanstalk
-- **Backward Compatibility**: Maintains existing functionality
-
-#### Configuration
-
-- **Ansible Vault**: `/app/vault-password` and `/app/secrets/all-secrets.env`
-- **AWS Parameter Store**: `/callableapis/github-oidc/` parameters
-- **Environment Variables**: Fallback for development
-
-See [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md) for detailed documentation.
-
-### Docker Hub Publishing
-
-The service automatically builds and publishes Docker images to Docker Hub:
-
-- **Latest**: `callableapis/services:latest`
-- **Versioned**: `callableapis/services:v1.0.0`
-- **Development**: `callableapis/services:commit-sha-branch`
-
-See [DOCKER_HUB_SETUP.md](DOCKER_HUB_SETUP.md) for setup instructions and usage examples.
-
-### Project Structure
-
+# Run all validation checks
+./run_checks.sh
 ```
-src/
-├── main/
-│   ├── java/
-│   │   └── com/callableapis/api/
-│   │       ├── APIApplication.java          # Jersey application configuration
-│   │       ├── config/
-│   │       │   ├── AppConfig.java           # Application configuration
-│   │       │   └── SecretsConfig.java       # Secrets management configuration
-│   │       ├── secrets/
-│   │       │   └── VaultSecretsManager.java # Dual secrets management (Ansible Vault + AWS)
-│   │       └── handlers/v1/
-│   │           └── CalendarResource.java    # REST endpoint implementation
-│   └── webapp/
-│       ├── index.jsp                       # Home page
-│       ├── authenticated.jsp               # Authenticated user page
-│       └── WEB-INF/
-│           └── web.xml                     # Tomcat deployment descriptor
-├── test/
-│   └── java/
-│       └── com/callableapis/api/
-│           ├── config/
-│           │   ├── SecretsConfigTest.java   # Secrets configuration tests
-│           │   └── AppConfigIntegrationTest.java # AppConfig integration tests
-│           ├── secrets/
-│           │   └── VaultSecretsManagerTest.java # VaultSecretsManager tests
-│           └── CalendarResourceTest.java   # Unit tests
-├── uiTest/
-│   └── java/
-│       └── com/callableapis/api/ui/
-│           ├── BaseUITest.java             # Base UI test class
-│           ├── OIDCFlowUITest.java         # OIDC flow UI tests
-│           └── JavaScriptErrorDetectionTest.java # JavaScript error detection
-Dockerfile                                 # Docker container configuration
-Dockerfile.validator                       # Docker image for validation
-docker-compose.yml                        # Docker Compose configuration
-build.gradle                             # Gradle build configuration
-run_checks.sh                            # Validation script
-run_ui_tests.sh                          # UI test execution script
-UI_TESTING.md                            # UI testing documentation
-SECRETS_MANAGEMENT.md                    # Secrets management documentation
-DOCKER_HUB_SETUP.md                      # Docker Hub publishing documentation
-.github/workflows/docker-publish.yml     # Docker Hub publishing workflow
+
+For detailed UI testing documentation, see [UI_TESTING.md](UI_TESTING.md).
+
+## Docker
+
+### Building Locally
+
+```bash
+# Build the services container
+docker build -f containers/services/Dockerfile -t rl337/callableapis:services .
+
+# Run the container
+docker run -p 8080:8080 rl337/callableapis:services
 ```
+
+### Docker Hub
+
+The container is automatically built and pushed to Docker Hub as `rl337/callableapis:services` via GitHub Actions when code is pushed to `main` branch.
+
+- **Latest**: `rl337/callableapis:services:latest`
+- **Versioned**: `rl337/callableapis:services:v1.0.0` (from git tags)
+- **Multi-arch**: Supports both AMD64 and ARM64
+
+For detailed Docker Hub setup, see [DOCKER_HUB_SETUP.md](DOCKER_HUB_SETUP.md).
 
 ## Deployment
 
-### AWS Elastic Beanstalk Deployment
+### AWS Elastic Beanstalk
 
-This application is optimized for deployment on AWS Elastic Beanstalk using the following AMI:
-- **AMI ID**: ami-061519a9509247f5b
-- **Base OS**: Amazon Linux 2023
+This application is optimized for deployment on AWS Elastic Beanstalk:
+- **AMI**: Amazon Linux 2023
 - **Java**: Corretto 21 (OpenJDK 21)
 - **Tomcat**: Version 11
 - **Architecture**: x86_64
 
-#### Deployment Steps:
+### Container Deployment
 
-1. **Build the WAR file:**
+1. **Pull the image:**
    ```bash
-   ./gradlew war
+   docker pull rl337/callableapis:services:latest
    ```
 
-2. **Deploy to Elastic Beanstalk:**
-   - Upload the WAR file (`build/libs/callableapis-webapp-1.0.0.war`) to Elastic Beanstalk
-   - The application will be deployed to `/var/lib/tomcat/webapps/` on the instance
-   - Access the API at: `http://your-eb-url/api/v1/calendar/date`
-
-#### Docker Deployment (Alternative):
-
-1. **Build the Docker image:**
+2. **Run with secrets:**
    ```bash
-   docker build -t callableapis-webapp .
-   ```
-
-2. **Tag for your registry:**
-   ```bash
-   docker tag callableapis-webapp:latest your-registry/callableapis-webapp:latest
-   ```
-
-3. **Push to registry:**
-   ```bash
-   docker push your-registry/callableapis-webapp:latest
-   ```
-
-4. **Deploy on EC2:**
-   ```bash
-   docker run -d -p 80:8080 --name callableapis your-registry/callableapis-webapp:latest
+   # Using Ansible Vault
+   docker run -p 8080:8080 \
+     -v /app/vault-password:/app/vault-password:ro \
+     -v /app/secrets:/app/secrets:ro \
+     rl337/callableapis:services:latest
+   
+   # Using AWS Parameter Store
+   docker run -p 8080:8080 \
+     -e AWS_ACCESS_KEY_ID=your-key \
+     -e AWS_SECRET_ACCESS_KEY=your-secret \
+     -e AWS_DEFAULT_REGION=us-west-2 \
+     rl337/callableapis:services:latest
    ```
 
 ### Health Checks
 
-The application includes health checks that verify the API is responding:
-- Docker health check: `curl -f http://localhost:8080/api/v1/calendar/date`
-- Check container health: `docker ps` (look for "healthy" status)
+- **Health endpoint**: `GET /health` - Returns `{"status": "healthy", "timestamp": "...", "version": "..."}`
+- **API health**: `GET /api/health` - Returns `{"status": "ok", "timestamp": "...", "version": "..."}`
+- **Status endpoint**: `GET /api/status` - Detailed status information
 
-## Configuration
+## Project Structure
 
-### Environment Variables
-
-- `JAVA_OPTS`: JVM options (default: `-Xmx512m -Xms256m`)
-- `PORT`: Application port (default: 8080)
-
-### Logging
-
-Logs are available in the container at `/usr/local/tomcat/logs/` and can be accessed via:
-```bash
-docker logs callableapis-webapp
+```
+src/
+├── main/
+│   ├── java/com/callableapis/api/
+│   │   ├── APIApplication.java          # Jersey application configuration
+│   │   ├── config/                      # Configuration classes
+│   │   ├── di/                          # Dependency injection bindings
+│   │   ├── handlers/                    # REST endpoint handlers
+│   │   ├── health/                      # Health check endpoints
+│   │   ├── secrets/                    # Secrets management
+│   │   ├── security/                    # Authentication & authorization
+│   │   └── web/                        # Web resources (JSP pages)
+│   └── webapp/                         # JSP pages and web.xml
+├── test/                               # Unit and integration tests
+└── uiTest/                             # Selenium UI tests
+containers/services/                    # Docker configuration
+.github/workflows/                      # CI/CD workflows
 ```
 
-## Migration from Legacy System
+## Development Workflow
 
-This project has been modernized from the original Grizzly-based implementation:
+1. **Create a GitHub Issue** for the task
+2. **Create a branch** named `{issue-id}_{snake-case-title}`
+3. **Make changes** and add tests
+4. **Run checks** before committing: `./gradlew compileJava compileTestJava` (minimum) or `./run_checks.sh` (full)
+5. **Commit and push** to the branch
+6. **Create a PR** referencing the issue
+7. **Wait for CI** to pass
+8. **Update the issue** when complete
 
-### Changes Made:
-- ✅ Upgraded from Java 8 to Java 21 (Corretto 21)
-- ✅ Migrated from Grizzly HTTP server to Tomcat 11
-- ✅ Updated from Jersey 2.x to Jersey 3.x
-- ✅ Migrated from javax.* to jakarta.* APIs
-- ✅ Added Docker containerization
-- ✅ Implemented proper WAR packaging
-- ✅ Added health checks and monitoring
-- ✅ Updated dependencies to latest stable versions
-- ✅ Optimized for AWS Elastic Beanstalk deployment
-
-### Removed Legacy Files:
-- `App.java` - Replaced by Tomcat servlet container
-- `appspec.yml` - Replaced by Docker deployment
-- `codedeploy-app-start.sh` - Replaced by Docker CMD
+For detailed agent instructions, see [AGENTS.md](AGENTS.md).
 
 ## Troubleshooting
 
@@ -256,33 +248,48 @@ This project has been modernized from the original Grizzly-based implementation:
 
 1. **Port already in use:**
    ```bash
-   # Change port in docker-compose.yml or use different port
-   docker run -p 8081:8080 callableapis-webapp
+   docker run -p 8081:8080 rl337/callableapis:services
    ```
 
 2. **Build failures:**
    ```bash
-   # Clean and rebuild
    ./gradlew clean build
    docker-compose up --build --force-recreate
    ```
 
-3. **Health check failures:**
-   ```bash
-   # Check container logs
-   docker logs callableapis-webapp
-   
-   # Check if application is running
-   docker exec callableapis-webapp curl http://localhost:8080/api/v1/calendar/date
-   ```
+3. **Secrets not loading:**
+   - Check vault files are mounted correctly
+   - Verify AWS credentials and region
+   - Check container logs: `docker logs <container-id>`
 
-## Contributing
+4. **OIDC callback failures:**
+   - Verify redirect URI matches GitHub OAuth app configuration
+   - Check Parameter Store has correct HTTPS redirect URI
+   - Ensure `AuthenticationStatsService` is registered in DI container
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+### Debug Commands
+
+```bash
+# Check container logs
+docker logs <container-id>
+
+# Check health
+curl http://localhost:8080/api/health
+
+# Check status
+curl http://localhost:8080/api/status
+
+# Test authentication
+curl -v http://localhost:8080/api/auth/login
+```
+
+## Additional Documentation
+
+- [AGENTS.md](AGENTS.md) - Instructions for AI agents working on this project
+- [SECRETS_MANAGEMENT.md](SECRETS_MANAGEMENT.md) - Detailed secrets management documentation
+- [UI_TESTING.md](UI_TESTING.md) - UI testing setup and usage
+- [DOCKER_HUB_SETUP.md](DOCKER_HUB_SETUP.md) - Docker Hub publishing setup
+- [containers/README.md](containers/README.md) - Container-specific documentation
 
 ## License
 
