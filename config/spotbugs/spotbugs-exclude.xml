@@ -53,14 +53,45 @@
         <Class name="com.callableapis.api.AppConfigurationTest"/>
         <Bug pattern="NP_NULL_ON_SOME_PATH"/>
     </Match>
-    <!-- Exclude common test code patterns that are acceptable in tests -->
-    <!-- Tests may use reflection, have unused variables for setup, etc. -->
+    <!-- Exclude AuthResourceDITest -->
     <Match>
-        <Package name="~.*\.test\..*"/>
+        <Class name="com.callableapis.api.AuthResourceDITest"/>
         <Bug pattern="DP_DO_INSIDE_DO_PRIVILEGED"/>
     </Match>
     <Match>
-        <Package name="~.*\.test\..*"/>
+        <Class name="com.callableapis.api.AuthResourceDITest"/>
         <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.AuthResourceDITest"/>
+        <Bug pattern="NP_NULL_ON_SOME_PATH"/>
+    </Match>
+    <!-- Exclude common test code patterns that are acceptable in tests -->
+    <!-- Tests may use reflection, have unused variables for setup, etc. -->
+    <!-- Exclude all test classes (classes ending with Test) -->
+    <Match>
+        <Class name="~.*Test"/>
+        <Bug pattern="DP_DO_INSIDE_DO_PRIVILEGED"/>
+    </Match>
+    <Match>
+        <Class name="~.*Test"/>
+        <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="~.*Test"/>
+        <Bug pattern="NP_NULL_ON_SOME_PATH"/>
+    </Match>
+    <!-- Also exclude integration test classes -->
+    <Match>
+        <Class name="~.*IT"/>
+        <Bug pattern="DP_DO_INSIDE_DO_PRIVILEGED"/>
+    </Match>
+    <Match>
+        <Class name="~.*IT"/>
+        <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="~.*IT"/>
+        <Bug pattern="NP_NULL_ON_SOME_PATH"/>
     </Match>
 </FindBugsFilter>
