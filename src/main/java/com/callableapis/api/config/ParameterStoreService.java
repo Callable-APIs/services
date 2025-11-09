@@ -30,8 +30,15 @@ public final class ParameterStoreService {
         logger.info("Initializing Parameter Store Service...");
         SsmClient client = null;
         try {
+            // Use region from environment variable AWS_DEFAULT_REGION, or default to US_EAST_1
+            String regionStr = System.getenv("AWS_DEFAULT_REGION");
+            Region region = (regionStr != null && !regionStr.isEmpty()) 
+                    ? Region.of(regionStr) 
+                    : Region.US_EAST_1;
+            logger.info("Using AWS region: " + region.id());
+            
             client = SsmClient.builder()
-                    .region(Region.US_EAST_1) // Adjust region as needed
+                    .region(region)
                     .credentialsProvider(DefaultCredentialsProvider.create())
                     .build();
             
