@@ -9,6 +9,7 @@ import com.callableapis.api.security.AuthenticationStatsService;
 import com.callableapis.api.security.BearerAuthFilter;
 import com.callableapis.api.security.RateLimitService;
 import com.callableapis.api.web.AuthenticatedResource;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
 import org.junit.Test;
@@ -91,6 +92,8 @@ public class AppConfigurationTest {
     }
 
     @Test
+    @SuppressFBWarnings(value = {"DP_DO_INSIDE_DO_PRIVILEGED", "UWF_UNWRITTEN_FIELD"}, 
+                       justification = "Reflection is acceptable in test code to verify DI injection")
     public void testAuthResourceDependenciesAreInjected() throws Exception {
         // Verify that AuthResource's @Inject fields are properly injected
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
@@ -114,6 +117,8 @@ public class AppConfigurationTest {
     }
 
     @Test
+    @SuppressFBWarnings(value = {"DP_DO_INSIDE_DO_PRIVILEGED", "UWF_UNWRITTEN_FIELD"}, 
+                       justification = "Reflection is acceptable in test code to verify DI injection")
     public void testBearerAuthFilterDependenciesAreInjected() throws Exception {
         // Verify that BearerAuthFilter's @Inject fields are properly injected
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
@@ -133,6 +138,8 @@ public class AppConfigurationTest {
     }
 
     @Test
+    @SuppressFBWarnings(value = {"DP_DO_INSIDE_DO_PRIVILEGED", "UWF_UNWRITTEN_FIELD"}, 
+                       justification = "Reflection is acceptable in test code to verify DI injection")
     public void testAuthenticatedResourceDependenciesAreInjected() throws Exception {
         // Verify that AuthenticatedResource's @Inject fields are properly injected
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
@@ -147,6 +154,8 @@ public class AppConfigurationTest {
     }
 
     @Test
+    @SuppressFBWarnings(value = {"DP_DO_INSIDE_DO_PRIVILEGED", "UWF_UNWRITTEN_FIELD"}, 
+                       justification = "Reflection is acceptable in test code to verify DI injection")
     public void testUserResourceDependenciesAreInjected() throws Exception {
         // Verify that UserResource's @Inject fields are properly injected
         // Note: UserResource injects ApiKeyService directly, not ApiKeyStore
@@ -164,6 +173,8 @@ public class AppConfigurationTest {
     }
 
     @Test
+    @SuppressFBWarnings(value = {"DP_DO_INSIDE_DO_PRIVILEGED", "UWF_UNWRITTEN_FIELD"}, 
+                       justification = "Reflection is acceptable in test code to verify DI injection")
     public void testNoMissingInjectFields() {
         // Collect all classes with @Inject fields
         Set<Class<?>> classesWithInject = new HashSet<>();
