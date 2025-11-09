@@ -81,6 +81,10 @@
         <Class name="~.*Test"/>
         <Bug pattern="NP_NULL_ON_SOME_PATH"/>
     </Match>
+    <Match>
+        <Class name="~.*Test"/>
+        <Bug pattern="JUA_DONT_ASSERT_INSTANCEOF_IN_TESTS"/>
+    </Match>
     <!-- Also exclude integration test classes -->
     <Match>
         <Class name="~.*IT"/>
@@ -93,5 +97,9 @@
     <Match>
         <Class name="~.*IT"/>
         <Bug pattern="NP_NULL_ON_SOME_PATH"/>
+    </Match>
+    <Match>
+        <Class name="~.*IT"/>
+        <Bug pattern="JUA_DONT_ASSERT_INSTANCEOF_IN_TESTS"/>
     </Match>
 </FindBugsFilter>
