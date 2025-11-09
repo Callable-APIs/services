@@ -39,4 +39,18 @@
         <Class name="com.callableapis.api.time.AffirmationService$AffirmationResult"/>
         <Bug pattern="EI_EXPOSE_REP2"/>
     </Match>
+    <!-- Exclude reflection-related warnings in test code -->
+    <!-- Reflection is acceptable in test code to verify DI injection -->
+    <Match>
+        <Class name="com.callableapis.api.AppConfigurationTest"/>
+        <Bug pattern="DP_DO_INSIDE_DO_PRIVILEGED"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.AppConfigurationTest"/>
+        <Bug pattern="UWF_UNWRITTEN_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="com.callableapis.api.AppConfigurationTest"/>
+        <Bug pattern="NP_NULL_ON_SOME_PATH"/>
+    </Match>
 </FindBugsFilter>

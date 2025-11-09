@@ -228,6 +228,8 @@ public class AppConfigurationTest {
     }
 
     @Test
+    @SuppressFBWarnings(value = {"NP_NULL_ON_SOME_PATH"}, 
+                       justification = "Services are verified to be non-null before assertSame calls")
     public void testSingletonServicesAreShared() {
         // Verify that singleton services (like ApiKeyService) are shared instances
         ServiceLocator locator = ServiceLocatorUtilities.createAndPopulateServiceLocator();
@@ -236,11 +238,19 @@ public class AppConfigurationTest {
         ApiKeyStore store1 = locator.getService(ApiKeyStore.class);
         ApiKeyStore store2 = locator.getService(ApiKeyStore.class);
         
+        // Verify services are not null (should have been bound in AppBinder)
+        assertNotNull("ApiKeyStore should be bound", store1);
+        assertNotNull("ApiKeyStore should be bound", store2);
+        
         // Both should be the same instance (singleton)
         assertSame("ApiKeyStore should be a singleton", store1, store2);
         
         RateLimitService rate1 = locator.getService(RateLimitService.class);
         RateLimitService rate2 = locator.getService(RateLimitService.class);
+        
+        // Verify services are not null
+        assertNotNull("RateLimitService should be bound", rate1);
+        assertNotNull("RateLimitService should be bound", rate2);
         
         // Both should be the same instance (singleton)
         assertSame("RateLimitService should be a singleton", rate1, rate2);
