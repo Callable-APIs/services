@@ -44,6 +44,7 @@ dependencies {
 
     // SpotBugs annotations for suppressing specific warnings where intentional
     compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.6'
+    testImplementation 'com.github.spotbugs:spotbugs-annotations:4.8.6'
 
     // AWS SDK for Parameter Store
     implementation 'software.amazon.awssdk:ssm:2.21.29'
