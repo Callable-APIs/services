@@ -2,6 +2,7 @@ package com.callableapis.api.di;
 
 import com.callableapis.api.security.ApiKeyService;
 import com.callableapis.api.security.ApiKeyStore;
+import com.callableapis.api.security.AuthenticationStatsService;
 import com.callableapis.api.security.RateLimitService;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
@@ -11,5 +12,9 @@ public class AppBinder extends AbstractBinder {
         ApiKeyService instance = ApiKeyService.getInstance();
         bind(instance).to(ApiKeyStore.class);
         bind(instance).to(RateLimitService.class);
+        
+        // Register AuthenticationStatsService as a singleton for dependency injection
+        // This service tracks authentication statistics across all requests
+        bind(new AuthenticationStatsService()).to(AuthenticationStatsService.class);
     }
 }
