@@ -62,6 +62,7 @@ public final class ParameterStoreService {
     
     /**
      * Get a parameter value from Parameter Store with caching and fallback.
+     * Uses version-based cache invalidation to detect parameter updates.
      * 
      * @param parameterName The parameter name (e.g., "/callableapis/github/client-id")
      * @param fallbackValue Fallback value if parameter is not found or service is unavailable
@@ -70,18 +71,52 @@ public final class ParameterStoreService {
     public String getParameter(String parameterName, String fallbackValue) {
         logger.info("Attempting to get parameter: " + parameterName);
         
-        // Check cache first
-        CachedParameter cached = cache.get(parameterName);
-        if (cached != null && !cached.isExpired(isCriticalParameter(parameterName))) {
-            logger.info("Using cached parameter: " + parameterName + " = " + cached.value);
-            return cached.value;
-        }
-        
         // If SSM client is not available, skip Parameter Store and use fallback
         if (ssmClient == null) {
             logger.warning("SSM client not available - Parameter Store disabled. Using fallback value for: " + parameterName);
             logger.warning("This typically means AWS credentials are not configured. In production, ensure IAM role has Parameter Store access.");
             return fallbackValue;
+        }
+        
+        // Check cache first - but also check version to detect parameter updates
+        // Version checking is especially important for critical parameters like redirect-uri
+        CachedParameter cached = cache.get(parameterName);
+        boolean isCritical = isCriticalParameter(parameterName);
+        
+        if (cached != null && !cached.isExpired(isCritical)) {
+            // For critical parameters, always check version to detect updates immediately
+            // For non-critical parameters, rely on TTL-based expiration
+            if (isCritical && cached.version != null) {
+                // Check if parameter version has changed (for critical parameters only)
+                // This allows immediate detection of parameter updates
+                try {
+                    GetParameterRequest versionRequest = GetParameterRequest.builder()
+                            .name(parameterName)
+                            .build();
+                    GetParameterResponse versionResponse = ssmClient.getParameter(versionRequest);
+                    Long currentVersion = versionResponse.parameter().version();
+                    
+                    if (cached.version.equals(currentVersion)) {
+                        // Version matches, use cached value
+                        logger.info("Using cached parameter (version " + currentVersion + "): " + parameterName + " = " + cached.value);
+                        return cached.value;
+                    } else {
+                        // Version changed, force refresh
+                        logger.info("Parameter version changed from " + cached.version + " to " + currentVersion + 
+                                   ", refreshing cache for: " + parameterName);
+                        // Fall through to fetch new value
+                    }
+                } catch (Exception versionCheckException) {
+                    // If version check fails, fall back to TTL-based cache
+                    logger.warning("Failed to check parameter version, using TTL-based cache: " + versionCheckException.getMessage());
+                    logger.info("Using cached parameter: " + parameterName + " = " + cached.value);
+                    return cached.value;
+                }
+            } else {
+                // Non-critical parameter or no version info - use cached value
+                logger.info("Using cached parameter: " + parameterName + " = " + cached.value);
+                return cached.value;
+            }
         }
         
         try {
@@ -95,11 +130,13 @@ public final class ParameterStoreService {
             
             GetParameterResponse response = ssmClient.getParameter(request);
             String value = response.parameter().value();
+            Long version = response.parameter().version();
             
-            // Cache the result
-            cache.put(parameterName, new CachedParameter(value, System.currentTimeMillis()));
+            // Cache the result with version information
+            cache.put(parameterName, new CachedParameter(value, System.currentTimeMillis(), version));
             
-            logger.info("Successfully retrieved parameter from Parameter Store: " + parameterName + " = " + value);
+            logger.info("Successfully retrieved parameter from Parameter Store (version " + version + "): " + 
+                       parameterName + " = " + value);
             return value;
             
         } catch (ParameterNotFoundException e) {
@@ -149,19 +186,23 @@ public final class ParameterStoreService {
     }
     
     /**
-     * Cached parameter with expiration time
+     * Cached parameter with expiration time and version tracking.
+     * Version tracking allows detection of parameter updates even if TTL hasn't expired.
      */
     private static class CachedParameter {
         final String value;
         final long timestamp;
+        final Long version; // Parameter version from AWS SSM (null if not available)
         
+        @SuppressWarnings("unused") // Kept for backward compatibility
         CachedParameter(String value, long timestamp) {
-            this.value = value;
-            this.timestamp = timestamp;
+            this(value, timestamp, null);
         }
         
-        boolean isExpired() {
-            return isExpired(false);
+        CachedParameter(String value, long timestamp, Long version) {
+            this.value = value;
+            this.timestamp = timestamp;
+            this.version = version;
         }
         
         boolean isExpired(boolean isCritical) {
