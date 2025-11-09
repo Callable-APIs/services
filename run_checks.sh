@@ -40,6 +40,10 @@ check_docker() {
 
 # Function to build the Docker image if it doesn't exist or is outdated
 build_docker_image() {
+    if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "^callableapis-validator:latest$"; then
+        print_status "Docker image callableapis-validator:latest already exists, skipping build"
+        return 0
+    fi
     print_status "Building Docker image for validation..."
     docker build -f Dockerfile.validator -t callableapis-validator .
     print_success "Docker image built successfully"
@@ -52,11 +56,19 @@ run_in_docker() {
     
     print_status "Running: $description"
     
+    # Clean Gradle lock files and caches before running to avoid conflicts
+    # This ensures each Docker run starts with a clean Gradle state
+    # Remove the entire Gradle 8.5 cache directory to avoid all lock conflicts
+    rm -rf .gradle/8.5 2>/dev/null || true
+    find build -name "*.lock" -delete 2>/dev/null || true
+    rm -rf build/tmp/.cache 2>/dev/null || true
+    
     if docker run --rm \
         -v "$(pwd)":/workspace \
         -w /workspace \
+        -e GRADLE_USER_HOME=/tmp/gradle-user-home-$$ \
         callableapis-validator \
-        bash -c "$command"; then
+        bash -c "rm -rf /workspace/.gradle/8.5 2>/dev/null || true; find /workspace/build -name '*.lock' -delete 2>/dev/null || true; rm -rf /workspace/build/tmp/.cache 2>/dev/null || true; $command"; then
         print_success "$description completed successfully"
         return 0
     else
