@@ -94,7 +94,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run unit tests
-        timeout-minutes: 15
+        timeout-minutes: 10
         env:
           # Set test environment flag to prevent AWS credential resolution
           test.environment: "true"

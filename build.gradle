@@ -126,7 +126,8 @@ test {
     useJUnitPlatform()
     // Set timeout to prevent tests from hanging indefinitely
     // This is especially important for integration tests that use JerseyTest
-    timeout = java.time.Duration.ofMinutes(3)
+    // Based on actual test execution time (~2-3 minutes), 5 minutes provides reasonable buffer
+    timeout = java.time.Duration.ofMinutes(5)
     
     // Fail fast on test failures
     failFast = false
