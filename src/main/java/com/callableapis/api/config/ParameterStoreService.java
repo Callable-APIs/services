@@ -73,9 +73,12 @@ public final class ParameterStoreService {
         boolean hasJUnit = classPath.contains("junit") || classPath.contains("test");
         boolean hasGradleTest = System.getProperty("org.gradle.test.worker") != null;
         boolean hasTestProperty = System.getProperty("test.environment") != null;
+        boolean hasTestEnvVar = System.getenv("test.environment") != null;
         boolean hasJUnitProperty = System.getProperty("junit.jupiter.execution.enabled") != null;
+        // Check if running under Gradle test task
+        boolean isGradleTest = System.getProperty("org.gradle.test") != null;
         
-        return hasJUnit || hasGradleTest || hasTestProperty || hasJUnitProperty;
+        return hasJUnit || hasGradleTest || hasTestProperty || hasTestEnvVar || hasJUnitProperty || isGradleTest;
     }
     
     @SuppressFBWarnings(value = "MS_EXPOSE_REP", justification = "Intentional singleton service returned by accessor")

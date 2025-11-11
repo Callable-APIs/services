@@ -95,6 +95,16 @@ jobs:
 
       - name: Run unit tests
         timeout-minutes: 15
+        env:
+          # Set test environment flag to prevent AWS credential resolution
+          test.environment: "true"
+          # Provide fallback values for tests
+          GITHUB_CLIENT_ID: "test-client-id"
+          GITHUB_CLIENT_SECRET: "test-client-secret"
+          GITHUB_REDIRECT_URI: "http://localhost:8080/api/auth/callback"
+          GITHUB_OAUTH_SCOPE: "read:user user:email"
+          API_KEY_SALT: "test-salt"
+          API_RATE_LIMIT_QPS: "10"
         run: ./gradlew --no-daemon test
 
       - name: Generate JaCoCo report
