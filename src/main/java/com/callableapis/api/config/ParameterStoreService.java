@@ -29,6 +29,15 @@ public final class ParameterStoreService {
     private ParameterStoreService() {
         logger.info("Initializing Parameter Store Service...");
         SsmClient client = null;
+        
+        // In test environments, skip AWS client creation entirely to avoid hangs
+        // Tests should use environment variables or mocks
+        if (isTestEnvironment()) {
+            logger.info("Test environment detected - skipping AWS client creation (will use environment variables only)");
+            this.ssmClient = null;
+            return;
+        }
+        
         try {
             // Use region from environment variable AWS_DEFAULT_REGION, or default to US_EAST_1
             String regionStr = System.getenv("AWS_DEFAULT_REGION");
@@ -52,6 +61,21 @@ public final class ParameterStoreService {
             client = null; // Mark as unavailable if initialization failed
         }
         this.ssmClient = client; // Set to null if initialization failed
+    }
+    
+    /**
+     * Detect if we're running in a test environment.
+     * This prevents AWS client creation in tests, avoiding hangs and credential resolution issues.
+     */
+    private static boolean isTestEnvironment() {
+        // Check for common test environment indicators
+        String classPath = System.getProperty("java.class.path", "");
+        boolean hasJUnit = classPath.contains("junit") || classPath.contains("test");
+        boolean hasGradleTest = System.getProperty("org.gradle.test.worker") != null;
+        boolean hasTestProperty = System.getProperty("test.environment") != null;
+        boolean hasJUnitProperty = System.getProperty("junit.jupiter.execution.enabled") != null;
+        
+        return hasJUnit || hasGradleTest || hasTestProperty || hasJUnitProperty;
     }
     
     @SuppressFBWarnings(value = "MS_EXPOSE_REP", justification = "Intentional singleton service returned by accessor")

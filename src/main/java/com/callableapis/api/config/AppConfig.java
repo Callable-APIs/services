@@ -11,25 +11,26 @@ public final class AppConfig {
 
     private static final Logger logger = Logger.getLogger(AppConfig.class.getName());
     private static final String PUBLIC_BASE_URL = "https://api.callableapis.com";
-    private static final ParameterStoreService parameterStore;
+    private static volatile ParameterStoreService parameterStore;
     private static volatile VaultSecretsManager vaultSecretsManager;
 
-    static {
-        logger.info("=== AppConfig Static Initialization Started ===");
-        try {
-            parameterStore = ParameterStoreService.getInstance();
-            logger.info("ParameterStoreService instance obtained successfully");
-
-            // Initialize VaultSecretsManager lazily to avoid test failures
-            // vaultSecretsManager will be initialized on first access
-
-            logger.info("=== AppConfig Static Initialization Completed Successfully ===");
-        } catch (Exception e) {
-            logger.severe("=== AppConfig Static Initialization FAILED ===");
-            logger.severe("Error: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException("AppConfig initialization failed", e);
+    // Lazy initialization to avoid blocking during class loading (especially in tests)
+    private static ParameterStoreService getParameterStore() {
+        if (parameterStore == null) {
+            synchronized (AppConfig.class) {
+                if (parameterStore == null) {
+                    try {
+                        parameterStore = ParameterStoreService.getInstance();
+                        logger.info("ParameterStoreService instance obtained successfully");
+                    } catch (Exception e) {
+                        logger.warning("Failed to initialize ParameterStoreService: " + e.getMessage());
+                        // In test environments, this is expected - will use environment variable fallbacks
+                        throw new RuntimeException("ParameterStoreService initialization failed", e);
+                    }
+                }
+            }
         }
+        return parameterStore;
     }
 
     private static VaultSecretsManager getVaultSecretsManagerInstance() {
@@ -60,7 +61,7 @@ public final class AppConfig {
 
         // Fallback to original ParameterStoreService if VaultSecretsManager fails
         if (value == null) {
-            value = parameterStore.getParameterWithEnvFallback(
+            value = getParameterStore().getParameterWithEnvFallback(
                     "/callableapis/github/client-id",
                     "GITHUB_CLIENT_ID",
                     "dev-client-id-placeholder");
@@ -81,7 +82,7 @@ public final class AppConfig {
 
         // Fallback to original ParameterStoreService if VaultSecretsManager fails
         if (value == null) {
-            value = parameterStore.getParameterWithEnvFallback(
+            value = getParameterStore().getParameterWithEnvFallback(
                     "/callableapis/github/client-secret",
                     "GITHUB_CLIENT_SECRET",
                     "dev-client-secret-placeholder");
@@ -93,7 +94,7 @@ public final class AppConfig {
     }
 
     public static String getGithubOAuthScope() {
-        String value = parameterStore.getParameterWithEnvFallback(
+        String value = getParameterStore().getParameterWithEnvFallback(
                 "/callableapis/github/oauth-scope",
                 "GITHUB_OAUTH_SCOPE",
                 "read:user user:email");
@@ -111,7 +112,7 @@ public final class AppConfig {
 
         // Fallback to original ParameterStoreService if VaultSecretsManager fails
         if (redirectUri == null) {
-            redirectUri = parameterStore.getParameterWithEnvFallback(
+            redirectUri = getParameterStore().getParameterWithEnvFallback(
                     "/callableapis/github/redirect-uri",
                     "GITHUB_REDIRECT_URI",
                     getPublicBaseUrl() + "/api/auth/callback");
@@ -144,14 +145,14 @@ public final class AppConfig {
     }
 
     public static String getApiKeySalt() {
-        return parameterStore.getParameterWithEnvFallback(
+        return getParameterStore().getParameterWithEnvFallback(
                 "/callableapis/api/key-salt",
                 "API_KEY_SALT",
                 "dev-salt");
     }
 
     public static int getRateLimitQps() {
-        String value = parameterStore.getParameterWithEnvFallback(
+        String value = getParameterStore().getParameterWithEnvFallback(
                 "/callableapis/api/rate-limit-qps",
                 "API_RATE_LIMIT_QPS",
                 "10");
