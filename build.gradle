@@ -126,7 +126,7 @@ test {
     useJUnitPlatform()
     // Set timeout to prevent tests from hanging indefinitely
     // This is especially important for integration tests that use JerseyTest
-    timeout = java.time.Duration.ofMinutes(5)
+    timeout = java.time.Duration.ofMinutes(3)
     
     // Fail fast on test failures
     failFast = false
@@ -137,13 +137,24 @@ test {
         exceptionFormat "full"
         // Show which tests are running to help debug hangs
         showStandardStreams = true
+        // Show test progress to identify where it hangs
+        info {
+            events "started", "passed", "skipped", "failed"
+        }
     }
     
     // Set JVM args to help with hanging tests
     jvmArgs = [
         '-Djava.awt.headless=true',
-        '-Dfile.encoding=UTF-8'
+        '-Dfile.encoding=UTF-8',
+        // Force test environment detection
+        '-Dtest.environment=true',
+        '-Dorg.gradle.test=true'
     ]
+    
+    // Set system properties for test environment detection
+    systemProperty 'test.environment', 'true'
+    systemProperty 'org.gradle.test', 'true'
 }
 
 // UI tests configuration
