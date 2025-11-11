@@ -37,29 +37,21 @@ public final class ParameterStoreService {
                     : Region.US_EAST_1;
             logger.info("Using AWS region: " + region.id());
             
+            // Create client without blocking - credentials will be resolved lazily
+            // This prevents hangs during initialization, especially in test environments
             client = SsmClient.builder()
                     .region(region)
                     .credentialsProvider(DefaultCredentialsProvider.create())
                     .build();
             
-            // Test credentials by making a simple call
-            logger.info("Testing Parameter Store credentials...");
-            try {
-                GetParameterRequest testRequest = GetParameterRequest.builder()
-                        .name("/callableapis/github/oauth-scope")
-                        .withDecryption(true)
-                        .build();
-                client.getParameter(testRequest);
-                logger.info("Parameter Store Service initialized successfully with working credentials");
-            } catch (Exception testException) {
-                logger.warning("Parameter Store client created but credentials test failed: " + testException.getMessage());
-                logger.warning("Will use fallback values only");
-                client = null; // Mark as unavailable if credentials don't work
-            }
+            // Skip the blocking test call during initialization to prevent hangs
+            // The client will be tested on first actual use, and failures will fall back gracefully
+            logger.info("Parameter Store Service initialized (will test credentials on first use)");
         } catch (Exception e) {
             logger.warning("Failed to initialize SSM client (will use environment variables only): " + e.getMessage());
+            client = null; // Mark as unavailable if initialization failed
         }
-        this.ssmClient = client; // Set to null if initialization failed or credentials don't work
+        this.ssmClient = client; // Set to null if initialization failed
     }
     
     @SuppressFBWarnings(value = "MS_EXPOSE_REP", justification = "Intentional singleton service returned by accessor")
