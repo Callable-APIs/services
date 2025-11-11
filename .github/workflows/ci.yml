@@ -18,6 +18,7 @@ jobs:
   checkstyle:
     name: Checkstyle
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,6 +47,7 @@ jobs:
   spotbugs:
     name: SpotBugs
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -77,6 +79,7 @@ jobs:
   tests:
     name: Tests and Coverage
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,6 +94,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run unit tests
+        timeout-minutes: 15
         run: ./gradlew --no-daemon test
 
       - name: Generate JaCoCo report
