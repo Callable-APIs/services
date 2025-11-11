@@ -124,6 +124,26 @@ war {
 
 test {
     useJUnitPlatform()
+    // Set timeout to prevent tests from hanging indefinitely
+    // This is especially important for integration tests that use JerseyTest
+    timeout = java.time.Duration.ofMinutes(5)
+    
+    // Fail fast on test failures
+    failFast = false
+    
+    // Show test output
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        // Show which tests are running to help debug hangs
+        showStandardStreams = true
+    }
+    
+    // Set JVM args to help with hanging tests
+    jvmArgs = [
+        '-Djava.awt.headless=true',
+        '-Dfile.encoding=UTF-8'
+    ]
 }
 
 // UI tests configuration
